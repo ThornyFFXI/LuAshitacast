@@ -81,7 +81,7 @@ commands.HandleCommand = function(e)
     
     if (args[2] == 'equip') then
         if (#args < 4) then  
-            print(chat.header('LuAshitacast') .. chat.error("Correct syntax is:  /lac equip [slot] [item]")
+            print(chat.header('LuAshitacast') .. chat.error("Correct syntax is:  /lac equip [slot] [item]"));
             return;
         else
             local slot = gData.GetEquipSlot(args[3]);

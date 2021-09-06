@@ -106,7 +106,7 @@ local EquipSet = function(set)
             end
         end
     elseif (type(set) == 'table') then
-        for k, v in pairs(set) do        
+        for k, v in pairs(set) do
             Equip(k, v);
         end
     end
@@ -147,10 +147,10 @@ local ForceEquipSet = function(set)
     for k,v in pairs(table) do
         local equipSlot = gData.GetEquipSlot(k);
         if (equipSlot == 0) then
-            print(chat.header('LuAshitacast') .. chat.error("Invalid slot specified: ") .. chat.color1(2, slot));
+            print(chat.header('LuAshitacast') .. chat.error("Invalid slot specified: ") .. chat.color1(2, k));
             return;
         end
-    
+
         local table = gEquip.MakeItemTable(v);
         if (table ~= nil) and (type(table.Name) == 'string') then
             newTable[equipSlot] = table;
@@ -183,7 +183,7 @@ local LockSet = function(set, seconds)
     for k,v in pairs(table) do
         local equipSlot = gData.GetEquipSlot(k);
         if (equipSlot == 0) then
-            print(chat.header('LuAshitacast') .. chat.error("Invalid slot specified: ") .. chat.color1(2, slot));
+            print(chat.header('LuAshitacast') .. chat.error("Invalid slot specified: ") .. chat.color1(2, k));
             return;
         end
     

@@ -319,9 +319,8 @@ data.GetTimestamp = function()
     local rawTime = ashita.memory.read_uint32(pointer, 0x0C) + 92514960;
     local timestamp = {};
     timestamp.day = math.floor(rawTime / 3456);
-    local realSeconds =
     timestamp.hour = math.floor(rawTime / 144) % 24;
-    timestamp.minute = math.floor(rawTime % 144) / 2.4);
+    timestamp.minute = math.floor((rawTime % 144) / 2.4);
     return timestamp;
 end
 
@@ -390,7 +389,6 @@ data.GetAction = function()
         else
             actionTable.Type = 'generic';
         end
-    end
     elseif (action.Type == 'Ranged') then
         actionTable.Name = 'Ranged';
         actionTable.Id = 0;
@@ -486,7 +484,7 @@ end
 data.GetPet = function()
     local myIndex = AshitaCore:GetMemoryManager():GetParty():GetMemberTargetIndex(0);
     local petIndex = AshitaCore:GetMemoryManager():GetEntity():GetPetTargetIndex(myIndex);
-    if (petIndex == 0) or AshitaCore:GetMemoryManager():GetEntity():GetHPPercent(petIndex) == 0) then
+    if (petIndex == 0) or AshitaCore:GetMemoryManager():GetEntity():GetHPPercent(petIndex) == 0 then
         return nil;
     end
 

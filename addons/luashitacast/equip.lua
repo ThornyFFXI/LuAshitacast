@@ -561,7 +561,7 @@ local ProcessBuffer = function(style)
             for k,v in pairs(gState.ForceSet) do
                 local equipSlot = gData.GetEquipSlot(k);
                 if (equipSlot == 0) then
-                    print(chat.header('LuAshitacast') .. chat.error("Invalid slot specified: ") .. chat.color1(2, slot));
+                    print(chat.header('LuAshitacast') .. chat.error("Invalid slot specified: ") .. chat.color1(2, k));
                 end
             
                 local table = MakeItemTable(v);
