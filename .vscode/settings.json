@@ -1,0 +1,21 @@
+{
+    "Lua.diagnostics.globals": [
+        "ashita",
+        "bit",
+        "AshitaCore",
+        "struct",
+        "gCommandHandlers",
+        "gPacketHandlers",
+        "gState",
+        "gSettings",
+        "gProfile",
+        "gFileTools",
+        "gEquip",
+        "gFunc",
+        "gData",
+        "gBase",
+        "chat",
+        "addon",
+        "T"
+    ]
+}

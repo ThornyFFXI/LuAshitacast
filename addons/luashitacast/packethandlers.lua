@@ -201,6 +201,9 @@ packethandlers.HandleOutgoingChunk = function(e)
         local size  = ashita.bits.unpack_be(e.chunk_data_raw, offset, 9, 7) * 4;
         if (id == 0x1A) then
             gPacketHandlers.HandleActionPacket(struct.unpack('c' .. size, e.chunk_data, offset + 1));
+        elseif (id == 0x15) then
+            gState.PositionX = struct.unpack('f', e.chunk_data, offset + 0x04 + 1);
+            gState.PositionY = struct.unpack('f', e.chunk_data, offset + 0x0C + 1);
         elseif (id == 0x37) then
             gPacketHandlers.HandleItemPacket(struct.unpack('c' .. size, e.chunk_data, offset + 1));
         end

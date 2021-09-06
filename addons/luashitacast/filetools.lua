@@ -62,7 +62,7 @@ fileTools.CreateProfile = function(path)
         return false;
     end
 
-    file = io.open(path, 'w');
+    local file = io.open(path, 'w');
     file:write('local profile = {};\n');
     file:write('local sets = {\n');
     file:write('};\n\n');

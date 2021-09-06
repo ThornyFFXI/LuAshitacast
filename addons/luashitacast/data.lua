@@ -364,6 +364,7 @@ data.GetAction = function()
     end
 
     local actionTable = {};
+    actionTable.Resource = action.Resource;
     actionTable.Type = action.Type;
     if (action.Type == 'Spell') then
         actionTable.CastTime = action.Resource.CastTime * 250;
@@ -387,7 +388,7 @@ data.GetAction = function()
         if (abilityType ~= nil) then
             actionTable.Type = abilityType;
         else
-            actionTable.Type = 'generic';
+            actionTable.Type = 'unknown';
         end
     elseif (action.Type == 'Ranged') then
         actionTable.Name = 'Ranged';
@@ -473,12 +474,35 @@ data.GetEquipment = function()
         if (type(equip) == 'table') and (equip.Item ~= nil) then
             local resource = AshitaCore:GetResourceManager():GetItemById(equip.Item.Id);
             if (resource ~= nil) then
+                local singleTable = {};
+                singleTable.Container = equip.Container;
+                singleTable.Item = equip.Item;
+                singleTable.Name = resource.Name[1];
+                singleTable.Resource = resource;
                 local slot = gData.Constants.EquipSlotNames[i];
-                equipTable[slot] = resource.Name[1];
+                equipTable[slot] = singleTable;
             end
         end
     end
     return equipTable;
+end
+
+data.GetEquipScreen = function()
+    local equipScreenTable = {};
+    local pPlayer = AshitaCore:GetMemoryManager():GetPlayer();
+
+    equipScreenTable.Attack = pPlayer:GetAttack();
+    equipScreenTable.DarkResistance = pPlayer:GetResist(7);
+    equipScreenTable.Defense = pPlayer:GetDefense();
+    equipScreenTable.EarthResistance = pPlayer:GetResist(3);
+    equipScreenTable.FireResistance = pPlayer:GetResist(0);
+    equipScreenTable.IceResistance = pPlayer:GetResist(1);
+    equipScreenTable.LightningResistance = pPlayer:GetResist(4);
+    equipScreenTable.LightResistance = pPlayer:GetResist(6);
+    equipScreenTable.WaterResistance = pPlayer:GetResist(5);
+    equipScreenTable.WindResistance = pPlayer:GetResist(2);
+
+    return equipScreenTable;
 end
 
 data.GetPet = function()
@@ -504,6 +528,12 @@ data.GetPetAction = function()
     if (action == nil) then
         return nil;
     end
+    
+    local myIndex = AshitaCore:GetMemoryManager():GetParty():GetMemberTargetIndex(0);
+    local petIndex = AshitaCore:GetMemoryManager():GetEntity():GetPetTargetIndex(myIndex);
+    if (petIndex == 0) or AshitaCore:GetMemoryManager():GetEntity():GetHPPercent(petIndex) == 0 then
+        return nil;
+    end
 
     local actionTable = {};
     actionTable.Type = action.Type;
@@ -512,9 +542,6 @@ data.GetPetAction = function()
         actionTable.Element = gData.ResolveString(gData.Constants.SpellElements, action.Resource.Element);
         actionTable.Id = action.Resource.Index;
         actionTable.MpCost = action.Resource.ManaCost;
-        local currentMp = AshitaCore:GetMemoryManager():GetParty():GetMemberMP(0)
-        actionTable.MpAftercast = currentMp - actionTable.MpCost;
-        actionTable.MppAftercast = (actionTable.MpAftercast * 100) / AshitaCore:GetMemoryManager():GetPlayer():GetMPMax();
         actionTable.Name = action.Resource.Name[1];
         actionTable.Recast = action.Resource.RecastDelay * 250;
         actionTable.Skill = gData.ResolveString(gData.Constants.SpellSkills, action.Resource.Skill);
@@ -528,7 +555,6 @@ data.GetPetAction = function()
         else
             actionTable.Type = 'generic';
         end
-    end
     elseif (action.Type == 'MobSkill') then        
         actionTable.Id = action.Id;
         actionTable.Name = action.Name;
@@ -539,6 +565,31 @@ end
 
 data.GetPlayer = function()
     local playerTable = {};
+    local pEntity = AshitaCore:GetMemoryManager():GetEntity();
+    local pParty = AshitaCore:GetMemoryManager():GetParty();
+    local pPlayer = AshitaCore:GetMemoryManager():GetPlayer();
+    local myIndex = pParty:GetMEmberTargetIndex(0);
+
+    playerTable.HP = pParty:GetMemberHP(0);
+    playerTable.MaxHP = pPlayer:GetHPMax();
+    playerTable.HPP = pParty:GetMemberHPPercent(0);
+    playerTable.IsMoving =  ((pEntity:GetLocalPositionX(myIndex) ~= gState.PositionX) or (pEntity:GetLocalPositionY(myIndex) ~= gState.PositionY));
+    local mainJob = pPlayer:GetMainJob();
+    playerTable.MainJob = AshitaCore:GetResourceManager():GetString("jobs_abbr", mainJob);
+    playerTable.MainJobLevel = pPlayer:GetJobLevel(mainJob);
+    playerTable.MainJobSync = pPlayer:GetMainJobLevel();
+    playerTable.MP = pParty:GetMemberMP(0);
+    playerTable.MaxMP = pPlayer:GetMPMax();
+    playerTable.MPP = pParty:GetMemberMPPercent(0);
+    playerTable.Name = pParty:GetMemberName(0);
+    playerTable.Status = gData.ResolveString(gData.Constants.EntityStatus, pEntity:GetStatus(myIndex));
+    local subJob = pPlayer:GetSubJob();
+    playerTable.SubJob = AshitaCore:GetResourceManager():GetString("jobs_abbr", mainJob);
+    playerTable.SubJobLevel = pPlayer:GetJobLevel(subJob);
+    playerTable.SubJobSync = pPlayer:GetSubJobLevel();
+    playerTable.TP = pParty:GetMemberTP(0);
+
+    return playerTable;
 end
 
 data.GetParty = function()    

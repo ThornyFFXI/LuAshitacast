@@ -80,8 +80,42 @@ local ClearEquipBuffer = function()
     gEquip.ClearBuffer();
 end
 
-local Echo = function(text, color)
+local Disable = function(slot)
+    if (slot == 'all') then
+        for i = 1,16,1 do
+            gState.Disabled[i] = true;
+        end            
+        print(chat.header('LuAshitacast') .. chat.message('All slots disabled.'));
+        return;
+    end
+    local slotIndex = gData.GetEquipSlot(slot);
+    if (slotIndex ~= 0) then
+        gState.Disabled[slotIndex] = true;
+        print(chat.header('LuAshitacast') .. chat.color1(2, gData.Constants.EquipSlotNames[slotIndex]) .. chat.message(' disabled.'));
+    else
+        print(chat.header('LuAshitacast') .. chat.error('Could not identify slot: ' .. chat.color1(2, slot)));
+    end
+end
+
+local Echo = function(color, text)
     print(chat.header('LuAshitacast') .. chat.color1(color, text));
+end
+
+local Enable = function(slot)
+    if (slot == 'all') then
+        for i = 1,16,1 do
+            gState.Disabled[i] = false;
+        end            
+        print(chat.header('LuAshitacast') .. chat.message('All slots enabled.'));
+        return;
+    end
+    local slotIndex = gData.GetEquipSlot(slot);
+    if (slotIndex ~= 0) then
+        gState.Disabled[slotIndex] = false;
+        print(chat.header('LuAshitacast') .. chat.color1(2, gData.Constants.EquipSlotNames[slotIndex]) .. chat.message(' enabled.'));
+    else
+        print(chat.header('LuAshitacast') .. chat.error('Could not identify slot: ' .. chat.color1(2, slot)));
+    end
 end
 
 local Equip = function(slot, item)
@@ -200,7 +234,9 @@ local exports = {
     ChangeActionId = ChangeActionId,
     ChangeActionTarget = ChangeActionTarget,
     ClearEquipBuffer = ClearEquipBuffer,
+    Disable = Disable,
     Echo = Echo,
+    Enable = Enable,
     Equip = Equip,
     EquipSet = EquipSet,
     Error = Error,

@@ -159,13 +159,23 @@ state.Reset = function()
         state.Encumbrance[i] = false;
     end
     gState.ForceSet = nil;
-    gSettings.Reset();
+    gSettings = {};
+    for k,v in pairs(gDefaultSettings) do
+        if (type(v) == 'table') then
+            gSettings[k] = {};
+            for subK,subV in pairs(v) do
+                gSettings[k][subK] = subV;
+            end
+        else
+            gSettings[k] = v;
+        end
+    end
 end
 
 state.SafeCall = function(name,...)
     if (gProfile ~= nil) then
         if (type(gProfile[name]) == 'function') then
-            success,error = pcall(gProfile[name],...);
+            local success,error = pcall(gProfile[name],...);
             if (not success) then
                 print (chat.header('LuAshitacast') .. chat.error('Error in profile function: ') .. chat.color1(2, name));
                 print (chat.header('LuAshitacast') .. chat.error(error));

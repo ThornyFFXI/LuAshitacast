@@ -46,37 +46,21 @@ commands.HandleCommand = function(e)
     end
 
     if (args[2] == 'disable') then
-        if (#args == 2) or (args[3] == 'all') then
-            for i = 1,16,1 do
-                gState.Disabled[i] = true;
-            end            
-            print(chat.header('LuAshitacast') .. chat.message('All slots disabled.'));
+        if (#args == 2) then
+            gFunc.Disable('all');
         else
-            local slot = gData.GetEquipSlot(args[3]);
-            if (slot ~= 0) then
-                gState.Disabled[slot] = true;
-                print(chat.header('LuAshitacast') .. chat.color1(2, gData.ResolveString(gData.Constants.EquipSlotNames, slot - 1)) .. chat.message(' disabled.'));
-            else
-                print(chat.header('LuAshitacast') .. chat.error('Could not identify slot: ' .. chat.color1(2, args[3])));
-            end
+            gFunc.Disable(args[3]);
         end
+        return;
     end
 
     if (args[2] == 'enable') then
-        if (#args == 2) or (args[3] == 'all') then
-            for i = 1,16,1 do
-                gState.Disabled[i] = false;
-            end            
-            print(chat.header('LuAshitacast') .. chat.message('All slots enabled.'));
+        if (#args == 2) then
+            gFunc.Enable('all');
         else
-            local slot = gData.GetEquipSlot(args[3]);
-            if (slot ~= 0) then
-                gState.Disabled[slot] = false;
-                print(chat.header('LuAshitacast') .. chat.color1(2, gData.ResolveString(gData.Constants.EquipSlotNames, slot)) .. chat.message(' enabled.'));
-            else
-                print(chat.header('LuAshitacast') .. chat.error('Could not identify slot: ' .. chat.color1(2, args[3])));
-            end
+            gFunc.Enable(args[3]);
         end
+        return;
     end
     
     if (args[2] == 'equip') then

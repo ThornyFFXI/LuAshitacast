@@ -1,0 +1,112 @@
+<html>
+    <title>LuAshitacast gFunc</title>
+    <body style="background-color:#000000">
+        <h1 style="color:#FF7903">Summary</h1>
+        <p style="color:#FFFFFF">gFunc is a global table containing functions used to interface with LuAshitacast from within your profile.  The following functions are designed for use by end users and documented.  You should not modify the gFunc table in any way, nor should you try to call any functions not documented here.</p><br>
+
+        <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.CancelAction()</font><br>
+        <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
+        <font color="#FFFFFF">Effects: Cancels the pending action and any accompanying swaps when called from Precast, Preshot, Ability, Item, or Weaponskill.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.ChangeActionId(id)</font><br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#208020">id</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the ID of the action you'd like to change to</font><br>
+        <font color="#FFFFFF">Effects: Changes a pending action to a different action of the same type when called from Precast, Ability, or Weaponskill.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.ChangeActionTarget(target)</font><br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#208020">target</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the index of an entity within zone to change target to</font><br>
+        <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
+        <font color="#FFFFFF">Effects: Changes a pending action to act on a different target.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Declaration: </font><font color="#208020">gData.ClearEquipBuffer()</font><br>
+        <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
+        <font color="#FFFFFF">Effects: Clears all pending swaps.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.Disable(slot))</font><br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#208020">slot</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the 1-based index of the slot(1-16)</font><br>
+        <font color="#208020">slot</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): the name of the slot, or 'all' for all slots</font><br>
+        <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
+        <font color="#FFFFFF">Effects: Disables the specified slot, preventing swaps from altering the currently equipped piece.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.Echo(color, text)</font><br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#208020">color</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): a value from 0 to 255 to represent the color</font><br>
+        <font color="#208020">text</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the text you would like to print</font><br>
+        <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
+        <font color="#FFFFFF">Effects: Prints text of a specified color to chat log using the LuAshitacast header.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.Enable(slot))</font><br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#208020">slot</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the 1-based index of the slot(1-16)</font><br>
+        <font color="#208020">slot</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): the name of the slot, or 'all' for all slots</font><br>
+        <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
+        <font color="#FFFFFF">Effects: Enables the specified slot, allowing it to be changed again.</font><br>
+        <br><br>
+        
+        
+        <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.Equip(slot, item)</font><br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#208020">slot</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the 1-based index of the slot you want to equip to(1-16)</font><br>
+        <font color="#208020">slot</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): the name of the slot you want to equip to</font><br>
+        <font color="#208020">item</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): the name of a piece of equipment you want to put on</font><br>
+        <font color="#208020">item</font><font color="#FFFFFF"> (</font><font color="#FF7908">table</font><font color="#FFFFFF">): a single item table representing the piece of equipment you want to put on.  Valid members are Name, Augment, AugRank, AugTrial, AugPath, Bag</font><br>
+        <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
+        <font color="#FFFFFF">Effects: Equips an item to the internal buffer.  This does not send a packet and can be safely called multiple times on the same slot.  When your current stage finishes, the equipment will all be put on.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.EquipSet(set)</font><br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#208020">set</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): the name of a set table, which must be located directly inside the profile.Sets table</font><br>
+        <font color="#208020">set</font><font color="#FFFFFF"> (</font><font color="#FF7908">table</font><font color="#FFFFFF">): a set table</font><br>
+        <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
+        <font color="#FFFFFF">Effects: Equips an item set to the internal buffer.  This does not send a packet and can be safely called multiple times.  When your current stage finishes, the equipment will all be put on.</font><br>
+        <br><br>
+        <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.Error(text)</font><br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#208020">text</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the text you would like to print</font><br>
+        <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
+        <font color="#FFFFFF">Effects: Prints text of the default error color to chat log using the LuAshitacast header.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.ForceEquip(slot, item)</font><br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#208020">slot</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the 1-based index of the slot you want to equip to(1-16)</font><br>
+        <font color="#208020">slot</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): the name of the slot you want to equip to</font><br>
+        <font color="#208020">item</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): the name of a piece of equipment you want to put on</font><br>
+        <font color="#208020">item</font><font color="#FFFFFF"> (</font><font color="#FF7908">table</font><font color="#FFFFFF">): a single item table representing the piece of equipment you want to put on.  Valid members are Name, Augment, AugRank, AugTrial, AugPath, Bag</font><br>
+        <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
+        <font color="#FFFFFF">Effects: Sends an equip packet directly to equip an item.  This should not be used unless you specifically understand why you're using it.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.ForceEquipSet(set)</font><br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#208020">set</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): the name of a set table, which must be located directly inside the profile.Sets table</font><br>
+        <font color="#208020">set</font><font color="#FFFFFF"> (</font><font color="#FF7908">table</font><font color="#FFFFFF">): a set table</font><br>
+        <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
+        <font color="#FFFFFF">Effects: Sends equip packets to directly to equip a set.  This should not be used unless you specifically understand why you're using it.</font><br>
+        <br><br>
+
+        <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.Message(text)</font><br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#208020">text</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the text you would like to print</font><br>
+        <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
+        <font color="#FFFFFF">Effects: Prints text of the default message color to chat log using the LuAshitacast header.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.LockSet(set, seconds)</font><br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#208020">seconds</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the length of seconds(decimals allowed) to lock a set on for</font><br>        
+        <font color="#208020">set</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): the name of a set table, which must be located directly inside the profile.Sets table</font><br>
+        <font color="#208020">set</font><font color="#FFFFFF"> (</font><font color="#FF7908">table</font><font color="#FFFFFF">): a set table</font><br>
+        <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
+        <font color="#FFFFFF">Effects: Overrides all state processing and equips a set for the specified period of time.  This does not bypass disable/enable.</font><br>
+    </body>
+</html>
