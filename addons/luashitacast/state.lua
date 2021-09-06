@@ -1,0 +1,179 @@
+local state = {
+    ActionDelay = 0,
+    ForceSet = nil,
+    ForceSetTimer = 0,
+    Injecting = false,
+    PetAction = nil,
+    PlayerAction = nil,
+    PlayerId = 0,
+    PlayerJob = 0,
+    PlayerName = '',
+    pWardrobe = 0,
+    pZoneFlags = 0,
+    pZoneOffset = 0
+};
+
+state.Init = function()
+    gState.pVanaTime = ashita.memory.find('FFXiMain.dll', 0, 'B0015EC390518B4C24088D4424005068', 0, 0);
+    gState.pWardrobe = ashita.memory.find('FFXiMain.dll', 0, 'A1????????568BF1578B88????????C1E902F6C101', 0, 0);
+    gState.pWeather = ashita.memory.find('FFXiMain.dll', 0, '66A1????????663D????72', 0, 0);
+    gState.pZoneFlags = ashita.memory.find('FFXiMain.dll', 0, '8B8C24040100008B90????????0BD18990????????8B15????????8B82', 0, 0);
+
+    if (gState.pVanaTime == 0) then
+        print(chat.header('LuAshitacast') .. chat.error('Vanatime signature scan failed.'));
+    end
+
+    if (gState.pWardrobe == 0) then
+        print(chat.header('LuAshitacast') .. chat.error('Wardrobe access signature scan failed.'));
+    end
+
+    if (gState.pWeather == 0) then
+        print(chat.header('LuAshitacast') .. chat.error('Weather signature scan failed.'));
+    end
+
+    if (gState.pZoneFlags == 0) then
+        print(chat.header('LuAshitacast') .. chat.error('Zone flag signature scan failed.'));
+    else
+        gState.pZoneOffset = ashita.memory.read_uint32(gState.pZoneFlags, 0x09);
+        if (gState.pZoneOffset == 0) then
+            gState.pZoneFlags = 0;
+            print(chat.header('LuAshitacast') .. chat.error('Zone flag offset not found.'));
+        else
+            gState.pZoneFlags = ashita.memory.read_uint32(gState.pZoneFlags, 0x17);
+            if (gState.pZoneFlags == 0) then
+                print(chat.header('LuAshitacast') .. chat.error('Zone flag sub pointer not found.'));
+            end
+        end
+    end
+
+    state.Disabled = {};
+    state.Encumbrance = {};
+    for i = 1,16,1 do
+        state.Disabled[i] = false;
+        state.Encumbrance[i] = false;
+    end
+    
+    if (AshitaCore:GetMemoryManager():GetParty():GetMemberIsActive(0)) then
+        gState.PlayerId = AshitaCore:GetMemoryManager():GetParty():GetMemberServerId(0);
+        gState.PlayerName = AshitaCore:GetMemoryManager():GetParty():GetMemberName(0);
+        gState.PlayerJob = AshitaCore:GetMemoryManager():GetPlayer():GetMainJob();
+        gState.AutoLoadProfile();
+    end    
+end
+
+state.LoadProfile = function(profilePath)
+    local shortFileName = profilePath:match("[^\\]*.$");
+    local status, err = pcall(function ()
+        gProfile = loadfile(profilePath)();
+    end);
+    if (status == false) then
+        gProfile = nil;
+        print(chat.header('LuAshitacast') .. chat.error('Failed to load profile: ') .. chat.color1(2, shortFileName));
+        print(chat.header('LuAshitacast') .. chat.error(err));
+        return;
+    elseif (gProfile ~= nil) then
+        print(chat.header('LuAshitacast') .. chat.message('Loaded profile: ') .. chat.color1(2, shortFileName));
+        if (gProfile.OnLoad ~= nil) and (type(gProfile.OnLoad) == 'function') then
+            gProfile.FilePath = profilePath;
+            gProfile.FileName = shortFileName;
+            gProfile.OnLoad();
+        end
+    end
+end
+
+state.AutoLoadProfile = function()
+    gState.UnloadProfile();
+    
+    local profilePath = ('%sconfig\\addons\\luashitacast\\%s_%u\\%s.lua'):fmt(AshitaCore:GetInstallPath(), gState.PlayerName, gState.PlayerId, AshitaCore:GetResourceManager():GetString("jobs_abbr", gState.PlayerJob));
+    if (not ashita.fs.exists(profilePath)) then
+        profilePath = ('%sconfig\\addons\\luashitacast\\%s_%s.lua'):fmt(AshitaCore:GetInstallPath(), gState.PlayerName, AshitaCore:GetResourceManager():GetString("jobs_abbr", gState.PlayerJob));
+        if (not ashita.fs.exists(profilePath)) then
+            print(chat.header('LuAshitacast') .. chat.error('Profile not found matching: ') .. chat.color1(2, gState.PlayerName .. '_' .. AshitaCore:GetResourceManager():GetString("jobs_abbr", gState.PlayerJob)));
+            return;
+        end
+    end
+    gState.LoadProfile(profilePath);
+end
+
+state.LoadProfileEx = function(path)
+    gState.UnloadProfile();
+    
+    local profilePath = path;
+    if (not ashita.fs.exists(profilePath)) then
+        profilePath = path .. '.lua';
+        if (not ashita.fs.exists(profilePath)) then
+            profilePath = ('%sconfig\\addons\\luashitacast\\%s_%u\\%s'):fmt(AshitaCore:GetInstallPath(), gState.PlayerName, gState.PlayerId, path);
+            if (not ashita.fs.exists(profilePath)) then
+                profilePath = ('%sconfig\\addons\\luashitacast\\%s_%u\\%s.lua'):fmt(AshitaCore:GetInstallPath(), gState.PlayerName, gState.PlayerId, path);
+                if (not ashita.fs.exists(profilePath)) then
+                    profilePath = ('%sconfig\\addons\\luashitacast\\%s'):fmt(AshitaCore:GetInstallPath(), path);
+                    if (not ashita.fs.exists(profilePath)) then
+                        profilePath = ('%sconfig\\addons\\luashitacast\\%s.lua'):fmt(AshitaCore:GetInstallPath(), path);
+                        if (not ashita.fs.exists(profilePath)) then
+                            print(chat.header('LuAshitacast') .. chat.error('Profile not found matching: ') .. chat.color1(2, path));
+                            return;
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    gState.LoadProfile(profilePath);
+end
+
+state.UnloadProfile = function()
+    if (gProfile ~= nil) then
+        if (gProfile.OnUnload ~= nil) and (type(gProfile.OnUnload) == 'function') then
+            gProfile.OnUnload();
+        end
+    end
+    gState.Reset();
+end
+
+state.HandleEquipEvent = function(eventName, equipStyle)
+    if (gProfile ~= nil) then
+        local event = gProfile[eventName];
+        if (event ~= nil) and (type(event) == 'function') then
+            gEquip.ClearBuffer();
+            gState.SafeCall(eventName);
+            if (gState.PlayerAction == nil) or (gState.PlayerAction.Block ~= true) then
+                gEquip.ProcessBuffer(equipStyle);
+            end
+        end
+    end
+end
+
+state.Inject = function(id, data)
+    gState.Injecting = true;
+    AshitaCore:GetPacketManager():AddOutgoingPacket(id, data);
+    gState.Injecting = false;
+end
+
+state.Reset = function()    
+    gProfile = nil;
+    state.Disabled = {};
+    state.Encumbrance = {};
+    for i = 1,16,1 do
+        state.Disabled[i] = false;
+        state.Encumbrance[i] = false;
+    end
+    gState.ForceSet = nil;
+    gSettings.Reset();
+end
+
+state.SafeCall = function(name,...)
+    if (gProfile ~= nil) then
+        if (type(gProfile[name]) == 'function') then
+            success,error = pcall(gProfile[name],...);
+            if (not success) then
+                print (chat.header('LuAshitacast') .. chat.error('Error in profile function: ') .. chat.color1(2, name));
+                print (chat.header('LuAshitacast') .. chat.error(error));
+            end
+        elseif (gProfile[name] ~= nil) then
+            print (chat.header('LuAshitacast') .. chat.error('Profile member exists but is not a function: ') .. chat.color1(2, name));
+        end
+    end
+end
+
+return state;
