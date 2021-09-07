@@ -197,6 +197,45 @@ local Message = function(text)
     print(chat.header('LuAshitacast') .. chat.message(text));
 end
 
+local LoadFile = function(path)
+    if not string.match(path, '.lua') then
+        path = path .. '.lua';
+    end
+    local filePath = path;
+    if (not ashita.fs.exists(filePath)) then
+        filePath = ('%sconfig\\addons\\luashitacast\\%s_%u\\%s'):fmt(AshitaCore:GetInstallPath(), gState.PlayerName, gState.PlayerId, path);
+        if (not ashita.fs.exists(filePath)) then
+            filePath = ('%sconfig\\addons\\luashitacast\\%s'):fmt(AshitaCore:GetInstallPath(), path);
+            if (not ashita.fs.exists(filePath)) then
+                print(chat.header('LuAshitacast') .. chat.error('File not found matching: ') .. chat.color1(2, path));
+                return nil;
+            end
+        end
+    end
+
+    local func = nil;
+    local success,error = pcall(function()
+        func  = loadfile(filePath);
+    end);
+    if (not success) then
+        print (chat.header('LuAshitacast') .. chat.error('Failed to load file: ') .. chat.color1(2,filePath));
+        print (chat.header('LuAshitacast') .. chat.error(error));
+        return nil;
+    end
+
+    local fileValue = nil;
+    success, error = pcall(function ()
+        fileValue = func();
+    end);
+    if (not success) then
+        print (chat.header('LuAshitacast') .. chat.error('Failed to process file: ') .. chat.color1(2,filePath));
+        print (chat.header('LuAshitacast') .. chat.error(error));
+        return nil;
+    end
+
+    return fileValue;
+end
+
 --Equips a set and locks it in for a given period of time
 local LockSet = function(set, seconds)
     local table = nil;
@@ -243,6 +282,7 @@ local exports = {
     ForceEquip = ForceEquip,
     ForceEquipSet = ForceEquipSet,
     Message = Message,
+    LoadFile = LoadFile,
     LockSet = LockSet
 };
 

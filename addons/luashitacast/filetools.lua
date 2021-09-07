@@ -56,13 +56,35 @@ fileTools.AddSet = function(path, sets)
     file:close();
 end
 
+fileTools.CreateDirectories = function(path)
+    local backSlash = string.byte('\\');
+    for c = 1,#path,1 do
+        if (path:byte(c) == backSlash) then
+            local directory = string.sub(path,1,c);            
+            if (ashita.fs.create_directory(directory) == false) then
+                gFunc.Error('Failed to create directory: ' .. directory);
+                return false;
+            end
+        end
+    end
+    return true;
+end
+
 fileTools.CreateProfile = function(path)
     if ashita.fs.exists(path) then
         gFunc.Error('Profile already exists: ' .. path);
         return false;
     end
 
+    if (gFileTools.CreateDirectories(path) == false) then        
+        return;
+    end
+
     local file = io.open(path, 'w');
+    if (file == nil) then
+        gFunc.Error('Failed to access file: ' .. path);
+        return false;
+    end
     file:write('local profile = {};\n');
     file:write('local sets = {\n');
     file:write('};\n\n');
@@ -94,10 +116,10 @@ fileTools.WriteSet = function(file, set)
         if (v ~= nil) then
             local outString = '        ' .. slot .. ' = ';
             if (type(v) == 'string') then
-                outString = outString .. '\'' .. v .. '\',\n';
+                outString = outString .. '\'' .. string.gsub(v, '\'', '\\\'') .. '\',\n';
                 file:write(outString);
             elseif type(v) == 'table' and v.Name ~= nil then
-                outString = outString .. '{ Name = \'' .. v.Name .. '\'';
+                outString = outString .. '{ Name = \'' .. string.gsub(v.Name, '\'', '\\\'') .. '\'';
                 if (v.Augment ~= nil) then
                     if (type(v.Augment) == 'string') then
                         outString = outString .. ', Augment = \'' .. v.Augment .. '\'';

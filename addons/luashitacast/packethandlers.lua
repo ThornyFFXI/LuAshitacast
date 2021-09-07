@@ -84,7 +84,6 @@ packethandlers.HandleIncoming0x28 = function(e)
                 local actionMessage = ashita.bits.unpack_be(e.data_raw, 28, 6, 10);
                 if (actionMessage == 43) then
                     gState.PetAction.Type = 'MobSkill';
-                    gState.PetAction.Completion = os.clock() + 4000;
                     gState.PetAction.Id = actionId;
                     gState.PetAction.Name = AshitaCore:GetResourceManager():GetString("monster_abilities", actionId - 256);
                 else
@@ -95,7 +94,7 @@ packethandlers.HandleIncoming0x28 = function(e)
                 --Pet Spell (8)
                 gState.PetAction.Type = 'Spell';
                 gState.PetAction.Resource = AshitaCore:GetResourceManager():GetSpellById(actionId);
-                gState.PetAction.Completion = os.clock() + (gState.PetAction.Resource.CastTime * 250) + gSettings.SpellOffset;
+                gState.PetAction.Completion = os.clock() + (gState.PetAction.Resource.CastTime * 0.25) + gSettings.SpellOffset;
             end
         end
     end
@@ -111,9 +110,9 @@ packethandlers.HandleActionPacket = function(packet)
         gState.PlayerAction.Target = targetIndex;
         gState.PlayerAction.Type = 'Spell';
         gState.PlayerAction.Resource = AshitaCore:GetResourceManager():GetSpellById(actionId);
-        local baseCast = gState.PlayerAction.Resource.CastTime * 250;
+        local baseCast = gState.PlayerAction.Resource.CastTime * 0.25;
         baseCast = (baseCast * (100 - gSettings.FastCast)) / 100;
-        gState.PlayerAction.Completion = (os.clock() * 1000) + baseCast + gSettings.SpellOffset;
+        gState.PlayerAction.Completion = os.clock() + baseCast + gSettings.SpellOffset;
         gState.HandleEquipEvent('HandlePrecast', 'set');
     elseif (category == 0x07) then
         gState.PlayerAction = { Block = false };
@@ -121,7 +120,7 @@ packethandlers.HandleActionPacket = function(packet)
         gState.PlayerAction.Target = targetIndex;
         gState.PlayerAction.Type = 'Weaponskill';
         gState.PlayerAction.Resource = AshitaCore:GetResourceManager():GetAbilityById(actionId);
-        gState.PlayerAction.Completion = (os.clock() * 1000) + gSettings.WeaponskillDelay;
+        gState.PlayerAction.Completion = os.clock() + gSettings.WeaponskillDelay;
         gState.HandleEquipEvent('HandleWeaponskill', 'auto');
     elseif (category == 0x09) then
         gState.PlayerAction = { Block = false };
@@ -129,7 +128,7 @@ packethandlers.HandleActionPacket = function(packet)
         gState.PlayerAction.Target = targetIndex;
         gState.PlayerAction.Type = 'Ability';
         gState.PlayerAction.Resource = AshitaCore:GetResourceManager():GetAbilityById(actionId + 0x200);
-        gState.PlayerAction.Completion = (os.clock() * 1000) + gSettings.AbilityDelay;
+        gState.PlayerAction.Completion = os.clock() + gSettings.AbilityDelay;
         gState.HandleEquipEvent('HandleAbility', 'auto');
     elseif (category == 0x10) then
         gState.PlayerAction = { Block = false };
@@ -137,7 +136,7 @@ packethandlers.HandleActionPacket = function(packet)
         gState.PlayerAction.Target = targetIndex;
         gState.PlayerAction.Type = 'Ranged';
         local rangedBase = (gSettings.RangedBase * (100 - gSettings.Snapshot)) / 100;
-        gState.PlayerAction.Completion = (os.clock() * 1000) + rangedBase + gSettings.RangedOffset;
+        gState.PlayerAction.Completion = os.clock() + rangedBase + gSettings.RangedOffset;
         gState.HandleEquipEvent('HandlePreshot', 'set');
     else
         gState.Inject(0x1A, packet:totable());
@@ -152,8 +151,13 @@ packethandlers.HandleActionPacket = function(packet)
     end
 
     if (gState.PlayerAction.Type == 'Spell') then
+        local baseCast = gState.PlayerAction.Resource.CastTime * 0.25;
+        baseCast = (baseCast * (100 - gSettings.FastCast)) / 100;
+        gState.PlayerAction.Completion = os.clock() + baseCast + gSettings.SpellOffset;
         gState.HandleEquipEvent('HandleMidcast', 'single');
     elseif (gState.PlayerAction.Type == 'Ranged') then
+        local rangedBase = (gSettings.RangedBase * (100 - gSettings.Snapshot)) / 100;
+        gState.PlayerAction.Completion = os.clock() + rangedBase + gSettings.RangedOffset;
         gState.HandleEquipEvent('HandleMidshot', 'single');
     end
 end
@@ -169,10 +173,10 @@ packethandlers.HandleItemPacket = function(packet)
     gState.PlayerAction.Target = targetIndex;
     gState.PlayerAction.Type = 'Item';
     if (item == nil) or (item.Id == 0) or (item.Count == 0) then
-        gState.PlayerAction.Completion = (os.clock() * 1000) + gSettings.ItemBase + gSettings.ItemOffset;
+        gState.PlayerAction.Completion = os.clock() + gSettings.ItemBase + gSettings.ItemOffset;
     else
         gState.PlayerAction.Resource = AshitaCore:GetResourceManager():GetItemById(item.Id);
-        gState.PlayerAction.Completion = (os.clock() * 1000) + (gState.PlayerAction.Resource.CastTime * 250) + gSettings.ItemOffset;
+        gState.PlayerAction.Completion = os.clock() + (gState.PlayerAction.Resource.CastTime * 0.25) + gSettings.ItemOffset;
     end
 
     gState.HandleEquipEvent('HandleItem', 'auto');

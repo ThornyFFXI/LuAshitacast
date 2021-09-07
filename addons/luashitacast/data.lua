@@ -407,7 +407,7 @@ data.GetActionTarget = function()
     if (gState.PlayerAction == nil) or (gState.PlayerAction.Target == nil) then
         return nil;
     end
-    return gData.GetEntity(gState.PlayerAction.TargetIndex);
+    return gData.GetEntity(gState.PlayerAction.Target);
 end
 
 data.GetBuffCount = function(matchBuff)
@@ -447,10 +447,10 @@ data.GetEnvironment = function()
     local environmentTable = {};
     environmentTable.Area = AshitaCore:GetResourceManager():GetString("zones", AshitaCore:GetMemoryManager():GetParty():GetMemberZone(0));
     local timestamp = gData.GetTimestamp();
-    environmentTable.Day = gData.ResolveString(gData.Constants.WeekDay, timestamp.Day % 8);
-    environmentTable.DayElement = gData.ResolveString(gData.Constants.WeekDayElement, timestamp.Day % 8);
-    environmentTable.MoonPhase = gData.ResolveString(gData.Constants.MoonPhase, (timestamp.Day + 26) % 84);
-    environmentTable.MoonPercent = gData.Constants.MoonPhasePercent[((timestamp.Day + 26) % 84) + 1];
+    environmentTable.Day = gData.Constants.WeekDay[timestamp.day % 8];
+    environmentTable.DayElement = gData.Constants.WeekDayElement[timestamp.day % 8];
+    environmentTable.MoonPhase = gData.ResolveString(gData.Constants.MoonPhase, (timestamp.day + 26) % 84);
+    environmentTable.MoonPercent = gData.Constants.MoonPhasePercent[((timestamp.day + 26) % 84) + 1];
     local weather = gData.GetWeather();
     environmentTable.RawWeather = gData.ResolveString(gData.Constants.Weather, weather);
     environmentTable.RawWeatherElement = gData.ResolveString(gData.Constants.WeatherElement, weather);
@@ -568,7 +568,7 @@ data.GetPlayer = function()
     local pEntity = AshitaCore:GetMemoryManager():GetEntity();
     local pParty = AshitaCore:GetMemoryManager():GetParty();
     local pPlayer = AshitaCore:GetMemoryManager():GetPlayer();
-    local myIndex = pParty:GetMEmberTargetIndex(0);
+    local myIndex = pParty:GetMemberTargetIndex(0);
 
     playerTable.HP = pParty:GetMemberHP(0);
     playerTable.MaxHP = pPlayer:GetHPMax();

@@ -31,7 +31,7 @@ constants.EquipSlots = T{
     waist = 11,
     ear1 = 12,
     ear2 = 13,
-    lring = 14,
+    ring1 = 14,
     ring2 = 15,
     back = 16
 };
@@ -128,25 +128,25 @@ constants.SpawnFlags = T{
 };
 
 constants.WeekDay = T{
-    [1] = 'firesday',
-    [2] = 'earthsday',
-    [3] = 'watersday',
-    [4] = 'windsday',
-    [5] = 'iceday',
-    [6] = 'lightningday',
-    [7] = 'lightsday',
-    [8] = 'darksday'
+    [0] = 'firesday',
+    [1] = 'earthsday',
+    [2] = 'watersday',
+    [3] = 'windsday',
+    [4] = 'iceday',
+    [5] = 'lightningday',
+    [6] = 'lightsday',
+    [7] = 'darksday'
 };
 
 constants.WeekDayElement = T{
-    [1] = 'fire',
-    [2] = 'earth',
-    [3] = 'water',
-    [4] = 'wind',
-    [5] = 'ice',
-    [6] = 'thunder',
-    [7] = 'light',
-    [8] = 'dark'
+    [0] = 'fire',
+    [1] = 'earth',
+    [2] = 'water',
+    [3] = 'wind',
+    [4] = 'ice',
+    [5] = 'thunder',
+    [6] = 'light',
+    [7] = 'dark'
 };
 
 constants.Weather = T{

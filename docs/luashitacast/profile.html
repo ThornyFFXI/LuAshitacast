@@ -1,0 +1,151 @@
+<html>
+    <title>LuAshitacast Profile</title>
+    <body style="background-color:#000000">
+        <h1 style="color:#FF7903">Summary</h1>
+        <font color="#FFFFFF">Your profile is a table that you will define and return in a Lua file.
+            As you have access to the full Lua environment, you will be able to include other files and do a wealth of things from within it.
+            This document is not an exhaustive list of what you can do, but rather a list of the table members that LuAshitacast expects to be present within your profile and how LuAshitacast will interact with them.
+            Your profile should be placed in <font color="#FF7903">ashita/config/addons/luashitacast/CharName_CharId/Job.lua</font>.  You can use the command <font color="#0080FF">/lac newlua</font> to create a blank profile for your current character, id, and job automatically.<br>
+        <br>
+        
+        <h1 style="color:#FF7903">Sets</h1>
+        <font color="#FFFFFF">Sets are a core concept within LuAshitacast.  They are used to easily define gear in large quantities, and the majority of your swaps should be done using sets.
+            Each set is a table, and can have members for the 16 equipment slots as listed here, and an optional NoWrite boolean.  The NoWrite flag should be set to true for dynamically allocated tables, to ensure that addset does not write them to your file.
+            The other valid table members are:<br>
+            <ul>
+            <li><font color="#208020">main</font></li>
+            <li><font color="#208020">sub</font></li>
+            <li><font color="#208020">range</font></li>
+            <li><font color="#208020">ammo</font></li>
+            <li><font color="#208020">head</font></li>
+            <li><font color="#208020">body</font></li>
+            <li><font color="#208020">hands</font></li>
+            <li><font color="#208020">legs</font></li>
+            <li><font color="#208020">feet</font></li>
+            <li><font color="#208020">neck</font></li>
+            <li><font color="#208020">waist</font></li>
+            <li><font color="#208020">ear1</font></li>
+            <li><font color="#208020">ear2</font></li>
+            <li><font color="#208020">ring1</font></li>
+            <li><font color="#208020">ring2</font></li>
+            <li><font color="#208020">back</font></li>
+            </ul>
+        </font>        
+        <font color="#FFFFFF">Each table member represents one piece of equipment and can be either a string, in which case the equipment's name will be matched against it, or a table, which allows additional parameters.  If you use a table, it can have the following members:<br>
+        <br><br>
+
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">Name</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">string</font><br>
+        <font color="#FFFFFF">Effects: Must be specified.  The item to be equipped has to have a name matching the value of this member.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">AugPath</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">string</font><br>
+        <font color="#FFFFFF">Effects: If specified, the item must have this augment path to be equipped.  Value should be 'A' 'B' 'C' or 'D'.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">AugRank</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">number</font><br>
+        <font color="#FFFFFF">Effects: If specified, the item must be exactly this rank to be equipped.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">AugTrial</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">number</font><br>
+        <font color="#FFFFFF">Effects: If specified, the item must be on this trial to be equipped.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">Augment</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">string</font><br>
+        <font color="#FFFFFF">Effects: If specified, at least one of the item's augments must match the string to be equipped.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">Augment</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">table</font><br>
+        <font color="#FFFFFF">Effects: If specified, each table entry must be a string, and at least one of the item's augments must match each table entry for the item to be equipped.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">Bag</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">string</font><br>
+        <font color="#FFFFFF">Effects: If specified, the item must be in this container to be equipped.  Please note that while the tag supports all containers, only heavily modified Topaz servers can equip from anything besides inventory or wardrobes.  Possible values:</font><br>
+        <ul>
+        <li><font color="#208020">inventory</font></li>
+        <li><font color="#208020">safe</font></li>
+        <li><font color="#208020">storage</font></li>
+        <li><font color="#208020">temporary</font></li>
+        <li><font color="#208020">locker</font></li>
+        <li><font color="#208020">satchel</font></li>
+        <li><font color="#208020">sack</font></li>
+        <li><font color="#208020">case</font></li>
+        <li><font color="#208020">wardrobe</font></li>
+        <li><font color="#208020">safe2</font></li>
+        <li><font color="#208020">wardrobe2</font></li>
+        <li><font color="#208020">wardrobe3</font></li>
+        <li><font color="#208020">wardrobe4</font></li>
+        </ul>
+        
+        <h1 style="color:#FF7903">Profile Members</h1>
+        <font color="#FFFFFF">These are the members of your profile table that LuAshitacast will utilize.  Naming is case sensitive and you should not use any of these table members for anything besides the described purpose.  Any of these members can be skipped if you have no use for them.</font><br>
+                
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">Sets</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">table</font><br>
+        <font color="#FFFFFF">Effects: This table should contain all of your sets.  While you can directly equip set objects that are not contained within this table, only sets within this table will be written with '/lac addset', equipped with '/lac set', or respond to string based EquipSet calls.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">OnLoad()</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">function</font><br>
+        <font color="#FFFFFF">Effects: This function is called when your profile is first loaded.  It should handle any ashita event registration, dependency loading, variable initialization, settings modification, dynamic set allocation, keybinds, etc.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">OnUnload()</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">function</font><br>
+        <font color="#FFFFFF">Effects: This function is called when your profile is unloaded.  It should undo any ashita event registration, keybinds, global variables, or anything else you've done that may persist outside the scope of your profile.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">HandleCommand(args)</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">function</font><br>
+        <font color="#FFFFFF">Effects: This function is called when the user types '/lac fwd' based commands.  Any arguments input after the first 2 are passed in.  This should be used for interfacing with the profile's user</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">HandleDefault()</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">function</font><br>
+        <font color="#FFFFFF">Effects: This function is called continuously while you are not performing any actions.
+            Unlike Ashitacast, this does not include pet spells or skills.  As a result, you should use the default section to handle those by checking the gData.GetPetAction() object.
+            You should also use this section to handle idle, engaged, resting, or other sets that you are likely to need while not performing actions.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">HandleAbility</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">function</font><br>
+        <font color="#FFFFFF">Effects: This function is called when you use an ability and should be used to equip gear that will make the ability more effective or a defensive set.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">HandleItem</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">function</font><br>
+        <font color="#FFFFFF">Effects: This function is called when you use an item and should be used to equip gear that will make the item more effective or a defensive set.</font><br>
+        <br><br>
+
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">HandlePrecast</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">function</font><br>
+        <font color="#FFFFFF">Effects: This function is called when you cast a spell, and equips are processed before the spell packet.  It should be used to equip fast cast and quick magic gear.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">HandleMidcast</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">function</font><br>
+        <font color="#FFFFFF">Effects: This function is called when you cast a spell, and equips are processed after the spell packet.  It should be used to equip anything that changes the result or recast time of a spell.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">HandlePreshot</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">function</font><br>
+        <font color="#FFFFFF">Effects: This function is called when you use ranged attack, and equips are processed before the ranged attack packet.  It should be used to equip snapshot and rapid shot gear.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">HandleMidshot</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">function</font><br>
+        <font color="#FFFFFF">Effects: This function is called when you use ranged attack, and equips are processed after the ranged attack packet.  It should be used to equip anything that changes the result of the ranged attack.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">HandleWeaponskill</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">function</font><br>
+        <font color="#FFFFFF">Effects: This function is called when you use a weaponskill and should be used to equip gear that you want to wear while weaponskilling.</font><br>
+        <br><br>
+    </body>
+</html>

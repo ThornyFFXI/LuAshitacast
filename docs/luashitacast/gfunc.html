@@ -101,6 +101,14 @@
         <font color="#FFFFFF">Effects: Prints text of the default message color to chat log using the LuAshitacast header.</font><br>
         <br><br>
         
+        <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.LoadFile(path)</font><br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#208020">path</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): filename or filepath to load</font><br>
+        <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
+        <font color="#FFFFFF">Effects: Loads a lua file, searching first for a full path match, then for a match inside <font color="#FF7903">ashita/config/addons/luashitacast/playername_playerid</font>, and finally for a match inside <font color="#FF7903">ashita/config/addons/luashitacast/</font>.</font><br>
+        <font color="#FFFFFF">Should be used in place of require for any dependencies stored in your config folder, to allow easy per-character overrides and default fallback.</font><br>
+        <br><br>
+
         <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.LockSet(set, seconds)</font><br>
         <font color="#FFFFFF">Arguments:</font><br>
         <font color="#208020">seconds</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the length of seconds(decimals allowed) to lock a set on for</font><br>        

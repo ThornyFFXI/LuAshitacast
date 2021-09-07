@@ -1,0 +1,109 @@
+<html>
+    <title>LuAshitacast Commands</title>
+    <body style="background-color:#000000">
+        <h1 style="color:#FF7903">Summary</h1>
+        <font color="#FFFFFF">These commands should be typed directly into the FFXI console.  They can all be prefixed with /lac or /luashitacast.<br>
+        <br><br>
+
+        <font color="#FFFFFF">Syntax: </font><font color="#0080FF">/lac exec </font><font color="#FFFFFF">[Required: <font color="#208020">code</font>]<br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#208020">code</font><font color="#FFFFFF">: lua code to be executed</font><br>
+        <font color="#FFFFFF">Effects: Executes arbitrary lua code from within the addon environment.  Does not use standard arguments, will take all text typed after the prefix.</font><br>
+        <font color="#FFFFFF">Example Syntax: </font><font color="#0080FF">/lac exec gProfile.AccToggle = 3;</font><br>
+        <br><br>
+
+        <font color="#FFFFFF">Syntax: </font><font color="#0080FF">/lac addset </font><font color="#FFFFFF">[Required: <font color="#208020">set name</font>]</font><br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#208020">set name</font><font color="#FFFFFF">: A set name, that must be valid syntax to become a lua table key.</font><br>
+        <font color="#FFFFFF">Effects: Creates or replaces a set with your current equipment in the active environment and rewrites your sets to your profile.</font><br>
+        <font color="#FFFFFF">Example Syntax: </font><font color="#0080FF">/lac addset tp</font><br>
+        <font color="#A00020"><b>Warning: This function alters your lua profile by replacing a variable at file scope named 'local sets'.<br>
+        -If you have mismatched curly braces, you may lose large chunks of your file.<br>
+        -If you use variables to assign members of your set table in your set declaration, they will be lost.<br>
+        -Any dynamically assigned sets should have a key named NoWrite set to true to avoid them being written with this function.<br>
+        -Due to the potential for this function to be damaging and cost work, you will need to enable the setting 'AllowAddSet' to use it.</b></font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Syntax: </font><font color="#0080FF">/lac debug </font><font color="#FFFFFF">[Optional: <font color="#E6BF00">state</font>]</font><br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#E6BF00">state</font><font color="#FFFFFF">: 'on' or 'off'</font><br>
+        <font color="#FFFFFF">Effects: If 'state' is specified, sets debug mode to that state.  Otherwise, toggles debug mode.  Debug mode will print all your swaps to log.</font><br>
+        <font color="#FFFFFF">Example Syntax: </font><font color="#0080FF">/lac debug on</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Syntax: </font><font color="#0080FF">/lac disable </font><font color="#FFFFFF">[Optional: <font color="#E6BF00">slot</font>]</font><br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#E6BF00">slot</font><font color="#FFFFFF">: 'all' or a slot name(see profile.html)</font><br>
+        <font color="#FFFFFF">Effects: Locks the specified slot(all slots if 'slot' is omitted or 'all') so that it cannot be swapped.</font><br>
+        <font color="#FFFFFF">Example Syntax: </font><font color="#0080FF">/lac disable back</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Syntax: </font><font color="#0080FF">/lac enable </font><font color="#FFFFFF">[Optional: <font color="#E6BF00">slot</font>]</font><br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#E6BF00">slot</font><font color="#FFFFFF">: 'all' or a slot name(see profile.html)</font><br>
+        <font color="#FFFFFF">Effects: Unlocks the specified slot(all slots if 'slot' is omitted or 'all') so that swaps can be resumed.</font><br>
+        <font color="#FFFFFF">Example Syntax: </font><font color="#0080FF">/lac enable back</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Syntax: </font><font color="#0080FF">/lac equip </font><font color="#FFFFFF">[Required: <font color="#208020">slot</font>]</font><font color="#FFFFFF">[Required: <font color="208020">item</font>]</font><br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#208020">slot</font><font color="#FFFFFF">: a slot name(see profile.html)</font><br>
+        <font color="#208020">item</font><font color="#FFFFFF">: an item name(must match the format displayed in inventory)</font><br>
+        <font color="#FFFFFF">Effects: Directly equips an item using packets and allows the LuAshitacast environment to be aware of the swap immediately.</font><br>
+        <font color="#FFFFFF">Example Syntax: </font><font color="#0080FF">/lac equip back "Mecisto. Mantle"</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Syntax: </font><font color="#0080FF">/lac fwd </font><font color="#FFFFFF">[Optional: <font color="#E6BF00">args</font>]<br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#E6BF00">args</font><font color="#FFFFFF">: arguments to be forwarded</font><br>
+        <font color="#FFFFFF">Effects: Sends a command to your profile via the HandleCommand function.  Any specified arguments are passed as a table.</font><br>
+        <font color="#FFFFFF">Example Syntax: </font><font color="#0080FF">/lac fwd /toggle acc</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Syntax: </font><font color="#0080FF">/lac load </font><font color="#FFFFFF">[Optional: <font color="#E6BF00">filename</font>]<br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#E6BF00">filename</font><font color="#FFFFFF">: filename of a profile to load</font><br>
+        <font color="#FFFFFF">Effects: Loads a new profile.  If filename is not specified, will look in <font color="#FF7903">ashita/config/addons/luashitacast/playername_playerid/job.lua</font>.</font><br>
+        If filename is specified, will search for the specified file in <font color="#FF7903">ashita/config/addons/luashitacast/playername_playerid/filename</font> then <font color="#FF7903">ashita/config/luashitacast/filename</font>.  If you do not specify extension, will add .lua.</font><br>
+        <font color="#FFFFFF">Example Syntax: </font><font color="#0080FF">/lac load warodyssey.lua</font><br>
+        <br><br>
+        
+        
+        <font color="#FFFFFF">Syntax: </font><font color="#0080FF">/lac naked</font><br>
+        <font color="#FFFFFF">Arguments: N/A</font><br>
+        <font color="#FFFFFF">Effects: Removes all equipment and disables all slots.</font><br>
+        <font color="#FFFFFF">Example Syntax: </font><font color="#0080FF">/lac naked</font><br>
+        <br><br>
+
+        
+        <font color="#FFFFFF">Syntax: </font><font color="#0080FF">/lac newlua </font><font color="#FFFFFF">[Optional: <font color="#E6BF00">filename</font>]<br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#E6BF00">filename</font><font color="#FFFFFF">: filename to use</font><br>
+        <font color="#FFFFFF">Effects: Creates and loads a new profile.  If filename is not specified, will use <font color="#FF7903">ashita/config/addons/luashitacast/playername_playerid/job.lua.</font></font><br>
+        If filename is specified, will use <font color="#FF7903">ashita/config/addons/luashitacast/playername_playerid/filename</font> and append .lua if no extension is specified.</font><br>
+        If file already exists, this function will fail rather than overwriting it.<br>
+        Profile will contain function declarations and an empty sets section, and enable addset.  This is best used in conjunction with addset to quickly prepare a new job.<br>
+        <font color="#FFFFFF">Example Syntax: </font><font color="#0080FF">/lac newlua warskillup.lua</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Syntax: </font><font color="#0080FF">/lac reload</font><br>
+        <font color="#FFFFFF">Arguments: N/A</font><br>
+        <font color="#FFFFFF">Effects: Reloads the current profile from disk.</font><br>
+        <font color="#FFFFFF">Example Syntax: </font><font color="#0080FF">/lac reload</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Syntax: </font><font color="#0080FF">/lac set </font><font color="#FFFFFF">[Required: <font color="#208020">set</font>]</font><font color="#FFFFFF">[Optional: <font color="#E6BF00">duration</font>]<br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#208020">set</font><font color="#FFFFFF">: a set name(must be a table entry in profile.Sets table)</font><br>
+        <font color="#E6BF00">duration</font><font color="#FFFFFF">: duration, in seconds, to equip the set for</font><br>
+        <font color="#FFFFFF">Effects: Equips a set for the specified duration(default of 3 seconds if duration is not specified).  Will not override disabled slots.</font><br>
+        <font color="#FFFFFF">Example Syntax: </font><font color="#0080FF">/lac set pdt 3.0</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Syntax: </font><font color="#0080FF">/lac unload</font><br>
+        <font color="#FFFFFF">Arguments: N/A</font><br>
+        <font color="#FFFFFF">Effects: Unloads the current profile.</font><br>
+        <font color="#FFFFFF">Example Syntax: </font><font color="#0080FF">/lac unload</font><br>
+        <br><br>
+    </body>
+</html>

@@ -1,6 +1,21 @@
 local commands = {}
 
 commands.HandleCommand = function(e)
+    if string.sub(e.command, 1, 9) == '/lac exec' or string.sub(e.command,1,18) == '/luashitacast exec' then
+        e.blocked = true;
+        local command = string.sub(e.command, 10, string.len(e.command));
+        if (string.sub(e.command, 1, 9) == '/luashitacast exec') then
+            command = string.sub(e.command, 19, string.len(e.command));
+        end
+        local func = assert(loadstring(command));
+        local success,error = pcall(func);
+        if (not success) then
+            print (chat.header('LuAshitacast') .. chat.error('Error in execute: ') .. chat.color1(2,command));
+            print (chat.header('LuAshitacast') .. chat.error(error));
+        end
+        return;
+    end
+
     local args = e.command:args();
     if (#args == 0) or ((args[1] ~= '/lac') and (args[1] ~= '/luashitacast')) then
         return;
@@ -20,9 +35,25 @@ commands.HandleCommand = function(e)
             print(chat.header('LuAshitacast') .. chat.error('You must specify a set name for addset.'));
             return;
         end
+        
+        if (gProfile == nil) then
+            print(chat.header('LuAshitacast') .. chat.error('You must have a profile loaded to use addset.'));
+            return;
+        end
+        
+        if (gProfile.Sets == nil) then
+            print(chat.header('LuAshitacast') .. chat.error('Your profile must have a sets table to use addset.'));
+            return;
+        end
 
+        local replaced = (gProfile.Sets[args[3]] ~= nil);
         gProfile.Sets[args[3]] = gData.GetCurrentSet();
         gFileTools.AddSet(gProfile.FilePath, gProfile.Sets);
+        if (replaced) then
+            print(chat.header('LuAshitacast') .. chat.message('Replaced Set: ') .. chat.color1(2, args[3]));
+        else
+            print(chat.header('LuAshitacast') .. chat.message('Added Set: ') .. chat.color1(2, args[3]));
+        end
         return;
     end
 

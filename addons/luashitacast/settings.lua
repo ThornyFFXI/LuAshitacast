@@ -11,16 +11,16 @@ local defaultSettings = {
         [5] = 0
     },
     EnableNomadStorage = false,
-    ForceEnableBags = { },
     ForceDisableBags = { },
-    PetskillDelay = 4000,
-    WeaponskillDelay = 3000,
-    AbilityDelay = 2500,
-    SpellOffset = 500,
-    RangedBase = 10000,
-    RangedOffset = 500,
-    ItemBase = 4000;
-    ItemOffset = 500,
+    ForceEnableBags = { },
+    PetskillDelay = 4.0,
+    WeaponskillDelay = 3.0,
+    AbilityDelay = 2.5,
+    SpellOffset = 0.5,
+    RangedBase = 10.0,
+    RangedOffset = 0.5,
+    ItemBase = 4.0;
+    ItemOffset = 0.5,
     FastCast = 0,
     Snapshot = 0
 };

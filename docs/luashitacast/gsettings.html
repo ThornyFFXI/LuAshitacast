@@ -1,0 +1,115 @@
+<html>
+    <title>LuAshitacast gSettings</title>
+    <body style="background-color:#000000">
+        <h1 style="color:#FF7903">Summary</h1>
+        <p style="color:#FFFFFF">gSettings is a global table containing settings that are used by LuAshitacast during operation.  It is rewritten every time a new profile is loaded, so you should ensure your OnLoad event updates any settings you plan to alter.</p><br>
+
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">AddSetEquipScreenOrder</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">boolean</font><br>
+        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">true</font><br>
+        <font color="#FFFFFF">Effects: If true, addset will write your sets in the order of equip screen rows.  If false, addset will write them in the order of equipment slot IDs.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">AllowSyncEquip</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">boolean</font><br>
+        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">true</font><br>
+        <font color="#FFFFFF">Effects: If true, LuAshitacast will judge equipment based on your real level and attempt to equip pieces above your current sync level.  If false, LuAshitacast will not try to equip anything above your current sync level.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">AllowAddSet</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">boolean</font><br>
+        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">false</font><br>
+        <font color="#FFFFFF">Effects: If true, you will be able to use the '/lac addset' command.  If false, it will be blocked.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">Debug</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">boolean</font><br>
+        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">false</font><br>
+        <font color="#FFFFFF">Effects: If enabled, LuAshitacast will print your equipment swaps to the chat log.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">EquipBags</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">table</font><br>
+        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">{ [1] = 8, [2] = 10, [3] = 11, [4] = 12, [5] = 0 }</font><br>
+        <font color="#FFFFFF">Effects: This determines the containers and order that LuAshitacast will search for equipment.  It must be an ipairs compatible table.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">EnableNomadStorage</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">boolean</font><br>
+        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">false</font><br>
+        <font color="#FFFFFF">Effects: If true, LuAshitacast will assume you have access to storage at nomad moogles.  This should not be needed in normal circumstances, as storage is not an equippable container.  It was included in case of particularly bazaar Topaz implementations.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">ForceDisableBags</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">table</font><br>
+        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">{ }</font><br>
+        <font color="#FFFFFF">Effects: Any container indices listed in this table will be treated as if you do not have access to them, regardless of whether you do.  This is intended for Topaz servers that do not enable wardrobes the same way as retail.</font><br>
+        <font color="#FFFFFF">Example Value: </font><font color="#FF7903">{ 8, 10 }</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">ForceEnableBags</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">table</font><br>
+        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">{ }</font><br>
+        <font color="#FFFFFF">Effects: Any container indices listed in this table will be treated as if you have access to them, regardless of whether you do.  This is intended for Topaz servers that do not enable wardrobes the same way as retail.</font><br>
+        <font color="#FFFFFF">Example Value: </font><font color="#FF7903">{ 8, 10, 11, 12 }</font><br>
+        <br><br>
+
+        <font color="#A00020"><b>Note: The following settings are used for defaults, and setting them too high will not reduce efficiency as the action is marked complete anyway when you receive the action complete packet.<br>
+            Setting them too low can result in your swaps not persisting until the action ends.  If uncertain, leave them alone or use higher values than you expect to be necessary.</b></font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">PetskillDelay</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">number</font><br>
+        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">4.0</font><br>
+        <font color="#FFFFFF">Effects: This is the time, in seconds, that LuAshitacast will wait for a pet skill to complete before assuming the completion packet was lost.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">WeaponskillDelay</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">number</font><br>
+        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">3.0</font><br>
+        <font color="#FFFFFF">Effects: This is the time, in seconds, that LuAshitacast will wait for a player weaponskill to complete before assuming the completion packet was lost.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">AbilityDelay</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">number</font><br>
+        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">2.5</font><br>
+        <font color="#FFFFFF">Effects: This is the time, in seconds, that LuAshitacast will wait for a player ability to complete before assuming the completion packet was lost.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">SpellOffset</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">number</font><br>
+        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">1.0</font><br>
+        <font color="#FFFFFF">Effects: Additional time, in seconds, to be added to a calculated spell casttime before assuming the completion packet was lost.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">RangedBase</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">number</font><br>
+        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">10.0</font><br>
+        <font color="#FFFFFF">Effects: Base time, in seconds, to wait for a ranged attack to complete before assuming the completion packet was lost.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">RangedOffset</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">number</font><br>
+        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">0.5</font><br>
+        <font color="#FFFFFF">Effects: Additional time, in seconds, to wait for a ranged attack to complete before assuming the completion packet was lost.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">ItemOffset</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">number</font><br>
+        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">1.0</font><br>
+        <font color="#FFFFFF">Effects: Additional time, in seconds, to be added to a calculated item usage time before assuming the completion packet was lost.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">FastCast</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">number</font><br>
+        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">0</font><br>
+        <font color="#FFFFFF">Effects: Value of fast cast to be used in reducing spell cast completion estimate.  Can be set during precast function.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">Snapshot</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">number</font><br>
+        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">0</font><br>
+        <font color="#FFFFFF">Effects: Value of snapshot to be used in reducing ranged attack completion estimate.  Can be set during preshot function.</font><br>
+        <br><br>
+    </body>
+</html>

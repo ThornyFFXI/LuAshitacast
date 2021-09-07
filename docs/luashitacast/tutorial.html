@@ -1,0 +1,182 @@
+<html>
+    <title>LuAshitacast Tutorial</title>
+    <body style="background-color:#000000">
+        <h1 style="color:#FF7903">Lesson 1 - Install an editor.</h1>
+        <font color="#FFFFFF">Lua is a full featured language, and syntax highlighting will make your experience much easier.
+            I would recommend you use either <a href="https://notepad-plus-plus.org/downloads/">Notepad++</a> for a lightweight solution,
+            or <a href="https://code.visualstudio.com/">VSCode</a> if you're not worried about being overwhelmed by features.
+            While I personally use VSCode, I will do this tutorial with Notepad++ as I feel it is more suitable for those who are likely to need a tutorial.
+            Once you've installed your editor, log into FFXI and proceed to the next step.</font><br><br>
+            
+        <h1 style="color:#FF7903">Lesson 2 - Create and open a blank profile.</h1>
+        <font color="#FFFFFF">While ingame, and on your desired job, type the following commands:<br>
+            <ul>
+                <li><font color="#0080FF">/load addons</font></li>
+                <li><font color="#0080FF">/addon load luashitacast</font></li>
+                <li><font color="#0080FF">/lac newlua</font></li>
+            </ul></font>
+
+        <font color="#FFFFFF">You should see a message along the lines of:<br>
+        <img src="Tutorial/load.png" /><br><br><br>
+        <font color="#FFFFFF">Next, browse to your ashita folder and go into the subdirectories: config, addons, luashitacast, then the one named after your current character.  It should look like this(windows 10):</font><br>
+        <img src="Tutorial/directories.png" /><br><br><br>
+        <font color="#FFFFFF">Right click and choose 'edit with notepad++'.  Then, under the Language heading, ensure that the category L, and further the language Lua are selected.
+            This will highlight some parts of the profile for easier viewing.  You should have your profile open and be looking at something like this:</font><br>
+        <img src="Tutorial/profile.png" /><br><br><br>
+
+        <h1 style="color:#FF7903">Lesson 3 - Add some sets to your profile.</h1>
+        <font color="#FFFFFF">Ingame, equip a set you'd like to use for idle, and type the command: <font color="#0080FF">/lac addset Idle</font></font><br>
+        <font color="#FFFFFF">Repeat for a few other sets you'd like to use, such as nuking, healing, weaponskill, fast cast, etc.</font><br>
+        <font color="#FFFFFF">Look back at Notepad++(you may need to click File..Reload From Disk to ensure changes applied).  You should have your sets visible:<br>
+            <img src="Tutorial/profilesets.png" /><br><br><br>
+
+        
+        <h1 style="color:#FF7903">Lesson 4 - Configure an idle set.</h1>
+        <font color="#FFFFFF">To do this, we'll need to use the HandleDefault function.
+            Scroll down your profile until you find it.
+            We want to seperate our idle set by state, so we need to use the data functions.
+            You can see a full list of available data tables in <a href="gdata.html">gdata.html</a>.<br>
+
+            First, we grab the player table:<br>
+            <font color="#0080FF">&emsp;local player = gData.GetPlayer();</font><br>
+
+            Next, we evaluate whether we're engaged:<br>
+            <font color="#0080FF">    &emsp;if (player.Status == 'engaged') then</font><br>
+
+            Then, we equip the set using gFunc.EquipSet(for a full list of available functions see <a href="gfunc.html">gfunc.html</a>):<br>
+            <font color="#0080FF">        &emsp;&emsp;gFunc.EquipSet(sets.Tp);</font><br>
+
+            Since we have other possible comparisons to look at, we can use elseif to check for multiple things.  Elseif statements are only evaluated if the prior if was not, so this guarantees we only hit one at a time.<br>
+            <font color="#0080FF">   &emsp; elseif (player.Status == 'resting') then</font><br>
+            <font color="#0080FF">        &emsp;&emsp;gFunc.EquipSet(sets.Resting);</font><br>
+
+            Finally, we use an else to catch the most likely scenario so any other state will fall under it:<br>
+            <font color="#0080FF">    &emsp;else</font><br>
+            <font color="#0080FF">        &emsp;&emsp;gFunc.EquipSet(sets.Idle);</font><br>
+
+            Lua requires all if-elseif-else blocks to be terminated with an end call, so add that:<br>
+            <font color="#0080FF">    &emsp;end</font><br>
+
+            This will result in equipping the set Resting while you're resting, Tp while you're engaged, and Idle any other time.  For it to work correctly, you must have defined those sets with those exact names.  If you used other names, don't worry, you can just change the name inside the gFunc.EquipSet call.
+            For example, if you called your idle set refresh, you would change gFunc.EquipSet(sets.Idle) to gFunc.EquipSet(sets.refresh).  You should end up with something like this:<br>
+            <img src="Tutorial/default.png" /><br>
+            If you want to see it in action, type <font color="#0080FF">/lac reload</font> ingame and it will take effect.  Bear in mind that you will need to use <font color="#0080FF">/lac disable</font> to pause equipment swaps if you need to add additional sets after defining an idle set, so you are not placed back in idle while manually equipping things.
+            <br><br>
+
+        <h1 style="color:#FF7903">Lesson 5 - Configure some weaponskill sets.</h1>
+        <font color="#FFFFFF">To do this, we'll need to use the HandleWeaponskill function.  Scroll down your profile until you find it.<br>
+            Much like how we wanted to differentiate engaged, resting, and other(assumed to be idle), we want to know which weaponskill we're using.
+
+            First, we grab the action table:<br>
+            <font color="#0080FF">&emsp;local action = gData.GetAction();</font><br>
+
+            Next, we start checking for weaponskills that have their own sets, and adding equip commands:<br>
+            <font color="#0080FF">    &emsp;if (action.Name == 'Savage Blade') then</font><br>
+            <font color="#0080FF">        &emsp;&emsp;gFunc.EquipSet(sets.SavageBlade);</font><br>
+
+            Because we only want to equip one weaponskill set, we should use elseif for everything except the first set:<br>
+            <font color="#0080FF">    &emsp;elseif (action.Name == 'Sanguine Blade') then</font><br>
+            <font color="#0080FF">        &emsp;&emsp;gFunc.EquipSet(sets.SanguineBlade);</font><br>
+            <font color="#0080FF">    &emsp;elseif (action.Name == 'Spirits Within') then</font><br>
+            <font color="#0080FF">        &emsp;&emsp;gFunc.EquipSet(sets.SpiritsWithin);</font><br>
+
+            And we end with a default weaponskill set to catch any ws we didn't bother to define:<br>
+            <font color="#0080FF">    &emsp;else</font><br>
+            <font color="#0080FF">       &emsp;&emsp; gFunc.EquipSet(sets.DefaultWeaponskill);</font><br>
+
+            As before, we have to use the end keyword to finish an if-elseif-else block.<br>
+            <font color="#0080FF">    &emsp;end</font><br>
+            
+            Again, you can change the names of the sets and the weaponskills you check for however you like.  You should end up with something like this:<br>
+            <img src="Tutorial/weaponskill.png" /><br>
+            If you want to see it in action, type <font color="#0080FF">/lac reload</font> ingame and go weaponskill something.  You can actually leave the equipment open and watch the swaps happen in real time.<br>
+            <br><br>
+            
+        <h1 style="color:#FF7903">Lesson 6 - Add a precast set.</h1>
+        <font color="#FFFFFF">To do this, we'll need to use the HandlePrecast function.  Scroll down your profile until you find it.<br>
+            Unlike the last couple of examples, you might only need one set for all precasts.<br>
+            That makes this super easy, because you don't have to use any if-elseif-else gating at all!<br>
+            Simply equip the set:<br>
+            <font color="#0080FF">&emsp;gFunc.EquipSet(sets.FastCast);</font><br>
+            As always, you can change the name of the set if you want.  It should look like this:<br>
+            <img src="Tutorial/precast1.png" /><br>
+
+            But, let's say you have a Marsyas or Twilight Cloak.  You'll need to equip those seperately, which we do by using if gating.<br>
+            Since it is only a single conditional(If we're casting honor march, we need to equip Marsyas), you won't need elseif or else.<br>
+            If you've been following so far, you might have the idea in your head already, but we will accomplish this with the action table just like in weaponskills.<br>
+            
+            <font color="#0080FF">&emsp;local action = gData.GetAction();<br>
+                &emsp;if (action.Name == 'Honor March') then<br>
+                &emsp;&emsp;gFunc.Equip('range', 'Marsyas');<br>
+                &emsp;&emsp;gFunc.Equip('ammo', 'displaced');<br>
+                &emsp;end<br></font><br>
+            <img src="Tutorial/precast2.png" /><br>
+
+            This introduces two new concepts.  First, we use a single equip tag.  Since we already equipped the precast set, we don't need a whole new set, we can just modify slots.
+            By calling Equip to set range to marsyas, we modify the pending set to include marsyas instead of it's existing range.  Second, we add the ammo as displaced.<br>
+            This is a crucial component for fast swaps; the displaced tag tells LuAshitacast that equipping this set will remove your ammo slot.
+            Consider this example scenario: While idling in gjallarhorn, you equip an impatiens for precast, then gjallarhorn for midcast.
+            Because precast and midcast happen nearly instantly, when LuAshitacast examines midcast it will know your ammo has changed to impatiens, but your client will still show gjallarhorn in range.
+            Because gjallarhorn is still shown in range, LuAshitacast will not equip it, and your midcast will end up with impatiens and no instrument!
+            By adding a displaced tag, you let LuAshitacast know that the slot will be emptied, so any other swaps occuring in the near future can be performed properly.
+            Now is a good time to go back and look at your sets and add displaced tags: Most ammo pieces will displace ranged slots, cloaks will displace headgear, and so on.<br>
+            <font color="#A00020"><b>A note on precast/preshot: The server will often send both your precast+midcast or preshot+midshot swaps in the same packet sequence.  This means you may never see your precast/preshot on the equipment screen.  If it doesn't seem to be taking effect, and you want to verify that it is working, use <font color="#0080FF">/lac debug on</font> to be sure.</b></font><br>
+            <br><br>
+            
+    <h1 style="color:#FF7903">Lesson 7 - Add some job ability swaps.</h1>
+    <font color="#FFFFFF">To do this, we'll need to use the HandleAbility function.  Scroll down your profile until you find it.<br>
+        Here we will introduce a new function, <font color="#0080FF">string.match</font> that we use to partially match names.<br>
+        There's no need to list out each of the 8 different quick draws when they all share the same name:<br>
+
+        <font color="#0080FF">&emsp;local action = gData.GetAction();<br>
+        <font color="#0080FF">&emsp;if string.match(action.Name, ' Shot') then<br>
+
+        <font color="#FFFFFF">Now, we still want to differentiate light and dark shot because they use different sets, so we will use <font color="#FF7903">nested conditionals</font>.
+        This might sound scary, but it really just means 'if statements inside other if statements'.<br>
+
+        <font color="#0080FF">&emsp;&emsp;if (action.Name == 'Light Shot') then<br>
+            &emsp;&emsp;&emsp;gFunc.EquipSet(sets.QuickDrawAccuracy);<br>
+            &emsp;&emsp;elseif (action.Name == 'Dark Shot') then<br>
+            &emsp;&emsp;&emsp;gFunc.EquipSet(sets.QuickDrawAccuracy);<br>
+            &emsp;&emsp;else<br>
+            &emsp;&emsp;&emsp;gFunc.EquipSet(sets.QuickDrawDamage);<br>
+            &emsp;&emsp;end<br>
+        
+        <font color="#FFFFFF">Since we already checked that the name contains ' Shot', and we haven't yet ended that if statement,
+            then we know anything besides Light Shot or Dark Shot will be a damage quick draw.  But, this is a little clunky, we can also use an <font color="#FF7903">or</font> statement to make it even cleaner:</font><br>
+
+            <font color="#0080FF">&emsp;&emsp;if (action.Name == 'Light Shot') or (action.Name == 'Dark Shot') then<br>
+                &emsp;&emsp;&emsp;gFunc.EquipSet(sets.QuickDrawAccuracy);<br>
+                &emsp;&emsp;else<br>
+                &emsp;&emsp;&emsp;gFunc.EquipSet(sets.QuickDrawDamage);<br>
+                &emsp;&emsp;end<br>
+            </font>
+        
+        <font color="#FFFFFF">This works the same way, the first if statement will be matched if either of the checks are matched.  We did not include any elseifs, so anytime the first statement is not matched we will equip our damage set.<br>
+        
+        Now, we still have to consider possible other abilities, so let's add some elseifs that will reference the first string.match check:<br>
+
+        <font color="#0080FF">&emsp;elseif (action.Name == 'Wild Card') then<br>
+            &emsp;&emsp;gFunc.Equip('Feet', 'Lanun Bottes +3');<br>
+            &emsp;elseif (action.Name == 'Random Deal') then<br>
+            &emsp;&emsp;gFunc.Equip('Body', 'Lanun Frac +3');<br>
+        </font>
+
+        Since we don't need a default equipment set for abilities, we could leave it like this.
+        Without an else statement, you'll be left in whatever gear you were in when the ability started for any other ability.
+        However, if you want to min-max, you could add a PDT set or something defensive(or refresh, regen, etc for possible tick) for other abilities:<br>
+        
+        <font color="#0080FF">else<br>
+            gFunc.EquipSet(sets.PDT);<br></font>
+
+        And, as always, we need an end statement for the outer if-elseif-else chain:<br>
+
+        <font color="#0080FF">end<br></font>
+
+        Before putting it all together, I want to note the importance of indentation.  Any time you leave an if-elseif-else statement or similar open, you should indent to make it easier to read.  In this case, our code looks like:<br>
+
+        <img src="Tutorial/ability.png" /><br><br><br>
+
+
+    </body>
+</html>
