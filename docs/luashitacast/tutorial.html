@@ -275,7 +275,7 @@
         <br>
         
     <h1 style="color:#FF7903">Lesson 10 - Creating and equipping variations of sets</h1>
-    <font color="#FFFFFF">If you're coming from Ashitacast, you might have some experience combining variable names such as <font face="Courier" color="#0080FF"><equip set="TP-$TpVariant" /></font>.
+    <font color="#FFFFFF">If you're coming from Ashitacast, you might have some experience combining variable names such as <font face="Courier" color="#0080FF">&lt;equip set="TP-$TpVariant" /&gt;</font>.
     If you're coming from gearswap, you're probably used to sets having nested tables, such as <font face="Courier" color="#0080FF">equip(sets.TP[TpVariant]</font>.
     LuAshitacast does things a little differently, as we want all your sets to be within the same un-nested table, but you can still apply these concepts easily.
     I recommend naming sets of this nature using underscores to indicate variants, such as  <font face="Courier" color="#0080FF">TP_TpVariant</font>.  This will make things easier to read, as each variable is seperated.
@@ -371,11 +371,11 @@
         for us to use within the table.  So, the table in question is going to be:</font><br>
 
         <font face="Courier" color="#0080FF">local MndDebuffs = T{ 'Slow', 'Paralyze', 'Slow II', 'Paralyze II', 'Addle', 'Addle II' };<br>
-            local ElementalDebuffs = T{ 'Burn', 'Rasp', 'Drown', 'Choke', 'Frost', 'Shock' };</font>br>
+            local ElementalDebuffs = T{ 'Burn', 'Rasp', 'Drown', 'Choke', 'Frost', 'Shock' };</font><br>
 
         
         The declaration is pretty straightforward.  We're just making lists to simplify our rules a little bit.
-        Now, onto the actual rules(if you're following, I probably don't have to tell you, but we'll be going to HandleMidcast for this):
+        Now, onto the actual rules(if you're following, I probably don't have to tell you, but we'll be going to HandleMidcast for this):<br>
         
         <font face="Courier" color="#0080FF">
             &emsp;local action = gData.GetAction();<br>
@@ -490,7 +490,7 @@
 
             Now we'll also wear BP gear if pet is BPing while we're casting haste.  Because Precast is instant, we don't need to alter that, we should keep it
             so we keep maximum cast speed.  You can add a table of spells, or even override all spells, all abilities, etc by not using that outer if statement.
-            This allows the utmost flexibility when optimizing for pet behavior.
+            This allows the utmost flexibility when optimizing for pet behavior.<br>
 
             <img src="Tutorial/petmidcast.png" /><br>            
             <font color="#A00020"><b>A note on Puppetmaster: Your puppet's weaponskills execute almost instantly.  It is highly probable that by the time the client
