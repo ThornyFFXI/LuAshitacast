@@ -525,6 +525,10 @@ local EquipSet = function(set, style)
     
     --Prepare table of equip packets.
     local equipInfo = PrepareEquip(set);
+    if (#equipInfo == 0) then
+        return;
+    end
+
     UnequipConflicts(equipInfo);
     
     --Send equip packets.
