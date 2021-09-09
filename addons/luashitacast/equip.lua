@@ -517,18 +517,20 @@ local EquipSet = function(set, style)
     end
 
     --Flag items that are already equipped.  If all are already equipped, don't bother parsing inventory.
-    if (FlagEquippedItems(set) == false) then
-        LocateItems(set);
+    if (FlagEquippedItems(set) == true) then
+        return;
     end
+    
+    LocateItems(set);
     
     --Prepare table of equip packets.
     local equipInfo = PrepareEquip(set);
     UnequipConflicts(equipInfo);
     
     --Send equip packets.
-    if (set == 'set') then
+    if (style == 'set') then
         ProcessEquipSet(equipInfo);
-    elseif (set == 'single') then
+    elseif (style == 'single') then
         ProcessEquip(equipInfo);
     else
         if (#equipInfo < 9) then
@@ -538,7 +540,7 @@ local EquipSet = function(set, style)
         end
     end
 
-    --Handle displaced items    
+    --Handle displaced items
     for k,v in ipairs(set) do
         if (v.Index == -1) then
             local internalEntry = {};

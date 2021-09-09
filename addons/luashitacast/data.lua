@@ -7,9 +7,9 @@ data.CheckInMogHouse = function()
         return false;
     end
 
-    local zonePointer = ashita.memory.read_uint32(gState.pZoneFlags, 0);
+    local zonePointer = ashita.memory.read_uint32(gState.pZoneFlags + 0);
     if (zonePointer ~= 0) then
-        local zoneFlags = ashita.memory.read_uint32(zonePointer, gState.pZoneOffset);
+        local zoneFlags = ashita.memory.read_uint32(zonePointer + gState.pZoneOffset);
         if (bit.band(zoneFlags, 0x100) == 0x100) then
             return true;
         end
@@ -108,8 +108,8 @@ data.ResolveString = function(table, value)
 end
 
 data.GetAccountFlags = function()
-    local subPointer = ashita.memory.read_uint32(gState.pWardrobe, 1);
-    return ashita.memory.read_uint8(subPointer, 0xB4);
+    local subPointer = ashita.memory.read_uint32(gState.pWardrobe + 1);
+    return ashita.memory.read_uint8(subPointer + 0xB4);
 end
 
 data.GetAugment = function(item)
@@ -315,8 +315,8 @@ data.GetTargetIndex = function()
 end
 
 data.GetTimestamp = function()
-    local pointer = ashita.memory.read_uint32(gState.pVanaTime, 0x34);
-    local rawTime = ashita.memory.read_uint32(pointer, 0x0C) + 92514960;
+    local pointer = ashita.memory.read_uint32(gState.pVanaTime + 0x34);
+    local rawTime = ashita.memory.read_uint32(pointer + 0x0C) + 92514960;
     local timestamp = {};
     timestamp.day = math.floor(rawTime / 3456);
     timestamp.hour = math.floor(rawTime / 144) % 24;
@@ -325,8 +325,8 @@ data.GetTimestamp = function()
 end
 
 data.GetWeather = function()
-    local pointer = ashita.memory.read_uint32(gState.pWeather, 0x02);
-    return ashita.memory.read_uint8(pointer, 0);
+    local pointer = ashita.memory.read_uint32(gState.pWeather + 0x02);
+    return ashita.memory.read_uint8(pointer + 0);
 end
 
 data.GetAlliance = function()
@@ -447,9 +447,9 @@ data.GetEnvironment = function()
     local environmentTable = {};
     environmentTable.Area = AshitaCore:GetResourceManager():GetString("zones", AshitaCore:GetMemoryManager():GetParty():GetMemberZone(0));
     local timestamp = gData.GetTimestamp();
-    environmentTable.Day = gData.Constants.WeekDay[timestamp.day % 8];
-    environmentTable.DayElement = gData.Constants.WeekDayElement[timestamp.day % 8];
-    environmentTable.MoonPhase = gData.ResolveString(gData.Constants.MoonPhase, (timestamp.day + 26) % 84);
+    environmentTable.Day = gData.Constants.WeekDay[(timestamp.day % 8) + 1];
+    environmentTable.DayElement = gData.Constants.WeekDayElement[(timestamp.day % 8) + 1];
+    environmentTable.MoonPhase = gData.ResolveString(gData.Constants.MoonPhase, ((timestamp.day + 26) % 84) + 1);
     environmentTable.MoonPercent = gData.Constants.MoonPhasePercent[((timestamp.day + 26) % 84) + 1];
     local weather = gData.GetWeather();
     environmentTable.RawWeather = gData.ResolveString(gData.Constants.Weather, weather);

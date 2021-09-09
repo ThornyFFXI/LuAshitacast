@@ -190,7 +190,7 @@ end
 
 packethandlers.HandleOutgoingChunk = function(e)
     --Clear expired actions.
-    local time = (os.clock() * 1000);
+    local time = os.clock();
     if (gState.PlayerAction ~= nil) and (gState.PlayerAction.Completion < time) then
         gState.PlayerAction = nil;
     end
@@ -210,6 +210,8 @@ packethandlers.HandleOutgoingChunk = function(e)
             gState.PositionY = struct.unpack('f', e.chunk_data, offset + 0x0C + 1);
         elseif (id == 0x37) then
             gPacketHandlers.HandleItemPacket(struct.unpack('c' .. size, e.chunk_data, offset + 1));
+        elseif (id == 0x100) then
+            gPacketHandlers.HandleOutgoing0x100(struct.unpack('c' .. size, e.chunk_data, offset + 1));
         end
         offset = offset + size;
     end
@@ -220,8 +222,8 @@ packethandlers.HandleOutgoingChunk = function(e)
     end
 end
 
-packethandlers.HandleOutgoing0x100 = function(e)
-    local newJob = struct.unpack('B', e.data, 0x04 + 1);
+packethandlers.HandleOutgoing0x100 = function(packet)
+    local newJob = struct.unpack('B', packet, 0x04 + 1);
     if (newJob ~= 0) then
         gState.PlayerJob = newJob;
         gState.AutoLoadProfile();
@@ -243,15 +245,15 @@ packethandlers.HandleOutgoingPacket = function(e)
     if (e.injected == true) then
         if (gState.Injecting == false) then
             if (e.id == 0x1A) then
-                gPacketHandlers.HandleActionPacket(e.data);
+                gPacketHandlers.HandleActionPacket(struct.unpack('c' .. e.size, e.data, 1));
                 e.blocked = true;
             elseif (e.id == 0x37) then
-                gPacketHandlers.HandleItemPacket(e.data);
+                gPacketHandlers.HandleItemPacket(struct.unpack('c' .. e.size, e.data, 1));
                 e.blocked = true;
             end
         end
         if (e.id == 0x100) then
-            gPacketHandlers.HandleOutgoing0x100(e);
+            gPacketHandlers.HandleOutgoing0x100(struct.unpack('c' .. e.size, e.data, 1));
         end
         return;
     end

@@ -163,9 +163,11 @@ fileTools.WriteSets = function(file, sets)
     file:write('local sets = {\n');
     for k,v in pairs(sets) do
         if type(v) == 'table' then
-            file:write('    ' .. k .. ' = {\n');
-            gFileTools.WriteSet(file, v);
-            file:write('    },\n');
+            if (v.NoWrite ~= true) then
+                file:write('    ' .. k .. ' = {\n');
+                gFileTools.WriteSet(file, v);
+                file:write('    },\n');
+            end
         end
     end
     file:write('};\n');

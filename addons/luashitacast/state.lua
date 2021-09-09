@@ -137,7 +137,9 @@ state.HandleEquipEvent = function(eventName, equipStyle)
         if (event ~= nil) and (type(event) == 'function') then
             gEquip.ClearBuffer();
             gState.SafeCall(eventName);
-            if (gState.PlayerAction == nil) or (gState.PlayerAction.Block ~= true) then
+            if (eventName == 'HandleDefault') then
+                gEquip.ProcessBuffer(equipStyle);
+            elseif (gState.PlayerAction ~= nil) and (gState.PlayerAction.Block ~= true) then
                 gEquip.ProcessBuffer(equipStyle);
             end
         end
