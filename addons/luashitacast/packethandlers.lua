@@ -17,7 +17,7 @@ packethandlers.HandleIncoming0x0A = function(e)
         gState.PlayerId = id;
         gState.PlayerName = name;
         gState.PlayerJob = job;
-        gState.LoadProfile();
+        gState.AutoLoadProfile();
     end
 end
 
