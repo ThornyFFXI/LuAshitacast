@@ -198,6 +198,9 @@ packethandlers.HandleOutgoingChunk = function(e)
         gState.PetAction = nil;
     end
 
+    local newPositionX = gState.PositionX;
+    local newPositionY = gState.PositionY;
+
     --Read ahead to handle any action packets, so we aren't doing idle and action at once.
     local offset = 0;
     while (offset < e.chunk_size) do
@@ -206,8 +209,8 @@ packethandlers.HandleOutgoingChunk = function(e)
         if (id == 0x1A) then
             gPacketHandlers.HandleActionPacket(struct.unpack('c' .. size, e.chunk_data, offset + 1));
         elseif (id == 0x15) then
-            gState.PositionX = struct.unpack('f', e.chunk_data, offset + 0x04 + 1);
-            gState.PositionY = struct.unpack('f', e.chunk_data, offset + 0x0C + 1);
+            newPositionX = struct.unpack('f', e.chunk_data, offset + 0x04 + 1);
+            newPositionY = struct.unpack('f', e.chunk_data, offset + 0x0C + 1);
         elseif (id == 0x37) then
             gPacketHandlers.HandleItemPacket(struct.unpack('c' .. size, e.chunk_data, offset + 1));
         elseif (id == 0x100) then
@@ -220,6 +223,9 @@ packethandlers.HandleOutgoingChunk = function(e)
     if (gState.PlayerAction == nil) then
         gState.HandleEquipEvent('HandleDefault', 'auto');
     end
+
+    gState.PositionX = newPositionX;
+    gState.PositionY = newPositionY;
 end
 
 packethandlers.HandleOutgoing0x100 = function(packet)

@@ -161,11 +161,26 @@ commands.HandleCommand = function(e)
     if (args[2] == 'set') then
         if (#args > 2) then
             local delay = 3.0;
-            local set = args[3];
             if (#args > 3) then
                 delay = args[4];
             end
-            gFunc.LockSet(set, delay);
+
+            local setName = string.lower(args[3]);
+            local setTable = nil;
+            if (gProfile ~= nil) and (gProfile.Sets ~= nil) then
+                for name,set in pairs(gProfile.Sets) do
+                    if (string.lower(name) == setName) then
+                        setTable = set;
+                    end
+                end
+            end
+
+            if (setTable == nil) then
+                gFunc.Error('Failed to locate set: ' .. args[3]);
+                return;
+            end
+
+            gFunc.LockSet(setTable, delay);
             return;
         end
     end
