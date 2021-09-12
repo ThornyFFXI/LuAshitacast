@@ -243,7 +243,7 @@
         Fortunately, with full access to lua, these are easy issues to resolve.  First, let's say you want to type <font face="Courier" color="#0080FF">/rdm</font> instead of <font face="Courier" color="#0080FF">/lac fwd</font>.
         We do this by registering an Ashita alias in the OnLoad event.<br>
 
-        <font face="Courier" color="#0080FF">&emsp;AshitaCore:GetInputManager():QueueCommand(-1, '/alias /rdm /lac fwd');</font>
+        <font face="Courier" color="#0080FF">&emsp;AshitaCore:GetChatManager():QueueCommand(-1, '/alias /rdm /lac fwd');</font>
         <br>
 
         Incidentally, the -1 is a command type that will allow ashita itself and other plugins and addons to view your command.
@@ -251,7 +251,7 @@
         It is important to note that since we're interacting with something outside of our own profile, it will remain after our profile is unloaded.
         Anytime you do anything like that, you want to ensure that your profile cleans up after itself, so go down to the OnUnload event and add:<br>
 
-        <font face="Courier" color="#0080FF">&emsp;AshitaCore:GetInputManager():QueueCommand(-1, '/alias delete /rdm');</font><br>
+        <font face="Courier" color="#0080FF">&emsp;AshitaCore:GetChatManager():QueueCommand(-1, '/alias delete /rdm');</font><br>
 
         In place, should look something like:<br>
 
@@ -259,11 +259,11 @@
 
         If you're familiar with Ashita in general, you can probably extrapolate how to do binds from this.  We're just going to use the same function call, but with the /bind command instead:<br>
 
-        <font face="Courier" color="#0080FF">&emsp;AshitaCore:GetInputManager():QueueCommand(-1, '/bind ^F1 /lac fwd idlerefresh');</font><br>
+        <font face="Courier" color="#0080FF">&emsp;AshitaCore:GetChatManager():QueueCommand(-1, '/bind ^F1 /lac fwd idlerefresh');</font><br>
 
         See Ashita documentation for full information on bindable keys and modifiers, but in short you can use ^ for control, ! for alt, and ^! for both.  And of course, we have to unbind on unload:<br>
         
-        <font face="Courier" color="#0080FF">&emsp;AshitaCore:GetInputManager():QueueCommand(-1, '/unbind ^F1);</font><br>
+        <font face="Courier" color="#0080FF">&emsp;AshitaCore:GetChatManager():QueueCommand(-1, '/unbind ^F1);</font><br>
 
         All together, we have:<br>
 

@@ -53,7 +53,7 @@ state.Init = function()
         state.Encumbrance[i] = false;
     end
     
-    if (AshitaCore:GetMemoryManager():GetParty():GetMemberIsActive(0)) then
+    if (AshitaCore:GetMemoryManager():GetParty():GetMemberIsActive(0) == 1) then
         gState.PlayerId = AshitaCore:GetMemoryManager():GetParty():GetMemberServerId(0);
         gState.PlayerName = AshitaCore:GetMemoryManager():GetParty():GetMemberName(0);
         gState.PlayerJob = AshitaCore:GetMemoryManager():GetPlayer():GetMainJob();
