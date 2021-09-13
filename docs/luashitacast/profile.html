@@ -10,7 +10,10 @@
         
         <h1 style="color:#FF7903">Sets</h1>
         <font color="#FFFFFF">Sets are a core concept within LuAshitacast.  They are used to easily define gear in large quantities, and the majority of your swaps should be done using sets.
-            Each set is a table, and can have members for the 16 equipment slots as listed here, and an optional NoWrite boolean.
+            Each set is a table, and can have members for the 16 equipment slots as listed here, and an optional NoWrite boolean.  All lua variables, including table entries, are case sensitive.
+            This means that you can technically have multiple sets with the same name(Idle, IDLE, idle would all be different sets).  However, when using commands such as '/lac addset',
+            '/lac set', or string based gFunc calls, LuAshitacast will internally search for a non-case sensitive match.  As a result, it is recommended that you do not use sets with the same
+            name and different case.  When using table based gFunc calls, you will need to use the correct case as well, due to the way Lua itself works.
             The NoWrite flag should be set to true for any set that utilizes variables or functions to populate any of it's fields, to ensure that addset does not write them to your file.
             These sets also should not be located inside your primary local sets table, as they will not be written by addset.  I recommend creating a secondary sets table and iterating it on load
             to add them to profile.Sets.  If you feel the benefits of using a different design method outweigh the benefits of having AddSet available, make sure your profile sets the AllowAddSet
