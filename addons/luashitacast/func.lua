@@ -1,3 +1,44 @@
+local AddSet = function(setName)
+    if (gSettings.AllowAddSet == false) then
+        print(chat.header('LuAshitacast') .. chat.error('Your profile has addset disabled.'));
+        return;
+    end
+
+    if (gProfile == nil) then
+        print(chat.header('LuAshitacast') .. chat.error('You must have a profile loaded to use addset.'));
+        return;
+    end
+    
+    if (gProfile.Sets == nil) then
+        print(chat.header('LuAshitacast') .. chat.error('Your profile must have a sets table to use addset.'));
+        return;
+    end
+
+    local lowerName = string.lower(setName);
+    local setTableName = nil;
+    for name,set in pairs(gProfile.Sets) do
+        if (string.lower(name) == lowerName) then
+            setTableName = name;
+        end
+    end
+
+    local replaced = false;
+    if (setTableName ~= nil) then
+        gProfile.Sets[setTableName] = gData.GetCurrentSet();
+        replaced = true;
+    else
+        gProfile.Sets[setName] = gData.GetCurrentSet();
+    end
+
+    if gFileTools.SaveSets() then
+        if (replaced) then
+            print(chat.header('LuAshitacast') .. chat.message('Replaced Set: ') .. chat.color1(2, setTableName));
+        else
+            print(chat.header('LuAshitacast') .. chat.message('Added Set: ') .. chat.color1(2, setName));
+        end
+    end
+end
+
 local CancelAction = function()
     if (gState.PlayerAction ~= nil) then
         gState.PlayerAction.Block = true;
@@ -134,11 +175,27 @@ end
 
 local EquipSet = function(set)
     if (type(set) == 'string') then
-        if (gProfile ~= nil) and (gProfile.Sets ~= nil) and (gProfile.Sets[set] ~= nil) then
-            for k, v in pairs(gProfile.Sets[set]) do
-                Equip(k, v);
+        if (gProfile == nil) then
+            print(chat.header('LuAshitacast') .. chat.error('You must have a profile loaded to use EquipSet(string).'));
+            return;
+        end
+        
+        if (gProfile.Sets == nil) then
+            print(chat.header('LuAshitacast') .. chat.error('Your profile must have a sets table to use EquipSet(string).'));
+            return;
+        end
+        
+        local setName = string.lower(set);
+        for name,setEntry in pairs(gProfile.Sets) do
+            if (string.lower(name) == setName) then
+                for k, v in pairs(setEntry) do
+                    Equip(k, v);
+                end
+                return;
             end
         end
+        
+        print(chat.header('LuAshitacast') .. chat.error('Set not found: ' .. set));
     elseif (type(set) == 'table') then
         for k, v in pairs(set) do
             Equip(k, v);
@@ -168,15 +225,32 @@ end
 local ForceEquipSet = function(set)
     local table = nil;
     if (type(set) == 'string') then
-        if (gProfile ~= nil) and (gProfile.Sets ~= nil) and (gProfile.Sets[set] ~= nil) then
-            table = gProfile.Sets[set];
+        if (gProfile == nil) then
+            print(chat.header('LuAshitacast') .. chat.error('You must have a profile loaded to use ForceEquipSet(string).'));
+            return;
+        end
+        
+        if (gProfile.Sets == nil) then
+            print(chat.header('LuAshitacast') .. chat.error('Your profile must have a sets table to use ForceEquipSet(string).'));
+            return;
+        end
+        
+        local setName = string.lower(set);
+        for name,setEntry in pairs(gProfile.Sets) do
+            if (string.lower(name) == setName) then
+                table = setEntry;
+            end
+        end
+        
+        if (table == nil) then
+            print(chat.header('LuAshitacast') .. chat.error('Set not found: ' .. set));
+            return;
         end
     elseif (type(set) == 'table') then
         table = set;
     else
         return;
     end
-    
     local newTable = {};
     for k,v in pairs(table) do
         local equipSlot = gData.GetEquipSlot(k);
@@ -240,8 +314,26 @@ end
 local LockSet = function(set, seconds)
     local table = nil;
     if (type(set) == 'string') then
-        if (gProfile ~= nil) and (gProfile.Sets ~= nil) and (gProfile.Sets[set] ~= nil) then
-            table = gProfile.Sets[set];
+        if (gProfile == nil) then
+            print(chat.header('LuAshitacast') .. chat.error('You must have a profile loaded to use LockSet(string).'));
+            return;
+        end
+        
+        if (gProfile.Sets == nil) then
+            print(chat.header('LuAshitacast') .. chat.error('Your profile must have a sets table to use LockSet(string).'));
+            return;
+        end
+        
+        local setName = string.lower(set);
+        for name,setEntry in pairs(gProfile.Sets) do
+            if (string.lower(name) == setName) then
+                table = setEntry;
+            end
+        end
+        
+        if (table == nil) then
+            print(chat.header('LuAshitacast') .. chat.error('Set not found: ' .. set));
+            return;
         end
     elseif (type(set) == 'table') then
         table = set;
@@ -269,6 +361,7 @@ local LockSet = function(set, seconds)
 end
 
 local exports = {
+    AddSet = AddSet,
     CancelAction = CancelAction,
     ChangeActionId = ChangeActionId,
     ChangeActionTarget = ChangeActionTarget,

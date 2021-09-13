@@ -26,34 +26,12 @@ commands.HandleCommand = function(e)
     end
 
     if (args[2] == 'addset') then
-        if (gSettings.AllowAddSet == false) then
-            print(chat.header('LuAshitacast') .. chat.error('Your profile has addset disabled.'));
-            return;
-        end
-
         if (#args == 2) then
             print(chat.header('LuAshitacast') .. chat.error('You must specify a set name for addset.'));
             return;
         end
-        
-        if (gProfile == nil) then
-            print(chat.header('LuAshitacast') .. chat.error('You must have a profile loaded to use addset.'));
-            return;
-        end
-        
-        if (gProfile.Sets == nil) then
-            print(chat.header('LuAshitacast') .. chat.error('Your profile must have a sets table to use addset.'));
-            return;
-        end
 
-        local replaced = (gProfile.Sets[args[3]] ~= nil);
-        gProfile.Sets[args[3]] = gData.GetCurrentSet();
-        gFileTools.AddSet(gProfile.FilePath, gProfile.Sets);
-        if (replaced) then
-            print(chat.header('LuAshitacast') .. chat.message('Replaced Set: ') .. chat.color1(2, args[3]));
-        else
-            print(chat.header('LuAshitacast') .. chat.message('Added Set: ') .. chat.color1(2, args[3]));
-        end
+        gFunc.AddSet(args[3]);
         return;
     end
 
@@ -165,22 +143,7 @@ commands.HandleCommand = function(e)
                 delay = args[4];
             end
 
-            local setName = string.lower(args[3]);
-            local setTable = nil;
-            if (gProfile ~= nil) and (gProfile.Sets ~= nil) then
-                for name,set in pairs(gProfile.Sets) do
-                    if (string.lower(name) == setName) then
-                        setTable = set;
-                    end
-                end
-            end
-
-            if (setTable == nil) then
-                gFunc.Error('Failed to locate set: ' .. args[3]);
-                return;
-            end
-
-            gFunc.LockSet(setTable, delay);
+            gFunc.LockSet(args[3], delay);
             return;
         end
     end

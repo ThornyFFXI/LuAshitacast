@@ -4,6 +4,13 @@
         <h1 style="color:#FF7903">Summary</h1>
         <p style="color:#FFFFFF">gFunc is a global table containing functions used to interface with LuAshitacast from within your profile.  The following functions are designed for use by end users and documented.  You should not modify the gFunc table in any way, nor should you try to call any functions not documented here.</p><br>
 
+        <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.AddSet(setName)</font><br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#208020">setName</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): the name of the set you want to add or replace</font><br>
+        <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
+        <font color="#FFFFFF">Effects: Adds a new set or replaces an existing set in your profile, then rewrites your profile to disk.  Can be blocked with the gSettings.AllowAddSet setting.  Can delete unintended parts of improperly formatted profiles.  Use with caution.</font><br>
+        <br><br>
+
         <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.CancelAction()</font><br>
         <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
         <font color="#FFFFFF">Effects: Cancels the pending action and any accompanying swaps when called from Precast, Preshot, Ability, Item, or Weaponskill.</font><br>

@@ -1,61 +1,5 @@
 local fileTools = {};
 
-fileTools.AddSet = function(path, sets)
-    local file = io.open(path, 'r');
-    local lines = {};
-    
-    local index = 0;
-    for line in file:lines() do
-        index = index + 1;
-        lines[index] = line;
-    end
-    file:close();
-
-    file = io.open(path, 'w');
-
-    local setsFound = false;
-    local parenthesisCount = 0;
-    local parenthesisOpen = string.byte('{');
-    local parenthesisClose = string.byte('}');
-
-    for i = 1,index,1 do
-        local line = lines[i];
-
-        if (setsFound == false) then
-            if (string.sub(line,1,14) == 'local sets = {') then
-                setsFound = true;
-                for c = 1,#line,1 do
-                    if (line:byte(c) == parenthesisOpen) then
-                        parenthesisCount = parenthesisCount + 1;
-                    elseif (line:byte(c) == parenthesisClose) then
-                        parenthesisCount = parenthesisCount - 1;
-                    end
-                end
-                if (parenthesisCount < 1) then
-                    gFileTools.WriteSets(file, sets);
-                end
-            else
-                file:write(line .. '\n');
-            end
-        elseif (parenthesisCount > 0) then
-            for c = 1,#line,1 do
-                if (line:byte(c) == parenthesisOpen) then
-                    parenthesisCount = parenthesisCount + 1;
-                elseif (line:byte(c) == parenthesisClose) then
-                    parenthesisCount = parenthesisCount - 1;
-                end
-            end
-            if (parenthesisCount < 1) then
-                gFileTools.WriteSets(file, sets);
-            end
-        else
-            file:write(line .. '\n');
-        end
-    end
-
-    file:close();
-end
-
 fileTools.CreateDirectories = function(path)
     local backSlash = string.byte('\\');
     for c = 1,#path,1 do
@@ -101,6 +45,71 @@ fileTools.CreateProfile = function(path)
     file:write('profile.HandleMidshot = function()\nend\n\n');
     file:write('profile.HandleWeaponskill = function()\nend\n\n');
     file:write('return profile;');
+    file:close();
+    return true;
+end
+
+fileTools.SaveSets = function()
+    local file = io.open(gProfile.FilePath, 'r');
+    if (file == nil) then
+        print(chat.header('LuAshitacast') .. chat.error('Failed to open profile in read mode: ' .. gProfile.FilePath));
+        return false;
+    end
+    local lines = {};
+    
+    local index = 0;
+    for line in file:lines() do
+        index = index + 1;
+        lines[index] = line;
+    end
+    file:close();
+
+    file = io.open(gProfile.FilePath, 'w');
+    if (file == nil) then
+        print(chat.header('LuAshitacast') .. chat.error('Failed to open profile in write mode: ' .. gProfile.FilePath));
+        return false;
+    end
+
+    local setsFound = false;
+    local parenthesisCount = 0;
+    local parenthesisOpen = string.byte('{');
+    local parenthesisClose = string.byte('}');
+
+    for i = 1,index,1 do
+        local line = lines[i];
+
+        if (setsFound == false) then
+            if (string.sub(line,1,14) == 'local sets = {') then
+                setsFound = true;
+                for c = 1,#line,1 do
+                    if (line:byte(c) == parenthesisOpen) then
+                        parenthesisCount = parenthesisCount + 1;
+                    elseif (line:byte(c) == parenthesisClose) then
+                        parenthesisCount = parenthesisCount - 1;
+                    end
+                end
+                if (parenthesisCount < 1) then
+                    gFileTools.WriteSets(file, gProfile.Sets);
+                end
+            else
+                file:write(line .. '\n');
+            end
+        elseif (parenthesisCount > 0) then
+            for c = 1,#line,1 do
+                if (line:byte(c) == parenthesisOpen) then
+                    parenthesisCount = parenthesisCount + 1;
+                elseif (line:byte(c) == parenthesisClose) then
+                    parenthesisCount = parenthesisCount - 1;
+                end
+            end
+            if (parenthesisCount < 1) then
+                gFileTools.WriteSets(file, gProfile.Sets);
+            end
+        else
+            file:write(line .. '\n');
+        end
+    end
+
     file:close();
     return true;
 end
