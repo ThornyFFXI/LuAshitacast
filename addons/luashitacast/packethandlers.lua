@@ -56,7 +56,7 @@ packethandlers.HandleIncoming0x28 = function(e)
         end
 
         if (actionType == 7) or (actionType == 8) then
-            local actionId = ashita.bits.unpack_be(e.data_raw, 26, 5, 10);
+            local actionId = ashita.bits.unpack_be(e.data_raw, 0, 213, 17);
             local actionTargetId = ashita.bits.unpack_be(e.data_raw, 18, 6, 32);
 
             --Anything in zone dat should work here.
@@ -84,7 +84,6 @@ packethandlers.HandleIncoming0x28 = function(e)
                 local actionMessage = ashita.bits.unpack_be(e.data_raw, 28, 6, 10);
                 if (actionMessage == 43) then
                     gState.PetAction.Type = 'MobSkill';
-                    gState.PetAction.Id = actionId;
                     gState.PetAction.Name = AshitaCore:GetResourceManager():GetString("monster_abilities", actionId - 256);
                 else
                     gState.PetAction.Type = 'Ability';
