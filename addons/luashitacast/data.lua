@@ -109,6 +109,7 @@ end
 
 data.GetAccountFlags = function()
     local subPointer = ashita.memory.read_uint32(gState.pWardrobe + 1);
+	subPointer = ashita.memory.read_uint32(subPointer);
     return ashita.memory.read_uint8(subPointer + 0xB4);
 end
 
