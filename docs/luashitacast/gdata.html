@@ -4,6 +4,11 @@
         <h1 style="color:#FF7903">Summary</h1>
         <p style="color:#FFFFFF">gData is a global table containing functions used to simplify the process of acquiring data for conditional swaps.  The following functions are designed for use by end users and documented.  You should not modify the gData table in any way, nor should you try to call any functions not documented here.</p><br>
 
+        <font color="#FFFFFF">Declaration: </font><font color="#208020">gData.GetCurrentCall()</font><br>
+        <font color="#FFFFFF">Return Type: </font><font color="#FF7903">string</font><br>
+        <font color="#FFFFFF">Return Value: </font><font color="#0080FF">OnLoad, OnUnload, HandleCommand, HandleDefault, HandleAbility, HandleItem, HandlePrecast, HandleMidcast, HandlePreshot, HandleMidshot, HandleWeaponskill, N/A</font><br>
+        <br><br>
+
         <font color="#FFFFFF">Declaration: </font><font color="#208020">gData.GetAlliance()</font><br>
         <font color="#FFFFFF">Return Type: </font><font color="#FF7903">table</font><br>
         <font color="#FFFFFF">Return Table Members:</font><br>
@@ -16,9 +21,9 @@
         <font color="#FFFFFF">Declaration: </font><font color="#208020">gData.GetAction()</font><br>
         <font color="#FFFFFF">Return Type: </font><font color="#FF7903">table</font> <font color="#FFFFFF"> (nil if not currently performing an action)</font><br>
         <font color="#FFFFFF">Return Table Members:</font><br>
-        <font color="#208020">Type</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): <font color="#0080FF">Spell Weaponskill Ability Ranged Item</font></font><br>
+        <font color="#208020">ActionType</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): <font color="#0080FF">Spell Weaponskill Ability Ranged Item</font></font><br>
         <font color="#208020">CastTime</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the duration, in milliseconds, of a spell or item's base casttime (nil if Type is not Spell or Item)</font><br>
-        <font color="#208020">Element</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">):  <font color="#0080FF">fire ice wind earth thunder water light dark nonelemental unknown</font><font color="#FFFFFF"> (nil if Type is not Spell)</font><br>
+        <font color="#208020">Element</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">):  <font color="#0080FF">Fire, Ice, Wind, Earth, Thunder, Water, Light, Dark, Non-Elemental, Unknown</font><font color="#FFFFFF"> (nil if Type is not Spell)</font><br>
         <font color="#208020">Id</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the internal ID of the action</font><br>
         <font color="#208020">MpCost</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the amount of MP the spell costs (nil if Type is not Spell)</font><br>
         <font color="#208020">MpAftercast</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the amount of MP you will have remaining if the cast completes at full mp cost (nil if Type is not Spell)</font><br>
@@ -26,9 +31,9 @@
         <font color="#208020">Name</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): the action's name</font><br>
         <font color="#208020">Recast</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the recast time of the spell or item, in milliseconds (nil if Type is not Item or Spell)</font><br>
         <font color="#208020">Resource</font><font color="#FFFFFF"> (</font><font color="#FF7908">table</font><font color="#FFFFFF">): a table from ashita API of type IItem, ISpell, IAbility (nil if Type is Ranged)</font><br>
-        <font color="#208020">Skill</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">divinemagic healingmagic enhancingmagic enfeeblingmagic elementalmagic darkmagic summoning ninjutsu singing bluemagic geomancy unknown</font><font color="#FFFFFF"> (nil if Type is not Spell)</font></font><br>
-        <font color="#208020">Type</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): (Spell) </font><font color="#0080FF">whitemagic blackmagic summoning ninjutsu bardsong bluemagic unknown</font><br>
-        <font color="#208020">Type</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): (Ability) </font><font color="#0080FF">runeenchantment ready bloodpactrage bloodpactward corsairroll quickdraw unknown</font><br>
+        <font color="#208020">Skill</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">Divine Magic, Healing Magic, Enhancing Magic, Enfeebling Magic, Elemental Magic, Dark Magic, Summoning, Ninjutsu, Singing, Blue Magic, Geomancy, Unknown</font><font color="#FFFFFF"> (nil if Type is not Spell)</font></font><br>
+        <font color="#208020">Type</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): (Spell) </font><font color="#0080FF">White Magic, Black Magic, Summoning, Ninjutsu, Bard Song, Blue Magic, Unknown</font><br>
+        <font color="#208020">Type</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): (Ability) </font><font color="#0080FF">Rune Enchantment, Ready, Blood Pact: Rage, Blood Pact: Ward, Corsair Roll, Quick Draw, Unknown</font><br>
         <br><br>
 
         <font color="#FFFFFF">Declaration: </font><font color="#208020">gData.GetActionTarget()</font><br>
@@ -39,8 +44,8 @@
         <font color="#208020">Id</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">):  the target's unique-to-game ID<br>
         <font color="#208020">Index</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the target's index within the current zone</font><br>
         <font color="#208020">Name</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): the target's name</font><br>
-        <font color="#208020">Status</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">idle engaged dead zoning resting unknown</font><br>
-        <font color="#208020">Type</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">pc npc alliance party monster unknown</font><br>
+        <font color="#208020">Status</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">Idle, Engaged, Dead, Zoning, Resting, Unknown</font><br>
+        <font color="#208020">Type</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">PC, NPC, Alliance, Party, Monster, Unknown</font><br>
         <br><br>
         
         <font color="#FFFFFF">Declaration: </font><font color="#208020">gData.GetBuffCount(matchBuff)</font><br>
@@ -62,25 +67,25 @@
         <font color="#208020">Id</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">):  the target's unique-to-game ID<br>
         <font color="#208020">Index</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the target's index within the current zone</font><br>
         <font color="#208020">Name</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): the target's name</font><br>
-        <font color="#208020">Status</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">idle engaged dead zoning resting unknown</font><br>
-        <font color="#208020">Type</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">pc npc alliance party monster unknown</font><br>
+        <font color="#208020">Status</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">Idle, Engaged, Dead, Zoning, Resting, Unknown</font><br>
+        <font color="#208020">Type</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">PC, NPC, Alliance, Party, Monster, Unknown</font><br>
         <br><br>
         
         <font color="#FFFFFF">Declaration: </font><font color="#208020">gData.GetEnvironment()</font><br>
         <font color="#FFFFFF">Return Type: </font><font color="#FF7903">table</font><br> 
         <font color="#FFFFFF">Return Table Members:</font><br>
         <font color="#208020">Area</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): the zone you are currently in</font><br>
-        <font color="#208020">Day</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">firesday earthsday watersday windsday iceday lightningday lightsday darksday unknown</font><br>
-        <font color="#208020">DayElement</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">fire earth water wind ice thunder light dark unknown</font><br>
-        <font color="#208020">MoonPhase</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">fullmoon waninggibbous lastquarter waningcrescent newmoon waxingcrescent firstquarter waxinggibbous unknown</font><br>
+        <font color="#208020">Day</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">Firesday, Earthsday, Watersday, Windsday, Iceday, Lightningday, Lightsday, Darksday, Unknown</font><br>
+        <font color="#208020">DayElement</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">Fire, Earth, Water, Wind, Ice, Thunder, Light, Dark, Unknown</font><br>
+        <font color="#208020">MoonPhase</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">Full Moon, Waning Gibbous, Last Quarter, Waning Crescent, New Moon, Waxing Crescent, First Quarter, Waxing Gibbous, Unknown</font><br>
         <font color="#208020">MoonPercent</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): value from 0-100 representing moon phase</font><br>
-        <font color="#208020">RawWeather</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">clear sunshine clouds fog fire firex2 water waterx2 earth earthx2 wind windx2 ice icex2 thunder thunderx2 light lightx2 dark darkx2 unknown</font><br>
-        <font color="#208020">RawWeatherElement</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">fire earth water wind ice thunder light dark unknown</font><br>
+        <font color="#208020">RawWeather</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">Clear, Sunshine, Clouds, Fog, Fire, Fire x2, Water, Water x2, Earth, Earth x2, Wind, Wind x2, Ice, Ice x2, Thunder, Thunder x2, Light, Light x2, Dark, Dark x2, Unknown</font><br>
+        <font color="#208020">RawWeatherElement</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">None, Fire, Earth, Water, Wind, Ice, Thunder, Light, Dark, Unknown</font><br>
         <font color="#208020">Time</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the current time in hours/minutes as a decimal for lt and gt comparisons (12:30 would return 12.30)</font><br>
         <font color="#208020">Timestamp</font><font color="#FFFFFF"> (</font><font color="#FF7908">table</font><font color="#FFFFFF">): members are day, hour, minute(all numbers, representing vanadiel time)</font><br>
         <font color="#FFFFFF">Weather and WeatherElement incorporate active storm spells.  RawWeather and RawWeatherElement do not.</font><br>
-        <font color="#208020">Weather</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">clear sunshine clouds fog fire firex2 water waterx2 earth earthx2 wind windx2 ice icex2 thunder thunderx2 light lightx2 dark darkx2 unknown</font><br>
-        <font color="#208020">WeatherElement</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">fire earth water wind ice thunder light dark unknown</font><br>
+        <font color="#208020">Weather</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">Clear, Sunshine, Clouds, Fog, Fire, Fire x2, Water, Water x2, Earth, Earth x2, Wind, Wind x2, Ice, Ice x2, Thunder, Thunder x2, Light, Light x2, Dark, Dark x2, Unknown</font><br>
+        <font color="#208020">WeatherElement</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">None, Fire, Earth, Water, Wind, Ice, Thunder, Light, Dark, Unknown</font><br>
         <br><br>
 
         <font color="#FFFFFF">Declaration: </font><font color="#208020">gData.GetEquipment()</font><br>
@@ -127,24 +132,24 @@
         <font color="#208020">Id</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">):  the target's unique-to-game ID<br>
         <font color="#208020">Index</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the target's index within the current zone</font><br>
         <font color="#208020">Name</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): the target's name</font><br>
-        <font color="#208020">Status</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">idle engaged dead zoning resting unknown</font><br>
+        <font color="#208020">Status</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">Idle, Engaged, Dead, Zoning, Resting, Unknown</font><br>
         <font color="#208020">TP</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): your pet's current tp<br>
         <br><br>
 
         <font color="#FFFFFF">Declaration: </font><font color="#208020">gData.GetPetAction()</font><br>
         <font color="#FFFFFF">Return Type: </font><font color="#FF7903">table</font> <font color="#FFFFFF"> (nil if your pet is dead or not currently performing an action)</font><br>
         <font color="#FFFFFF">Return Table Members:</font><br>
-        <font color="#208020">Type</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): <font color="#0080FF">Spell Ability MobSkill</font></font><br>
+        <font color="#208020">ActionType</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): <font color="#0080FF">Spell Ability MobSkill</font></font><br>
         <font color="#208020">CastTime</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the duration, in milliseconds, of a spell's base casttime (nil if Type is not Spell)</font><br>
-        <font color="#208020">Element</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">):  <font color="#0080FF">fire ice wind earth thunder water light dark nonelemental unknown</font><font color="#FFFFFF"> (nil if Type is not Spell)</font><br>
+        <font color="#208020">Element</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">):  <font color="#0080FF">Fire, Ice, Wind, Earth, Thunder, Water, Light, Dark, Non-Elemental, Unknown</font><font color="#FFFFFF"> (nil if Type is not Spell)</font><br>
         <font color="#208020">Id</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the internal ID of the action</font><br>
         <font color="#208020">MpCost</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the amount of MP the spell costs (nil if Type is not Spell)</font><br>
         <font color="#208020">Name</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): the action's name</font><br>
         <font color="#208020">Recast</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the recast time of the spell, in milliseconds (nil if Type is not Spell)</font><br>
         <font color="#208020">Resource</font><font color="#FFFFFF"> (</font><font color="#FF7908">table</font><font color="#FFFFFF">): a table from ashita API of type ISpell, IAbility (nil if Type is MobSkill)</font><br>
-        <font color="#208020">Skill</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">divinemagic healingmagic enhancingmagic enfeeblingmagic elementalmagic darkmagic summoning ninjutsu singing bluemagic geomancy unknown</font><font color="#FFFFFF"> (nil if Type is not Spell)</font></font><br>
-        <font color="#208020">Type</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): (Spell) </font><font color="#0080FF">whitemagic blackmagic summoning ninjutsu bardsong bluemagic unknown</font><br>
-        <font color="#208020">Type</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): (Ability) </font><font color="#0080FF">runeenchantment ready bloodpactrage bloodpactward corsairroll quickdraw unknown</font><br>
+        <font color="#208020">Skill</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">Divine Magic, Healing Magic, Enhancing Magic, Enfeebling Magic, Elemental Magic, Dark Magic, Summoning, Ninjutsu, Singing, Blue Magic, Geomancy, Unknown</font><font color="#FFFFFF"> (nil if Type is not Spell)</font></font><br>
+        <font color="#208020">Type</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): (Spell) </font><font color="#0080FF">White Magic, Black Magic, Summoning, Ninjutsu, Bard Song, Blue Magic, Unknown</font><br>
+        <font color="#208020">Type</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): (Ability) </font><font color="#0080FF">Rune Enchantment, Ready, Blood Pact: Rage, Blood Pact: Ward, Corsair Roll, Quick Draw, Unknown</font><br>
         <br><br>
         
         <font color="#FFFFFF">Declaration: </font><font color="#208020">gData.GetPlayer()</font><br>
@@ -161,7 +166,7 @@
         <font color="#208020">MaxMP</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): your current max mp</font><br>
         <font color="#208020">MPP</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): your current mp percent</font><br>
         <font color="#208020">Name</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): your character name</font><br>
-        <font color="#208020">Status</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">idle engaged dead zoning resting unknown</font><br>
+        <font color="#208020">Status</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">Idle, Engaged, Dead, Zoning, Resting, Unknown</font><br>
         <font color="#208020">SubJob</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): 3 letter abbreviation for your sub job</font><br>
         <font color="#208020">SubJobLevel</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the actual level of your sub job</font><br>
         <font color="#208020">SubJobSync</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the level of your sub job with any sync or cap effects applied</font><br>
@@ -185,7 +190,7 @@
         <font color="#208020">Id</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">):  the target's unique-to-game ID<br>
         <font color="#208020">Index</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the target's index within the current zone</font><br>
         <font color="#208020">Name</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): the target's name</font><br>
-        <font color="#208020">Status</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">idle engaged dead zoning resting unknown</font><br>
-        <font color="#208020">Type</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">pc npc alliance party monster unknown</font>
+        <font color="#208020">Status</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">Idle, Engaged, Dead, Zoning, Resting, Unknown</font><br>
+        <font color="#208020">Type</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): </font><font color="#0080FF">PC, NPC, Alliance, Party, Monster, Unknown</font>
     </body>
 </html>

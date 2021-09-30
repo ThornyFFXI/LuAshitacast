@@ -1,7 +1,7 @@
 local commands = {}
 
 commands.HandleCommand = function(e)
-    if string.sub(e.command, 1, 9) == '/lac exec' or string.sub(e.command,1,18) == '/luashitacast exec' then
+    if string.lower(string.sub(e.command, 1, 9)) == '/lac exec' or string.lower(string.sub(e.command,1,18)) == '/luashitacast exec' then
         e.blocked = true;
         local command = string.sub(e.command, 10, string.len(e.command));
         if (string.sub(e.command, 1, 9) == '/luashitacast exec') then
@@ -17,13 +17,18 @@ commands.HandleCommand = function(e)
     end
 
     local args = e.command:args();
-    if (#args == 0) or ((args[1] ~= '/lac') and (args[1] ~= '/luashitacast')) then
+    if (#args == 0) then
+        return;
+    end
+    args[1] = string.lower(args[1]);
+    if (args[1] ~= '/lac') and (args[1] ~= '/luashitacast') then
         return;
     end
     e.blocked = true;
     if (#args < 2) then
         return;
     end
+    args[2] = string.lower(args[2]);
 
     if (args[2] == 'addset') then
         if (#args == 2) then
@@ -42,7 +47,7 @@ commands.HandleCommand = function(e)
             else
                 gSettings.Debug = true;
             end
-        elseif (args[3] == 'on') then
+        elseif (string.lower(args[3]) == 'on') then
             gSettings.Debug = true;
         else
             gSettings.Debug = false;
@@ -152,7 +157,7 @@ commands.HandleCommand = function(e)
         if (gProfile == nil) then
             print(chat.header('LuAshitacast') .. chat.error("No profile loaded."));
         else
-            gState.Unload();
+            gState.UnloadProfile();
         end
     end
 end

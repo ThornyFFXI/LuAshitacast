@@ -85,8 +85,10 @@ end
 data.GetEquipSlot = function(slot)
     local equipSlot = 0;
     if (type(slot) == 'string') then
-        if (gData.Constants.EquipSlots[slot] ~= nil) then
-            equipSlot = gData.Constants.EquipSlots[slot];
+        for tableKey,tableEntry in pairs(gData.Constants.EquipSlots) do
+            if string.lower(tableKey) == string.lower(slot) then
+                equipSlot = tableEntry;                
+            end
         end
     elseif (type(slot) == 'number') then
         equipSlot = slot;
@@ -101,7 +103,7 @@ end
 
 data.ResolveString = function(table, value)
     if (table[value + 1] == nil) then
-        return 'unknown'
+        return 'Unknown';
     else
         return table[value + 1];
     end
@@ -116,7 +118,7 @@ end
 data.GetAugment = function(item)
     local augType = struct.unpack('B', item.Extra, 1);
     if (augType ~= 2) and (augType ~= 3) then
-        return { Type = 'unaugmented' };
+        return { Type = 'Unaugmented' };
     end
 
     local augFlag = struct.unpack('B', item.Extra, 2);
@@ -125,7 +127,7 @@ data.GetAugment = function(item)
     if (bit.band(augFlag, 0x20) ~= 0) then
         --Delve style augments
         local augment = {};
-        augment.Type = 'delve';
+        augment.Type = 'Delve';
         augment.Path = gData.GetAugmentPath(ashita.bits.unpack_be(itemTable, 16, 2));
         augment.Rank = ashita.bits.unpack_be(itemTable, 18, 4);
         augment.Augs = {};
@@ -164,6 +166,7 @@ data.GetAugment = function(item)
     if (augFlag == 131) then
         --Dynamis style augments
         local augment = {};
+        augment.Type = 'Dynamis';
         augment.Path = gData.GetAugmentPath(ashita.bits.unpack_be(itemTable, 32, 2));
         augment.Rank = ashita.bits.unpack_be(itemTable, 50, 5);
         return augment;
@@ -171,20 +174,23 @@ data.GetAugment = function(item)
 
     if (bit.band(augFlag, 0x08) ~= 0) then
         --I have done nothing to break down shield extdata, but this is where synth shields end up.
-        return { Type = 'unaugmented' };
+        return { Type = 'Unaugmented' };
     end
 
     if (bit.band(augFlag, 0x80) ~= 0) then
         --Evolith style augment
-        return { Type = 'unaugmented' };
+        return { Type = 'Unaugmented' };
     end
 
     local augment = {};
     local maxAugments = 5;
     if (bit.band(augFlag, 0x40) ~= 0) then
         --Magian trial augment
+        augment.Type = 'Magian';
         augment.Trial = ashita.bits.unpack_be(itemTable, 80, 15);
         augment.TrialComplete = (ashita.bits.unpack_be(itemTable, 95, 1) == 1);
+    else
+        augment.Type = 'Oseem';
     end
 
     augment.Augs = {};
@@ -262,6 +268,10 @@ data.GetAugmentSingle = function(value, resource)
     return augment;
 end
 
+data.GetCurrentCall = function()
+    return gState.CurrentCall;
+end
+
 data.GetCurrentSet = function()
     local setTable = {};
     for i = 1,16,1 do
@@ -271,7 +281,7 @@ data.GetCurrentSet = function()
             if (resource ~= nil) then
                 local slot = gData.Constants.EquipSlotNames[i];
                 local augment = gData.GetAugment(equip.Item);
-                if (augment.Type == 'unaugmented') then
+                if (augment.Type == 'Unaugmented') then
                     setTable[slot] = resource.Name[1];
                 else
                     local entry = {};
@@ -366,8 +376,8 @@ data.GetAction = function()
 
     local actionTable = {};
     actionTable.Resource = action.Resource;
-    actionTable.Type = action.Type;
-    if (action.Type == 'Spell') then
+    actionTable.ActionType = action.Type;
+    if (action.ActionType == 'Spell') then
         actionTable.CastTime = action.Resource.CastTime * 250;
         actionTable.Element = gData.ResolveString(gData.Constants.SpellElements, action.Resource.Element);
         actionTable.Id = action.Resource.Index;
@@ -379,22 +389,22 @@ data.GetAction = function()
         actionTable.Recast = action.Resource.RecastDelay * 250;
         actionTable.Skill = gData.ResolveString(gData.Constants.SpellSkills, action.Resource.Skill);
         actionTable.Type = gData.ResolveString(gData.Constants.SpellTypes, action.Resource.Type);
-    elseif (action.Type == 'Weaponskill') then
+    elseif (action.ActionType == 'Weaponskill') then
         actionTable.Name = action.Resource.Name[1];
         actionTable.Id = action.Resource.Id;
-    elseif (action.Type == 'Ability') then
+    elseif (action.ActionType == 'Ability') then
         actionTable.Name = action.Resource.Name[1];
         actionTable.Id = action.Resource.Id - 0x200;
         local abilityType = gData.Constants.AbilityTypes[action.Resource.RecastTimerId];
         if (abilityType ~= nil) then
             actionTable.Type = abilityType;
         else
-            actionTable.Type = 'unknown';
+            actionTable.Type = 'Unknown';
         end
-    elseif (action.Type == 'Ranged') then
+    elseif (action.ActionType == 'Ranged') then
         actionTable.Name = 'Ranged';
         actionTable.Id = 0;
-    elseif (action.Type == 'Item') then
+    elseif (action.ActionType == 'Item') then
         actionTable.CastTime = action.Resource.CastTime * 250;
         actionTable.Id = action.Resource.Id;
         actionTable.Name = action.Resource.Name[1];
@@ -537,8 +547,8 @@ data.GetPetAction = function()
     end
 
     local actionTable = {};
-    actionTable.Type = action.Type;
-    if (action.Type == 'Spell') then
+    actionTable.ActionType = action.Type;
+    if (action.ActionType == 'Spell') then
         actionTable.CastTime = action.Resource.CastTime * 250;
         actionTable.Element = gData.ResolveString(gData.Constants.SpellElements, action.Resource.Element);
         actionTable.Id = action.Resource.Index;
@@ -547,14 +557,14 @@ data.GetPetAction = function()
         actionTable.Recast = action.Resource.RecastDelay * 250;
         actionTable.Skill = gData.ResolveString(gData.Constants.SpellSkills, action.Resource.Skill);
         actionTable.Type = gData.ResolveString(gData.Constants.SpellTypes, action.Resource.Type);
-    elseif (action.Type == 'Ability') then
+    elseif (action.ActionType == 'Ability') then
         actionTable.Name = action.Resource.Name[1];
         actionTable.Id = action.Resource.Id - 0x200;
         local abilityType = gData.Constants.AbilityTypes[action.Resource.RecastTimerId];
         if (abilityType ~= nil) then
             actionTable.Type = abilityType;
         else
-            actionTable.Type = 'generic';
+            actionTable.Type = 'Generic';
         end
     elseif (action.Type == 'MobSkill') then        
         actionTable.Id = action.Id;

@@ -1,5 +1,6 @@
 local state = {
     ActionDelay = 0,
+    CurrentCall = 'N/A',
     ForceSet = nil,
     ForceSetTimer = 0,
     Injecting = false,
@@ -177,7 +178,9 @@ end
 state.SafeCall = function(name,...)
     if (gProfile ~= nil) then
         if (type(gProfile[name]) == 'function') then
+            gState.CurrentCall = name;
             local success,error = pcall(gProfile[name],...);
+            gState.CurrentCall = 'N/A';
             if (not success) then
                 print (chat.header('LuAshitacast') .. chat.error('Error in profile function: ') .. chat.color1(2, name));
                 print (chat.header('LuAshitacast') .. chat.error(error));

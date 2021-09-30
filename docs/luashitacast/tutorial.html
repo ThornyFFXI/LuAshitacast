@@ -1,543 +1,934 @@
-<html>
+<html>    
+    <head>
+        <style>
+            h1
+            {
+                color:#000000;
+                font-size: 210%;
+                font-family: Arial;
+                font-weight: normal;
+                background-color: #FFFFFF;
+            }
+            code
+            {
+                color:#FFFFFF;
+                font-size: 100%;
+                font-family: courier;
+                font-weight: normal;
+                background-color: #000000;
+                display: inline-block;
+            }
+            body
+            {
+                color: #000000;
+                font-size: 100%;
+                font-family: Arial;
+                font-weight: normal;
+                background-color: #FFFFFF;
+            }
+            h2
+            {
+                color:#A00020;
+                font-size: 100%;
+                font-family: Arial;
+                font-weight: bold;
+                background-color: #FFFFFF;
+            }
+            .highlight
+            {
+                color:#FF7903;
+                font-size: 100%;
+                font-family: Courier;
+                font-weight: normal;
+                background-color: #FFFFFF;
+            }
+            .code
+            {
+                color:#FFFFFF;
+                font-size: 100%;
+                font-family: Courier;
+                font-weight: normal;
+                background-color: #000000;
+            }
+            a
+            {
+                color:#0000FF;
+                font-size: 100%;
+                font-family: Arial;
+                font-weight: normal;
+                background-color: #FFFFFF;
+            }
+        </style>
+    </head>
+    
     <title>LuAshitacast Tutorial</title>
-    <body style="background-color:#000000">
-        <h1 style="color:#FF7903">Lesson 1 - Install an editor.</h1>
-        <font color="#FFFFFF">Lua is a full featured language, and syntax highlighting will make your experience much easier.
+    <body>
+        <h1>Directory</h1>
+        <a href="#l1">Lesson 1 - Install an editor.</a><br>
+        <a href="#l2">Lesson 2 - Create and open a blank profile.</a><br>
+        <a href="#l3">Lesson 3 - Add some sets to your profile.</a><br>
+        <a href="#l4">Lesson 4 - Configure an idle set.</a><br>
+        <a href="#l5">Lesson 5 - Configure some weaponskill sets.</a><br>
+        <a href="#l6">Lesson 6 - Add a precast set.</a><br>
+        <a href="#l7">Lesson 7 - Add some job ability swaps.</a><br>
+        <a href="#l8">Lesson 8 - Accept and use input from the player.</a><br>
+        <a href="#l9">Lesson 9 - Simplify user input with aliases and keybinds.</a><br>
+        <a href="#l10">Lesson 10 - Create a set variation and add a setting to utilize it.</a><br>
+        <a href="#l11">Lesson 11 - Allow your set variation to cycle through options with only one command.</a><br>
+        <a href="#l12">Lesson 12 - Create a midcast section using RDM as an example.</a><br>
+        <a href="#l13">Lesson 13 - Enable swaps for pet actions.</a><br>
+        <a href="#s1">Snippet - Cleanly use elemental staves.</a><br>
+        <a href="#s2">Snippet - Use a helper library to manage and display variables.</a><br>
+
+        <h1 id="l1">Lesson 1 - Install an editor.</h1>
+        Lua is a full featured language, and syntax highlighting will make your experience much easier.
             I would recommend you use either <a href="https://notepad-plus-plus.org/downloads/">Notepad++</a> for a lightweight solution,
             or <a href="https://code.visualstudio.com/">VSCode</a> if you're not worried about being overwhelmed by features.
             While I personally use VSCode, I will do this tutorial with Notepad++ as I feel it is more suitable for those who are likely to need a tutorial.
-            Once you've installed your editor, log into FFXI.</font><br>
-            <font color="#A00020"><b>A note before proceeding: This tutorial jumps between jobs to use easy to follow examples, as not every job uses every ability.
+            Once you've installed your editor, log into FFXI.
+        <h2>A note before proceeding: This tutorial jumps between jobs to use easy to follow examples, as not every job uses every ability.
                 If you follow it exactly with copy/paste, you'll end up with a profile that does nobody any good, you should be modifying each step to suit your own job by changing
                 ability names, set names, etc.  If you do not need to use a specific step on your current job, I would still recommend following along as many of them illustrate concepts
-                you'll want to apply elsewhere.  I'm not a professional teacher, nor a lua master, this is just my best attempt to make profile creation more reasonable for the average user.</b></font>
-            <br><br><br>
-            
-        <h1 style="color:#FF7903">Lesson 2 - Create and open a blank profile.</h1>
-        <font color="#FFFFFF">While ingame, and on your desired job, type the following commands:<br>
-            <ul>
-                <li><font face="Courier" color="#0080FF">/load addons</font></li>
-                <li><font face="Courier" color="#0080FF">/addon load luashitacast</font></li>
-                <li><font face="Courier" color="#0080FF">/lac newlua</font></li>
-            </ul></font>
+                you'll want to apply elsewhere.  I'm not a professional teacher, nor a lua master, this is just my best attempt to make profile creation more reasonable for the average user.</h2><br>
 
-        <font color="#FFFFFF">You should see a message along the lines of:<br>
-        <img src="Tutorial/load.png" /><br><br><br>
-        <font color="#FFFFFF">Next, browse to your ashita folder and go into the subdirectories: config, addons, luashitacast, then the one named after your current character.  It should look like this(windows 10):</font><br>
-        <img src="Tutorial/directories.png" /><br><br><br>
-        <font color="#FFFFFF">Right click and choose 'edit with notepad++'.  Then, under the Language heading, ensure that the category L, and further the language Lua are selected.
-            This will highlight some parts of the profile for easier viewing.  You should have your profile open and be looking at something like this:</font><br>
-        <img src="Tutorial/profile.png" /><br><br><br>
 
-        <h1 style="color:#FF7903">Lesson 3 - Add some sets to your profile.</h1>
-        <font color="#FFFFFF">Ingame, equip a set you'd like to use for idle, and type the command: <font face="Courier" color="#0080FF">/lac addset Idle</font></font><br>
-        <font color="#FFFFFF">Repeat for a few other sets you'd like to use, such as nuking, healing, weaponskill, fast cast, etc.</font><br>
-        <font color="#FFFFFF">Look back at Notepad++(you may need to click File..Reload From Disk to ensure changes applied).  You should have your sets visible:<br>
-            <img src="Tutorial/profilesets.png" /><br>
+
+
             
-            <font color="#A00020"><b>A warning about AddSet: As this is using string parsing to replace your sets in place,
+        <h1 id="l2">Lesson 2 - Create and open a blank profile.</h1>
+        While ingame, and on your desired job, type the following commands:
+<pre><code>/load addons
+/addon load luashitacast
+/lac newlua</code></pre>
+        You should see a message along the lines of:<br>
+        <img src="Tutorial/load.png" /><br><br>
+        Next, browse to your ashita folder and go into the subdirectories: config, addons, luashitacast, then the one named after your current character.  It should look like this(windows 10):<br>
+        <img src="Tutorial/directories.png" /><br><br>
+        Right click and choose 'edit with notepad++'.  Then, under the Language heading, ensure that the category L, and further the language Lua are selected.
+            This will highlight some parts of the profile for easier viewing.  You should have your profile open and be looking at something like this:<br>
+        <img src="Tutorial/profile.png" /><br><br>
+    
+        Now you have a blank profile to work with and notepad++ set up to highlight lua syntax for you.<br><br>
+
+
+
+
+        
+        <h1 id="l3">Lesson 3 - Add some sets to your profile.</h1>
+        Ingame, equip a set you'd like to use for idle, and type the command:
+<pre><code>/lac addset Idle</code></pre>
+        Repeat for a few other sets you'd like to use, such as nuking, healing, weaponskill, fast cast, etc.
+        Look back at Notepad++(you may need to click File..Reload From Disk to ensure changes applied).  You should have something resembling this:<br>
+<pre><code>local profile = {};
+local sets = {
+    Idle = {
+        Main = { Name = 'Lathi', AugPath='A' },
+        Sub = 'Enki Strap',
+        Ammo = 'Staunch Tathlum +1',
+        Head = 'Befouled Crown',
+        Neck = { Name = 'Loricate Torque +1', AugPath='A' },
+        Ear1 = 'Hearty Earring',
+        Ear2 = 'Etiolation Earring',
+        Body = { Name = 'Amalric Doublet +1', AugPath='A' },
+        Hands = { Name = 'Amalric Gages +1', AugPath='D' },
+        Ring1 = 'Defending Ring',
+        Ring2 = 'Shneddick Ring',
+        Back = 'Moonlight Cape',
+        Waist = 'Fucho-no-Obi',
+        Legs = 'Assid. Pants +1',
+        Feet = { Name = 'Amalric Nails +1', AugPath='D' },
+    },
+    Nuke = {
+        Main = { Name = 'Lathi', AugPath='A' },
+        Sub = 'Enki Strap',
+        Ammo = 'Pemphredo Tathlum',
+        Head = { Name = 'Amalric Coif +1', AugPath='A' },
+        Neck = { Name = 'Src. Stole +2', AugPath='A' },
+        Ear1 = 'Malignance Earring',
+        Ear2 = 'Regal Earring',
+        Body = { Name = 'Amalric Doublet +1', AugPath='A' },
+        Hands = { Name = 'Amalric Gages +1', AugPath='D' },
+        Ring1 = 'Shiva Ring +1',
+        Ring2 = 'Shiva Ring +1',
+        Back = { Name = 'Taranus\'s Cape', Augment = { [1] = '"Mag. Atk. Bns."+10', [2] = 'Mag. Acc+20', [3] = 'Magic Damage +20', [4] = 'INT+30' } },
+        Waist = 'Refoccilation Stone',
+        Legs = { Name = 'Amalric Slops +1', AugPath='A' },
+        Feet = { Name = 'Amalric Nails +1', AugPath='D' },
+    },
+    Precast = {
+        Main = { Name = 'Lathi', AugPath='A' },
+        Sub = 'Enki Strap',
+        Ammo = 'Impatiens',
+        Head = { Name = 'Merlinic Hood', Augment = { [1] = '"Fast Cast"+7', [2] = '"Mag. Atk. Bns."+6' } },
+        Neck = 'Orunmila\'s Torque',
+        Ear1 = 'Malignance Earring',
+        Ear2 = 'Etiolation Earring',
+        Body = { Name = 'Merlinic Jubbah', Augment = { [1] = 'INT+10', [2] = '"Fast Cast"+7', [3] = 'Mag. Acc.+10' } },
+        Hands = { Name = 'Merlinic Dastanas', Augment = { [1] = '"Mag. Atk. Bns."+10', [2] = '"Fast Cast"+7', [3] = 'Mag. Acc.+15' } },
+        Ring1 = 'Prolix Ring',
+        Ring2 = 'Veneficium Ring',
+        Back = 'Perimede Cape',
+        Waist = 'Witful Belt',
+        Legs = { Name = 'Psycloth Lappas', AugPath='D' },
+        Feet = { Name = 'Merlinic Crackows', Augment = { [1] = '"Fast Cast"+7', [2] = 'MND+10' } },
+    },
+};</code></pre>    
+    <h2>A warning about AddSet: As this is using string parsing to replace your sets in place,
                 if you modify your sets table in a way that it encompasses more of your profile than it should,
                 it is possible for addset to remove huge chunks of your profile.  For beginners, I recommend adding as
                 many sets as you can think of before proceeding, and backing up your profile before using addset if you have
                 to use it later.  If you're using profiles downloaded from the internet, it's possible for them to disable
                 addset via setting in OnLoad.  This is intended to be used for your own safety and you should not enable it
-                if the author has it disabled, unless specifically told it is ok to do so by the author.</b></font>
-            <br><br><br>
+                if the author has it disabled, unless specifically told it is ok to do so by the author.</h2><br>
 
-        
-        <h1 style="color:#FF7903">Lesson 4 - Configure an idle set.</h1>
-        <font color="#FFFFFF">To do this, we'll need to use the HandleDefault function.
+
+
+
+
+        <h1 id="l4">Lesson 4 - Configure an idle set.</h1>
+        To do this, we'll need to use the HandleDefault function.
             Scroll down your profile until you find it.
             We want to seperate our idle set by state, so we need to use the data functions.
-            You can see a full list of available data tables in <a href="gdata.html">gdata.html</a>.<br>
+            You can see a full list of available data tables in <a href="gdata.html">gdata.html</a>.  First, we grab the player table:
+<pre><code>local player = gData.GetPlayer();</code></pre>
 
-            First, we grab the player table:<br>
-            <font face="Courier" color="#0080FF">&emsp;local player = gData.GetPlayer();</font><br>
+            Next, we evaluate whether we're engaged:
+<pre><code>if (player.Status == 'Engaged') then</code></pre>
 
-            Next, we evaluate whether we're engaged:<br>
-            <font face="Courier" color="#0080FF">    &emsp;if (player.Status == 'engaged') then</font><br>
+            Then, we equip the set using gFunc.EquipSet(for a full list of available functions see <a href="gfunc.html">gfunc.html</a>):
+<pre><code>    gFunc.EquipSet(sets.Tp);</code></pre>
 
-            Then, we equip the set using gFunc.EquipSet(for a full list of available functions see <a href="gfunc.html">gfunc.html</a>):<br>
-            <font face="Courier" color="#0080FF">        &emsp;&emsp;gFunc.EquipSet(sets.Tp);</font><br>
+            Since we have other possible comparisons to look at, we can use elseif to check for multiple things.  Elseif statements are only evaluated if the prior if was not, so this guarantees we only hit one at a time.
+<pre><code>elseif (player.Status == 'Resting') then
+    gFunc.EquipSet(sets.Resting);</code></pre>
 
-            Since we have other possible comparisons to look at, we can use elseif to check for multiple things.  Elseif statements are only evaluated if the prior if was not, so this guarantees we only hit one at a time.<br>
-            <font face="Courier" color="#0080FF">   &emsp; elseif (player.Status == 'resting') then</font><br>
-            <font face="Courier" color="#0080FF">        &emsp;&emsp;gFunc.EquipSet(sets.Resting);</font><br>
+            Finally, we use an else to catch the most likely scenario so any other state will fall under it:
+<pre><code>else
+    gFunc.EquipSet(sets.Idle);</code></pre>
 
-            Finally, we use an else to catch the most likely scenario so any other state will fall under it:<br>
-            <font face="Courier" color="#0080FF">    &emsp;else</font><br>
-            <font face="Courier" color="#0080FF">        &emsp;&emsp;gFunc.EquipSet(sets.Idle);</font><br>
-
-            Lua requires all if-elseif-else blocks to be terminated with end, so add that:<br>
-            <font face="Courier" color="#0080FF">    &emsp;end</font><br>
+            Lua requires all if-elseif-else blocks to be terminated with end, so add that:
+<pre><code>end</code></pre>
 
             This will result in equipping the set Resting while you're resting, Tp while you're engaged, and Idle any other time.  For it to work correctly, you must have defined those sets with those exact names.  If you used other names, don't worry, you can just change the name inside the gFunc.EquipSet call.
-            For example, if you called your idle set refresh, you would change gFunc.EquipSet(sets.Idle) to gFunc.EquipSet(sets.refresh).  You should end up with something like this:<br>
-            <img src="Tutorial/default.png" /><br>
-            If you want to see it in action, type <font face="Courier" color="#0080FF">/lac reload</font> ingame and it will take effect.  Bear in mind that you will need to use <font face="Courier" color="#0080FF">/lac disable</font> to pause equipment swaps if you need to add additional sets after defining an idle set, so you are not placed back in idle while manually equipping things.
-            <br><br>
+            For example, if you called your idle set refresh, you would change gFunc.EquipSet(sets.Idle) to gFunc.EquipSet(sets.refresh).  You should end up with something like this:
+<pre><code>profile.HandleDefault = function()
+    local player = gData.GetPlayer();
+    if (player.Status == 'Engaged') then
+        gFunc.EquipSet(sets.Tp);
+    elseif (player.Status == 'Resting') then
+        gFunc.EquipSet(sets.Resting);
+    else
+        gFunc.EquipSet(sets.Idle);
+    end
+end</code></pre>
+            If you want to see it in action, type <font class="code">/lac reload</font> ingame and it will take effect.
+            Bear in mind that you will need to use <font class="code">/lac disable</font> to pause equipment swaps if
+             you need to add additional sets after defining an idle set, so you are not placed back in idle while manually equipping things.<br><br>
 
-        <h1 style="color:#FF7903">Lesson 5 - Configure some weaponskill sets.</h1>
-        <font color="#FFFFFF">To do this, we'll need to use the HandleWeaponskill function.  Scroll down your profile until you find it.<br>
+
+
+
+
+            <h1 id="l5">Lesson 5 - Configure some weaponskill sets.</h1>
+            To do this, we'll need to use the HandleWeaponskill function.  Scroll down your profile until you find it.
             Much like how we wanted to differentiate engaged, resting, and other(assumed to be idle), we want to know which weaponskill we're using.
 
-            First, we grab the action table:<br>
-            <font face="Courier" color="#0080FF">&emsp;local action = gData.GetAction();</font><br>
+            First, we grab the action table:
+<pre><code>local action = gData.GetAction();</code></pre>
 
-            Next, we start checking for weaponskills that have their own sets, and adding equip commands:<br>
-            <font face="Courier" color="#0080FF">    &emsp;if (action.Name == 'Savage Blade') then</font><br>
-            <font face="Courier" color="#0080FF">        &emsp;&emsp;gFunc.EquipSet(sets.SavageBlade);</font><br>
+            Next, we start checking for weaponskills that have their own sets, and adding equip commands:
+<pre><code>if (action.Name == 'Savage Blade') then
+    gFunc.EquipSet(sets.SavageBlade);</code></pre>
 
-            Because we only want to equip one weaponskill set, we should use elseif for everything except the first set:<br>
-            <font face="Courier" color="#0080FF">    &emsp;elseif (action.Name == 'Sanguine Blade') then</font><br>
-            <font face="Courier" color="#0080FF">        &emsp;&emsp;gFunc.EquipSet(sets.SanguineBlade);</font><br>
-            <font face="Courier" color="#0080FF">    &emsp;elseif (action.Name == 'Spirits Within') then</font><br>
-            <font face="Courier" color="#0080FF">        &emsp;&emsp;gFunc.EquipSet(sets.SpiritsWithin);</font><br>
+            Because we only want to equip one weaponskill set, we should use elseif for everything except the first set:
+<pre><code>elseif (action.Name == 'Sanguine Blade') then
+    gFunc.EquipSet(sets.SanguineBlade);
+elseif (action.Name == 'Spirits Within') then
+    gFunc.EquipSet(sets.SpiritsWithin);</code></pre>
 
-            And we end with a default weaponskill set to catch any ws we didn't bother to define:<br>
-            <font face="Courier" color="#0080FF">    &emsp;else</font><br>
-            <font face="Courier" color="#0080FF">       &emsp;&emsp; gFunc.EquipSet(sets.DefaultWeaponskill);</font><br>
+            And we end with a default weaponskill set to catch any ws we didn't bother to define:
+<pre><code>else
+    gFunc.EquipSet(sets.DefaultWeaponskill);</code></pre>
 
-            As before, we have to use the end keyword to finish an if-elseif-else block.<br>
-            <font face="Courier" color="#0080FF">    &emsp;end</font><br>
+            As before, we have to use the end keyword to finish an if-elseif-else block.
+<pre><code>end</code></pre>
+
+            Again, you can change the names of the sets and the weaponskills you check for however you like.  Putting it all together, it should resemble:
+<pre><code>profile.HandleWeaponskill = function()
+    local action = gData.GetAction();
+    if (action.Name == 'Savage Blade') then
+        gFunc.EquipSet(sets.SavageBlade);
+    elseif (action.Name == 'Sanguine Blade') then
+        gFunc.EquipSet(sets.SanguineBlade);
+    elseif (action.Name == 'Spirits Within') then
+        gFunc.EquipSet(sets.SpiritsWithin);
+    else
+        gFunc.EquipSet(sets.DefaultWeaponskill);
+    end
+end</code></pre>
+            If you want to see it in action, type <font class="code">/lac reload</font> ingame and go weaponskill something.  You can actually leave the equipment menu open and watch the swaps happen in real time.<br><br>
             
-            Again, you can change the names of the sets and the weaponskills you check for however you like.  You should end up with something like this:<br>
-            <img src="Tutorial/weaponskill.png" /><br>
-            If you want to see it in action, type <font face="Courier" color="#0080FF">/lac reload</font> ingame and go weaponskill something.  You can actually leave the equipment open and watch the swaps happen in real time.<br>
-            <br><br>
-            
-        <h1 style="color:#FF7903">Lesson 6 - Add a precast set.</h1>
-        <font color="#FFFFFF">To do this, we'll need to use the HandlePrecast function.  Scroll down your profile until you find it.<br>
-            Unlike the last couple of examples, you might only need one set for all precasts.<br>
-            That makes this super easy, because you don't have to use any if-elseif-else gating at all!<br>
-            Simply equip the set:<br>
-            <font face="Courier" color="#0080FF">&emsp;gFunc.EquipSet(sets.FastCast);</font><br>
-            As always, you can change the name of the set if you want.  It should look like this:<br>
-            <img src="Tutorial/precast1.png" /><br>
 
-            But, let's say you have a Marsyas or Twilight Cloak.  You'll need to equip those seperately, which we do by using if gating.<br>
-            Since it is only a single conditional(If we're casting honor march, we need to equip Marsyas), you won't need elseif or else.<br>
-            If you've been following so far, you might have the idea in your head already, but we will accomplish this with the action table just like in weaponskills.<br>
-            
-            <font face="Courier" color="#0080FF">&emsp;local action = gData.GetAction();<br>
-                &emsp;if (action.Name == 'Honor March') then<br>
-                &emsp;&emsp;gFunc.Equip('range', 'Marsyas');<br>
-                &emsp;&emsp;gFunc.Equip('ammo', 'displaced');<br>
-                &emsp;end<br></font><br>
-            <img src="Tutorial/precast2.png" /><br>
+
+
+
+        <h1 id="l6">Lesson 6 - Add a precast set.</h1>
+        To do this, we'll need to use the HandlePrecast function.  Scroll down your profile until you find it.
+            Unlike the last couple of examples, you might only need one set for all precasts.
+            That makes this super easy, because you don't have to use any if-elseif-else gating at all!
+            Simply equip the set:
+<pre><code>gFunc.EquipSet(sets.FastCast);</code></pre>
+            As always, you can change the name of the set if you want.  It should look like this:
+<pre><code>profile.HandlePrecast = function()
+    gFunc.EquipSet(sets.FastCast);
+end</code></pre>
+
+            But, let's say you have a Marsyas or Twilight Cloak.  You'll need to equip those seperately, which we do by using if gating.
+            Since it is only a single conditional(If we're casting honor march, we need to equip Marsyas), you won't need elseif or else.
+            If you've been following so far, you might have the idea in your head already, but we will accomplish this with the action table just like in weaponskills.
+<pre><code>local action = gData.GetAction();
+if (action.Name == 'Honor March') then
+    gFunc.Equip('range', 'Marsyas');
+    gFunc.Equip('ammo', 'displaced');
+end</code></pre>
+
+            Combining it together, we get:
+<pre><code>profile.HandlePrecast = function()
+    gFunc.EquipSet(sets.FastCast);
+    local action = gData.GetAction();
+    if (action.Name == 'Honor March') then
+        gFunc.Equip('range', 'Marsyas');
+        gFunc.Equip('ammo', 'displaced');
+    end
+end</code></pre>
 
             This introduces two new concepts.  First, we use a single equip tag.  Since we already equipped the precast set, we don't need a whole new set, we can just modify slots.
-            By calling Equip to set range to marsyas, we modify the pending set to include marsyas instead of it's existing range.  Second, we add the ammo as displaced.<br>
+            By calling Equip to set range to marsyas, we modify the pending set to include marsyas instead of it's existing range.  Second, we add the ammo as displaced.
             This is a crucial component for fast swaps; the displaced tag tells LuAshitacast that equipping this set will remove your ammo slot.
             Consider this example scenario: While idling in gjallarhorn, you equip an impatiens for precast, then gjallarhorn for midcast.
             Because precast and midcast happen nearly instantly, when LuAshitacast examines midcast it will know your ammo has changed to impatiens, but your client will still show gjallarhorn in range.
             Because gjallarhorn is still shown in range, LuAshitacast will not equip it, and your midcast will end up with impatiens and no instrument!
             By adding a displaced tag, you let LuAshitacast know that the slot will be emptied, so any other swaps occuring in the near future can be performed properly.
-            Now is a good time to go back and look at your sets and add displaced tags: Most ammo pieces will displace ranged slots, cloaks will displace headgear, and so on.<br>
-            <font color="#A00020"><b>A note on precast/preshot: The server will often send both your precast+midcast or preshot+midshot swaps in the same packet sequence.  This means you may never see your precast/preshot on the equipment screen.  If it doesn't seem to be taking effect, and you want to verify that it is working, use </b><font face="Courier" color="#0080FF">/lac debug on</font><b> to be sure.</b></font><br>
-            <br><br>
+            Now is a good time to go back and look at your sets and add displaced tags: Most ammo pieces will displace ranged slots, cloaks will displace headgear, and so on.
+            <h2>A note on precast/preshot: The server will often send both your precast+midcast or preshot+midshot swaps in the same packet sequence.  This means you may never see your precast/preshot on the equipment screen.
+                If it doesn't seem to be taking effect, and you want to verify that it is working, use <font class="code">/lac debug on</font> to be sure.</h2><br>
+
             
-    <h1 style="color:#FF7903">Lesson 7 - Add some job ability swaps.</h1>
-    <font color="#FFFFFF">To do this, we'll need to use the HandleAbility function.  Scroll down your profile until you find it.<br>
-        Here we will introduce a new function, <font face="Courier" color="#0080FF">string.match</font> that we use to partially match names.<br>
-        There's no need to list out each of the 8 different quick draws when they all share the same name:<br>
 
-        <font face="Courier" color="#0080FF">&emsp;local action = gData.GetAction();<br>
-            &emsp;if string.match(action.Name, ' Shot') then<br></font>
 
-        <font color="#FFFFFF">Now, we still want to differentiate light and dark shot because they use different sets, so we will use <font color="#FF7903">nested conditionals</font>.
-        This might sound scary, but it really just means 'if statements inside other if statements'.<br>
 
-        <font face="Courier" color="#0080FF">&emsp;&emsp;if (action.Name == 'Light Shot') then<br>
-            &emsp;&emsp;&emsp;gFunc.EquipSet(sets.QuickDrawAccuracy);<br>
-            &emsp;&emsp;elseif (action.Name == 'Dark Shot') then<br>
-            &emsp;&emsp;&emsp;gFunc.EquipSet(sets.QuickDrawAccuracy);<br>
-            &emsp;&emsp;else<br>
-            &emsp;&emsp;&emsp;gFunc.EquipSet(sets.QuickDrawDamage);<br>
-            &emsp;&emsp;end<br></font>
+    <h1 id="l7">Lesson 7 - Add some job ability swaps.</h1>
+        To do this, we'll need to use the HandleAbility function.  Scroll down your profile until you find it.
+        Here we will introduce a new function, <font class="highlight">string.match</font>, that we use to partially match names.
+        There's no need to list out each of the 8 different quick draws when they all share the same name:
+<pre><code>local action = gData.GetAction();
+    if string.match(action.Name, ' Shot') then</code></pre>
+
+        Now, we still want to differentiate light and dark shot because they use different sets, so we will use nested conditionals.
+        This might sound scary, but it really just means 'if statements inside other if statements'.
+<pre><code>if (action.Name == 'Light Shot') then
+    gFunc.EquipSet(sets.QuickDrawAccuracy);
+elseif (action.Name == 'Dark Shot') then
+    gFunc.EquipSet(sets.QuickDrawAccuracy);
+else
+    gFunc.EquipSet(sets.QuickDrawDamage);
+end</code></pre>
         
-        <font color="#FFFFFF">Since we already checked that the name contains ' Shot', and we haven't yet ended that if statement,
-            then we know anything besides Light Shot or Dark Shot will be a damage quick draw.  But, this is a little clunky, we can also use an <font color="#FF7903">or</font> statement to make it even cleaner:</font><br>
-
-            <font face="Courier" color="#0080FF">&emsp;&emsp;if (action.Name == 'Light Shot') or (action.Name == 'Dark Shot') then<br>
-                &emsp;&emsp;&emsp;gFunc.EquipSet(sets.QuickDrawAccuracy);<br>
-                &emsp;&emsp;else<br>
-                &emsp;&emsp;&emsp;gFunc.EquipSet(sets.QuickDrawDamage);<br>
-                &emsp;&emsp;end<br>
-            </font>
+        Since we already checked that the name contains ' Shot', and we haven't yet ended that if statement,
+        then we know anything besides Light Shot or Dark Shot will be a damage quick draw. 
+        But, this is a little clunky, we can also use an <font class="highlight">or statement</font> to make it even cleaner:
+<pre><code>if (action.Name == 'Light Shot') or (action.Name == 'Dark Shot') then
+    gFunc.EquipSet(sets.QuickDrawAccuracy);
+else
+    gFunc.EquipSet(sets.QuickDrawDamage);
+end</code></pre>
+            
         
-        <font color="#FFFFFF">This works the same way, the first if statement will be matched if either of the checks are matched.  We did not include any elseifs, so anytime the first statement is not matched we will equip our damage set.<br>
+        This works the same way, the first if statement will be matched if either of the checks are matched.  We did not include any elseifs, so anytime the first statement is not matched we will equip our damage set.
+        Now, we still have to consider possible other abilities, so let's add some elseifs that will reference the first string.match check:
+<pre><code>elseif (action.Name == 'Wild Card') then
+    gFunc.Equip('Feet', 'Lanun Bottes +3');
+elseif (action.Name == 'Random Deal') then
+    gFunc.Equip('Body', 'Lanun Frac +3');</code></pre>
         
-        Now, we still have to consider possible other abilities, so let's add some elseifs that will reference the first string.match check:<br>
-
-        <font face="Courier" color="#0080FF">&emsp;elseif (action.Name == 'Wild Card') then<br>
-            &emsp;&emsp;gFunc.Equip('Feet', 'Lanun Bottes +3');<br>
-            &emsp;elseif (action.Name == 'Random Deal') then<br>
-            &emsp;&emsp;gFunc.Equip('Body', 'Lanun Frac +3');<br>
-        </font>
 
         Since we don't need a default equipment set for abilities, we could leave it like this.
         Without an else statement, you'll be left in whatever gear you were in when the ability started for any other ability.
-        However, if you want to min-max, you could add a PDT set or something defensive(or refresh, regen, etc for possible tick) for other abilities:<br>
+        However, if you want to min-max, you could add a PDT set or something defensive(or refresh, regen, etc for possible tick) for other abilities:
+<pre><code>else
+    gFunc.EquipSet(sets.PDT);</code></pre>
+
+        And, as always, we need an end statement for the outer if-elseif-else chain:
+<pre><code>end</code></pre>
+
+        Before putting it all together, I want to note the importance of indentation.  Any time you leave an if-elseif-else statement or similar open, you should indent to make it easier to read.
+        In this case, the properly indented code all together should look like:
+<pre><code>profile.HandleAbility = function()
+    local action = gData.GetAction();
+    if string.match(action.Name, ' Shot') then
+        if (action.Name == 'Light Shot') or (action.Name == 'Dark Shot') then
+            gFunc.EquipSet(sets.QuickDrawAccuracy);
+        else
+            gFunc.EquipSet(sets.QuickDrawDamage);
+        end
+    elseif (action.Name == 'Wild Card') then
+        gFunc.Equip('Feet', 'Lanun Bottes +3');
+    elseif (action.Name == 'Random Deal') then
+        gFunc.Equip('Body', 'Lanun Frac +3');
+    else
+        gFunc.EquipSet(sets.PDT);
+    end
+end</code></pre>
+
+    As a final note, I directly equip the items for wild card and Random Deal in this example.  If you are making a profile you intend to share, it is better practice to make sets(even if they only have one item each).
+    That way, the user will only have to edit sets and won't even have to look at anything else.<br><br>
         
-        <font face="Courier" color="#0080FF">else<br>
-            gFunc.EquipSet(sets.PDT);<br></font>
 
-        And, as always, we need an end statement for the outer if-elseif-else chain:<br>
 
-        <font face="Courier" color="#0080FF">end<br></font>
 
-        Before putting it all together, I want to note the importance of indentation.  Any time you leave an if-elseif-else statement or similar open, you should indent to make it easier to read.  In this case, our code looks like:<br>
 
-        <img src="Tutorial/ability.png" /><br><br><br>
-        
-    <h1 style="color:#FF7903">Lesson 8 - Accepting and using user input</h1>
-    <font color="#FFFFFF">If you only have one potential set for each action, you can probably stop here.  But, in modern FFXI, people tend to want options.
+    <h1 id="l8">Lesson 8 - Accept and use input from the player.</h1>
+    If you only have one potential set for each action, you can probably stop here.  But, in modern FFXI, people tend to want options.
         For example, a mage might want to have a refresh-based idle set and a more defensive idle set.  We can accomplish this by using a local variable with accompanying commands to modify it.
         First, we want to make a settings table to keep some organization for all of our settings.  This can be anywhere at file scope(that is to say, anywhere not inside another function/table/etc), 
-        but I recommend putting it after your sets table and before assigning your sets table to profile.<br>
-       
+        but I recommend putting it after your sets table and before assigning your sets table to profile.
+<pre><code>    Precast = {
+        Main = { Name = 'Lathi', AugPath='A' },
+        Sub = 'Enki Strap',
+        Ammo = 'Impatiens',
+        Head = { Name = 'Merlinic Hood', Augment = { [1] = '"Fast Cast"+7', [2] = '"Mag. Atk. Bns."+6' } },
+        Neck = 'Orunmila\'s Torque',
+        Ear1 = 'Malignance Earring',
+        Ear2 = 'Etiolation Earring',
+        Body = { Name = 'Merlinic Jubbah', Augment = { [1] = 'INT+10', [2] = '"Fast Cast"+7', [3] = 'Mag. Acc.+10' } },
+        Hands = { Name = 'Merlinic Dastanas', Augment = { [1] = '"Mag. Atk. Bns."+10', [2] = '"Fast Cast"+7', [3] = 'Mag. Acc.+15' } },
+        Ring1 = 'Prolix Ring',
+        Ring2 = 'Veneficium Ring',
+        Back = 'Perimede Cape',
+        Waist = 'Witful Belt',
+        Legs = { Name = 'Psycloth Lappas', AugPath='D' },
+        Feet = { Name = 'Merlinic Crackows', Augment = { [1] = '"Fast Cast"+7', [2] = 'MND+10' } },
+    },
+};
 
-        <font face="Courier" color="#0080FF">local Settings = {<br>
-            &emsp;UseRefreshIdle = true<br>
-            &emsp;};<br></font>
-            
-        <img src="Tutorial/settings.png" /><br><br><br>
+local Settings = {
+    UseRefreshIdle = true
+};
 
-        <font color="#FFFFFF">Now, we have an existing table named Settings, with an entry called UseRefreshIdle set to true(you could set it to false if you want it off by default).
-            We can use this for an if statement easily enough.  Let's go down to where idle gear is, and add a nested conditional like we used for the quick draw example.<br>
+profile.Sets = sets;
 
-        <font face="Courier" color="#0080FF">&emsp;&emsp;if (Settings.UseRefreshIdle == true) then<br>
-            &emsp;&emsp;&emsp;gFunc.EquipSet(sets.IdleRefresh);<br>
-            &emsp;&emsp;else<br>
-            &emsp;&emsp;&emsp;gFunc.EquipSet(sets.IdleDefense);<br>
-            &emsp;&emsp;end<br>
-            &emsp;</font>
-            
-        <img src="Tutorial/settingsrule.png" /><br><br><br>
+profile.OnLoad = function()</code></pre>
+
+        Now, we have an existing table named Settings, with an entry called UseRefreshIdle set to true(you could set it to false if you want it off by default).
+            We can use this for an if statement easily enough.  Let's go down to where idle gear is, and add a nested conditional like we used for the quick draw example.
+<pre><code>profile.HandleDefault = function()
+    local player = gData.GetPlayer();
+    if (player.Status == 'Engaged') then
+        gFunc.EquipSet(sets.Tp);
+    elseif (player.Status == 'Resting') then
+        gFunc.EquipSet(sets.Resting);
+    else
+        if (Settings.UseRefreshIdle == true) then
+            gFunc.EquipSet(sets.IdleRefresh);
+        else
+            gFunc.EquipSet(sets.IdleDefense);
+        end
+    end
+end</code></pre>
         
-        <font color="#FFFFFF">If you were to reload it now, you would just end up idling in whatever set you hardcoded earlier under Settings.
-            But, we need to be able to change it.  So, let's add a command.  We do this by going down to the HandleCommand event.
-            The HandleCommand event passes anything typed after <font face="Courier" color="#0080FF">/lac fwd</font> to your profile as a table of arguments named args.
-            We can use this to edit your variable in real time:<br>
-           
+        If you were to reload it now, you would just end up idling in whatever set you hardcoded earlier under Settings.
+        But, we need to be able to change it.  So, let's add a command.  We do this by going down to the HandleCommand event.
+        The HandleCommand event passes anything typed after <font class="code">/lac fwd</font> to your profile as a table of arguments named args.
+        We can use this to edit your variable in real time:
+<pre><code>profile.HandleCommand = function(args)
+    if (args[1] == 'idlerefresh') then
+        if (Settings.UseRefreshIdle == true) then
+            Settings.UseRefreshIdle = false;
+        else
+            Settings.UseRefreshIdle = true;
+        end
+    end
+end</code></pre>
 
-            <font face="Courier" color="#0080FF">&emsp;if (args[1] == 'idlerefresh') then<br>
-                &emsp;&emsp;if (Settings.UseRefreshIdle == true) then<br>
-                &emsp;&emsp;&emsp;Settings.UseRefreshIdle = false;<br>
-                &emsp;&emsp;else<br>
-                &emsp;&emsp;&emsp;Settings.UseRefreshIdle = true;<br>
-                &emsp;&emsp;end<br>
-                &emsp;end<br>
-            </font><br><br>
-            
+        Breaking it down, first we check that the user typed idlerefresh(full command would be <font class="code">/lac fwd idlerefresh</font>).
+        Next, we check if Settings.UseRefreshIdle is enabled, and turn it off if it is.  Otherwise, we turn it on.  This results in the command always flipping the status of the variable.<br><br>
+
+
+
+
         
-        <font color="#FFFFFF">Breaking it down, first we check that the user typed idlerefresh(full command would be <font face="Courier" color="#0080FF">/lac fwd idlerefresh</font>).
-        Next, we check if Settings.UseRefreshIdle is enabled, and turn it off if it is.  Otherwise, we turn it on.  This results in the command always flipping the status of the variable.  In place, it should look like:<br>        
-        <img src="Tutorial/settingscommand.png" /><br><br><br>
-        <br>
-        
-    <h1 style="color:#FF7903">Lesson 9 - Simplifying user input</h1>
-    <font color="#FFFFFF">Looking at the last lesson, you might have been thinking something along the lines of
+    <h1 id="l9">Lesson 9 - Simplify user input with aliases and keybinds.</h1>
+    Looking at the last lesson, you might have been thinking something along the lines of
         <i>I don't like /lac fwd</i> or <i>I would rather have a keybind than have to type a command or use a macro space</i>.
-        Fortunately, with full access to lua, these are easy issues to resolve.  First, let's say you want to type <font face="Courier" color="#0080FF">/rdm</font> instead of <font face="Courier" color="#0080FF">/lac fwd</font>.
-        We do this by registering an Ashita alias in the OnLoad event.<br>
-
-        <font face="Courier" color="#0080FF">&emsp;AshitaCore:GetChatManager():QueueCommand(-1, '/alias /rdm /lac fwd');</font>
-        <br>
+        Fortunately, with full access to lua, these are easy issues to resolve.  First, let's say you want to type <font class="code">/rdm</font> instead of <font class="code">/lac fwd</font>.
+        We do this by registering an Ashita alias in the OnLoad event.
+<pre><code>AshitaCore:GetChatManager():QueueCommand(-1, '/alias /rdm /lac fwd');</code></pre>
 
         Incidentally, the -1 is a command type that will allow ashita itself and other plugins and addons to view your command.
         If you want to send the command directly to the game, you should use 1.  For other options, see Ashita documentation.
         It is important to note that since we're interacting with something outside of our own profile, it will remain after our profile is unloaded.
-        Anytime you do anything like that, you want to ensure that your profile cleans up after itself, so go down to the OnUnload event and add:<br>
+        Anytime you do anything like that, you want to ensure that your profile cleans up after itself, so go down to the OnUnload event and add:
+<pre><code>AshitaCore:GetChatManager():QueueCommand(-1, '/alias delete /rdm');</code></pre>
 
-        <font face="Courier" color="#0080FF">&emsp;AshitaCore:GetChatManager():QueueCommand(-1, '/alias delete /rdm');</font><br>
+        In place, should look something like:
+<pre><code>profile.OnLoad = function()
+    gSettings.AllowAddSet = true;
+    AshitaCore:GetChatManager():QueueCommand(-1, '/alias /rdm /lac fwd');
+end
 
-        In place, should look something like:<br>
+profile.OnUnload = function()
+    AshitaCore:GetChatManager():QueueCommand(-1, '/alias delete /rdm');
+end</code></pre>
 
-        <img src="Tutorial/settingsalias.png" /><br><br><br>
+        If you're familiar with Ashita in general, you can probably extrapolate how to do binds from this.  We're just going to use the same function call, but with the /bind command instead:
+        <pre><code>AshitaCore:GetChatManager():QueueCommand(-1, '/bind ^F1 /lac fwd idlerefresh');</code></pre>
+        See Ashita documentation for full information on bindable keys and modifiers, but in short you can use ^ for control, ! for alt, and ^! for both.  And of course, we have to unbind on unload:
+        <pre><code>AshitaCore:GetChatManager():QueueCommand(-1, '/unbind ^F1');</code></pre>
 
-        If you're familiar with Ashita in general, you can probably extrapolate how to do binds from this.  We're just going to use the same function call, but with the /bind command instead:<br>
+        All together, you should have:
+<pre><code>profile.OnLoad = function()
+    gSettings.AllowAddSet = true;
+    AshitaCore:GetChatManager():QueueCommand(-1, '/alias /rdm /lac fwd');
+    AshitaCore:GetChatManager():QueueCommand(-1, '/bind ^F1 /lac fwd idlerefresh');
+end
 
-        <font face="Courier" color="#0080FF">&emsp;AshitaCore:GetChatManager():QueueCommand(-1, '/bind ^F1 /lac fwd idlerefresh');</font><br>
-
-        See Ashita documentation for full information on bindable keys and modifiers, but in short you can use ^ for control, ! for alt, and ^! for both.  And of course, we have to unbind on unload:<br>
+profile.OnUnload = function()
+    AshitaCore:GetChatManager():QueueCommand(-1, '/alias delete /rdm');
+    AshitaCore:GetChatManager():QueueCommand(-1, '/unbind ^F1');
+end</code></pre>
+        Feel free to use as many aliases and keybinds as you'd like to simplify your profile commands, just remember to remove them when you unload.  They're very lightweight and make things much easier!<br><br>
         
-        <font face="Courier" color="#0080FF">&emsp;AshitaCore:GetChatManager():QueueCommand(-1, '/unbind ^F1);</font><br>
-
-        All together, we have:<br>
-
-        <img src="Tutorial/settingsbind.png" /><br><br><br>
-
-        Feel free to use as many aliases and keybinds as you'd like to simplify your profile commands, just remember to remove them when you unload.  They're very lightweight and make things much easier!<br>
 
 
-        <br>
-        
-    <h1 style="color:#FF7903">Lesson 10 - Creating and equipping variations of sets</h1>
-    <font color="#FFFFFF">If you're coming from Ashitacast, you might have some experience combining variable names such as <font face="Courier" color="#0080FF">&lt;equip set="TP-$TpVariant" /&gt;</font>.
-    If you're coming from gearswap, you're probably used to sets having nested tables, such as <font face="Courier" color="#0080FF">equip(sets.TP[TpVariant]</font>.
+
+
+    <h1 id="l10">Lesson 10 - Create a set variation and add a setting to utilize it.</h1>
+    If you're coming from Ashitacast, you might have some experience combining variable names such as <font class="code">&lt;equip set="TP-$TpVariant" /&gt</font>.
+    If you're coming from gearswap, you're probably used to sets having nested tables, such as <font class="code">equip(sets.TP[TpVariant])</font>.
     LuAshitacast does things a little differently, as we want all your sets to be within the same un-nested table, but you can still apply these concepts easily.
-    I recommend naming sets of this nature using underscores to indicate variants, such as  <font face="Courier" color="#0080FF">TP_TpVariant</font>.  This will make things easier to read, as each variable is seperated.
+    I recommend naming sets of this nature using underscores to indicate variants, such as  <font class="code">TP_TpVariant</font>.  This will make things easier to read, as each variable is seperated.
     To equip these sets, we'll use string concatenation(a fancy term for smushing words together!).  So, let's hop in the deep end and look at the code we'll use for this:<br>
-    
-    <font face="Courier" color="#0080FF">&emsp;gFunc.EquipSet('TP_' .. Settings.TpVariant);</font><br>
+<pre><code>gFunc.EquipSet('TP_' .. Settings.TpVariant);</code></pre>
 
-    String concatenation is done with <font face="Courier" color="#0080FF">..</font> in lua.
-    What we're doing here is combining <font face="Courier" color="#0080FF">TP_</font> with the value of a variable named Settings.TpVariant to get a set name.
+    String concatenation is done with <font class="code">..</font> in lua.
+    What we're doing here is combining <font class="code">TP_</font> with the value of a variable named <font class="code">Settings.TpVariant</font> to get a set name.
     So, to make this useful, we need to create some set variations, for example, let's say you want 4 different TP sets:<br>
-    <font face="Courier" color="#0080FF">Default Hybrid HighAcc LowAcc</font><br>
+<pre><code>Default Hybrid HighAcc LowAcc</code></pre>
     Because we want to prefix them with TP_, the actual sets you'll want to add to your profile are:
-    <font face="Courier" color="#0080FF">TP_Default TP_Hybrid TP_HighAcc TP_LowAcc</font><br>
-    With those added, we need to look at the variable TpVariant.  First, we go to Settings(from step 8) and add a setting:
-    &emsp;TpVariant = 'Default'<br>
+<pre><code>TP_Default TP_Hybrid TP_HighAcc TP_LowAcc</code></pre>
+    With those added, we need to look at the variable TpVariant.  First, we go to Settings(from step 8) and add another entry to the settings table:
+<pre><code>local Settings = {
+    UseRefreshIdle = true,
+    TpVariant = 'Default'
+};</code></pre>
     Note that because this is a string, to be used as text, we encompass it in ''.
     Further, because we're adding an additional variable, we need a comma after UseRefreshIdle so the interpretor knows there are more variables to come.
-    All together, should look like:<br>
-    
-    <img src="Tutorial/settingsvariant.png" /><br><br><br>
+    Next, we drop back to HandleDefault and set up our TP equip function to utilize the variable with the earlier line:
+<pre><code>profile.HandleDefault = function()            
+    local player = gData.GetPlayer();
+    if (player.Status == 'Engaged') then
+        gFunc.EquipSet('TP_' .. TpVariant);
+    elseif (player.Status == 'Resting') then
+        gFunc.EquipSet(sets.Resting);
+    else
+        if (Settings.UseRefreshIdle == true) then
+            gFunc.EquipSet(sets.IdleRefresh);
+        else
+            gFunc.EquipSet(sets.IdleDefense);
+        end
+    end
+end</code></pre>
 
-    Next, we drop back to HandleDefault and set up our TP equip function to utilize the variable with the earlier line:<br>
-
-    <img src="Tutorial/defaultvariant.png" /><br><br><br>
-
-    Now, like in step 8, if you were to reload you'd drop into TP_Default, because that is hardcoded in your settings.  Once again, we need to add a command to alter it, so back to HandleCommand.
+    Now, like in lesson 8, if you were to reload you'd drop into TP_Default, because that is hardcoded in your settings.  Once again, we need to add a command to alter it, so back to HandleCommand.
     We want to use elseif for every command besides the first, to ensure we only match one.  This time, we want to look at 2 arguments(the command itself, and the set we're changing to):<br>
+<pre><code>elseif (args[1] == 'tpset') then
+    if (#args > 1) then
+        Settings.TpVariant = args[2];
+    end
+end</code></pre>
 
-    <font face="Courier" color="#0080FF">&emsp;if (args[1] == 'tpset') then<br>
-        &emsp;&emsp;elseif (#args > 1) then<br>
-        &emsp;&emsp;&emsp;Settings.TpVariant = args[2];<br>
-        &emsp;&emsp;end<br>
-        &emsp;end<br>
-    </font><br><br>
+    We use #args to ensure that a second argument exists, so if the user types <font class="code">/rdm tpset</font>
+    then nothing happens, but if the user types <font class="code">/rdm tpset HighAcc</font> you instantly swap to HighAcc TP set.
+    You can use keybinds or further aliases to improve the user experience.  In place, it should look like:
+<pre><code>profile.HandleCommand = function(args)
+    if (args[1] == 'idlerefresh') then
+        if (Settings.UseRefreshIdle == true) then
+            Settings.UseRefreshIdle = false;
+        else
+            Settings.UseRefreshIdle = true;
+        end
+    elseif (args[1] == 'tpset') then
+        if (#args > 1) then
+            Settings.TpVariant = args[2];
+        end
+    end
+end</code></pre><br>
 
-    We use #args to ensure that a second argument exists, so if the user types <font face="Courier" color="#0080FF">/rdm tpset</font>
-    then nothing happens, but if the user types <font face="Courier" color="#0080FF">/rdm tpset HighAcc</font> you instantly swap to HighAcc TP set.
-    You can use keybinds or further aliases to improve the user experience.  In place, it should look like:<br>
 
-    <img src="Tutorial/commandvariant.png" /><br><br><br>
 
-    
-    <h1 style="color:#FF7903">Lesson 11 - Creating self-cycling variations</h1>
-    <font color="#FFFFFF">Back in Lesson 10, we created a multi-set variation for TP.  But, having 4 different commands or binds for the same set is inconvenient.
+
+
+    <h1 id="l11">Lesson 11 - Allow your set variation to cycle through options with only one command.</h1>
+    Back in Lesson 10, we created a multi-set variation for TP.  But, having 4 different commands or binds for the same set is inconvenient.
         So, now we'll create a way to cycle through them in order.  First, we use a numerical table to create a list of options, this needs to be at file scope and I recommend
-        placing it above settings:<br>
+        placing it above settings:
+<pre><code>local TpVariantTable = {
+    [1] = 'Default',
+    [2] = 'Hybrid',
+    [3] = 'HighAcc',
+    [4] = 'LowAcc'
+};
 
-        <font face="Courier" color="#0080FF">local TpVariantTable = {<br>
-            &emsp;[1] = 'Default',<br>
-            &emsp;[2] = 'Hybrid',<br>
-            &emsp;[3] = 'HighAcc',<br>
-            &emsp;[4] = 'LowAcc'<br>
-        };<br>
-        </font>
+local Settings = {
+    UseRefreshIdle = true,
+    TpVariant = 'Default'
+};</code></pre>
     
-        Ensure that you've listed every option you want to cycle through here, then we change our setting to a numerical value for the option we want to start with:<br>
-
-        <font face="Courier" color="#0080FF">TpVariant = 1</font><br>
-
-        This should look like:<br>
+        Ensure that you've listed every option you want to cycle through here, then we change our setting to a numerical value for the option we want to start with:
+        <pre><code>local TpVariantTable = {
+            [1] = 'Default',
+            [2] = 'Hybrid',
+            [3] = 'HighAcc',
+            [4] = 'LowAcc'
+        };
         
-        <img src="Tutorial/varianttable.png" /><br><br><br>
+        local Settings = {
+            UseRefreshIdle = true,
+            TpVariant = 1
+        };</code></pre>
 
-
-        Next, we go down to equip and change it to use the table to look up the value we want:<br>
-
-        <font face="Courier" color="#0080FF">&emsp;gFunc.EquipSet('TP_' .. TpVariantTable[Settings.TpVariant]);</font><br>
+        Now, instead of setting TpVariant to the <i>name</i> of the set we want, it needs to be set to the <i>number</i> representing the set.
+        Next, we go down to equip and change it so that it looks up the set using the number, rather than a name:
+<pre><code>gFunc.EquipSet('TP_' .. TpVariantTable[Settings.TpVariant]);</code></pre>
 
         In simple terms, this takes the value of TpVariant(1) and looks for an entry in TpVariantTable that matches it, so you end up with 'Default'.
-        Now, to cycle through the table, we just need to change the number of TpVariant rather than actually specifying a term.  So, let's go back to HandleCommand and alter it to do that:<br>
-        
-    <font face="Courier" color="#0080FF">&emsp;if (args[1] == 'tpset') then<br>
-        &emsp;&emsp;Settings.TpVariant = Settings.TpVariant + 1;<br>
-        &emsp;&emsp;if (Settings.TpVariant > #TpVariantTable) then<br>
-        &emsp;&emsp;Settings.TpVariant = 1;<br>
-        &emsp;&emsp;end<br>
-        &emsp;end<br>
-    </font><br><br>
+        Now, to cycle through the table, we just need to change the number of TpVariant rather than actually specifying a term.  So, let's go back to HandleCommand and alter it to do that:
+<pre><code>if (args[1] == 'tpset') then
+    Settings.TpVariant = Settings.TpVariant + 1;
+    if (Settings.TpVariant > #TpVariantTable) then
+        Settings.TpVariant = 1;
+    end
+end</code></pre>
 
-        Instead of having to pass in a second argument, now when we type <font face="Courier" color="#0080FF">/rdm tpset</font> it will add 1 to TpVariant.  The second check is important, if we've gone past
-        the amount of variants in the table, we go back to the start.  This ensures smooth operation.  However, most users will also want to see what step they are on, since the macro isn't
-        tied to a specific set any more.  We can do this with the message command:<br>
+        Breaking down the changes here, we got rid of the check for a second argument as we no longer need one.  First, we increase the numerical TpVariant value by 1.
+        Then, we check if it's higher than the amount of entries in the table, and if it is we go back to 1.  That way, you can cycle indefinitely.
+        Because the equip section has already been modified to equip the set, now you can have a single macro or bind to cycle through options easily.
+        However, most users will also want to see what step they are on rather than having to see what equipment shows up.
+        We can do this with the message function:
+<pre><code>gFunc.Message('TP Set: ' .. TpVariantTable[Settings.TpVariant]);</code></pre>
 
-        <font face="Courier" color="#0080FF">gFunc.Message('TP Set: ' .. TpVariantTable[Settings.TpVariant]);</font><br>
+        Notice that we use the same concatenation here.  This will print a message to log showing your current TP set, so we drop it in after editing the TP set.  All together, should have:
+        <pre><code>if (args[1] == 'tpset') then
+    Settings.TpVariant = Settings.TpVariant + 1;
+    if (Settings.TpVariant > #TpVariantTable) then
+        Settings.TpVariant = 1;
+    end
+    gFunc.Message('TP Set: ' .. TpVariantTable[Settings.TpVariant]);
+end</code></pre><br>
+        
 
-        Notice that we use the same concatenation here.  This will print a message to log showing your current TP set, so we drop it in after editing the TP set.  All together, should have:<br>
+
+
         
-        <img src="Tutorial/varianttablecommand.png" /><br><br><br>
-        
-    <h1 style="color:#FF7903">Lesson 12 - Creating a midcast section for RDM</h1>
-    <font color="#FFFFFF">This might feel a little out of order, but I've decided to place it here due to the amount of code, despite most of the concepts themselves being basic.
+    <h1 id="l12">Lesson 12 - Create a midcast section using RDM as an example.</h1>
+    This might feel a little out of order, but I've decided to place it here due to the amount of code, despite most of the concepts themselves being basic.
         We're only going to introduce one new function here, ashita meta-tables.  By declaring a table with T{ instead of {, Ashita's sugar lib will create a bunch of additional functions
-        for us to use within the table.  So, the table in question is going to be:</font><br>
-
-        <font face="Courier" color="#0080FF">local MndDebuffs = T{ 'Slow', 'Paralyze', 'Slow II', 'Paralyze II', 'Addle', 'Addle II' };<br>
-            local ElementalDebuffs = T{ 'Burn', 'Rasp', 'Drown', 'Choke', 'Frost', 'Shock' };</font><br>
-
-        
-        The declaration is pretty straightforward.  We're just making lists to simplify our rules a little bit.
-        Now, onto the actual rules(if you're following, I probably don't have to tell you, but we'll be going to HandleMidcast for this):<br>
-        
-        <font face="Courier" color="#0080FF">
-            &emsp;local action = gData.GetAction();<br>
-            &emsp;if (action.Skill == 'enfeeblingmagic') then<br>
-            &emsp;&emsp;if (MndDebuffs:contains(action.Name)) then<br>
-            &emsp;&emsp;&emsp;gFunc.EquipSet(sets.DebuffMND);<br>
-            &emsp;&emsp;else<br>
-            &emsp;&emsp;&emsp;gFunc.EquipSet(sets.DebuffINT);<br>
-            &emsp;&emsp;end<br>
-            &emsp;elseif (action.Skill == 'elementalmagic') then<br>
-            &emsp;&emsp;if (ElementalDebuffs:contains(action.Name)) then<br>
-            &emsp;&emsp;&emsp;gFunc.EquipSet(sets.ElementalDebuff);<br>
-            &emsp;&emsp;elseif (action.Name == 'Impact') then<br>
-            &emsp;&emsp;&emsp;gFunc.EquipSet(sets.Impact);<br>
-            &emsp;&emsp;else<br>
-            &emsp;&emsp;&emsp;gFunc.EquipSet(sets.Nuke);<br>
-            &emsp;&emsp;end<br>
-            &emsp;elseif (action.Skill == 'darkmagic') then<br>
-            &emsp;&emsp;if (action.Name == 'Stun') then<br>
-            &emsp;&emsp;&emsp;gFunc.EquipSet(sets.Stun);<br>
-            &emsp;&emsp;else<br>
-            &emsp;&emsp;&emsp;gFunc.EquipSet(sets.DarkMagic);<br>
-            &emsp;&emsp;end<br>
-            &emsp;elseif string.match(action.Name, 'Cure') or string.match(action.Name, 'Curaga') then<br>
-            &emsp;&emsp;gFunc.EquipSet(sets.Cure);<br>
-            &emsp;elseif (action.Skill == 'enhancingmagic') then<br>
-            &emsp;&emsp;gFunc.EquipSet(sets.Enhancing);<br>
-            &emsp;else<br>
-            &emsp;&emsp;gFunc.EquipSet(sets.Haste);<br>
-            &emsp;end<br></font>
+        for us to use within the table.  Now, onto the actual code(if you're following, I probably don't have to tell you, but we'll be going to HandleMidcast for this):<br>
+<pre><code>profile.HandleMidcast = function()
+    local MndDebuffs = T{ 'Slow', 'Paralyze', 'Slow II', 'Paralyze II', 'Addle', 'Addle II' };
+    local ElementalDebuffs = T{ 'Burn', 'Rasp', 'Drown', 'Choke', 'Frost', 'Shock' };
+    local action = gData.GetAction();				
+    if (action.Skill == 'Enfeebling Magic') then
+        if (MndDebuffs:contains(action.Name)) then
+            gFunc.EquipSet(sets.DebuffMND);
+        else
+            gFunc.EquipSet(sets.DebuffINT);
+        end
+    elseif (action.Skill == 'Elemental Magic') then
+        if (ElementalDebuffs:contains(action.Name)) then
+            gFunc.EquipSet(sets.ElementalDebuff);
+        elseif (action.Name == 'Impact') then
+            gFunc.EquipSet(sets.Impact);
+        else
+            gFunc.EquipSet(sets.Nuke);
+        end
+    elseif (action.Skill == 'Dark Magic') then
+        if (action.Name == 'Stun') then
+            gFunc.EquipSet(sets.Stun);
+        else
+            gFunc.EquipSet(sets.DarkMagic);
+        end
+    elseif string.match(action.Name, 'Cure') or string.match(action.Name, 'Curaga') then
+        gFunc.EquipSet(sets.Cure);
+    elseif (action.Skill == 'Enhancing Magic') then
+        gFunc.EquipSet(sets.Enhancing);
+    else
+        gFunc.EquipSet(sets.Haste);
+    end
+end</code></pre>
 
             Ok, there's a lot of stuff here.  Take a minute and try to follow the indentations to get an idea of everything going on.  First, we branch out into the different magic skills, as well as cures.
-            As we branch into enfeebling, we run into the :contains call.  This call is specific to Ashita's sugar libraries, and cannot be used unless you declare the table with T{.
+            As we branch into enfeebling, we run into the <font class="highlight">:contains</font> call.  This call is specific to Ashita's sugar libraries, and cannot be used unless you declare the table with T{.
             It returns true if any entry in the table matches the argument passed in. So, in this case, we check if the spell is a MND spell and decide whether to go to DebuffMND or DebuffINT.
             If you want to further split into multiple sets, you could use a toggle like in lesson 8, or set variants like in lesson 10-11.  Keeping it a little simpler for now.
             Elemental splits the same way, first checking for elemental debuffs, then impact, then falling back on nukes.
             In dark magic, we make an exception for stun, then fall to a generic dark set.
             Cures always go to cure, enhancing always goes to enhancing, and then we finish off with a haste set for anything unspecified to lower recasts.  Now, much of this is personal design choice.
             Maybe you have more spells that need exceptions, like a specific drain set that is seperate from absorb spells.  You should be able to follow the ideas to implement that.  Don't feel limited
-            by my design choices, this is simply an example.  Try to understand the individual components and learn from them, rather than copy/pasting the entire thing.  Note that while I'm screenshotting
-            the tables in the assembled section for ease of viewing, they could also be placed at file scope, alongside any variation tables.<br>
+            by my design choices, this is simply an example.  Try to understand the individual components and learn from them, rather than copy/pasting the entire thing.  Note that while I put the tables inside the midcast
+            section, they could also be placed at file scope, alongside any variation tables.<br><br>
 
-            <img src="Tutorial/midcast.png" /><br><br><br>
-        </font>
+
+
+        
     
-        <h1 style="color:#FF7903">Lesson 13 - Handling Pet Actions</h1>
-        <font color="#FFFFFF">Pet actions are a unique beast.  Because they can happen at the same time as player actions, we have to be able to decide what to balance them with.
-            As a result, a one-size-fits-all approach is unlikely to satisfy everyone.  I've decided to satisfy this by adding the current pet action as a data call, which allows
+        <h1 id="l13">Lesson 13 - Enable swaps for pet actions.</h1>
+        Pet actions are a unique beast.  Because they can happen at the same time as player actions, we have to be able to decide what to balance them with.
+            As a result, a one-size-fits-all approach is unlikely to satisfy everyone.  I've decided to treat this by adding the current pet action as a data call, which allows
             the user to override anything they want with pet actions.  Your approach may drastically vary from mine, especially as you learn lua, and that's perfectly fine!  With
-            all of this in mind, let's start by declaring a local function.  This function will not be called by LuAshitacast, you'll have to call it yourself.<br>
+            all of this in mind, let's start by declaring a local function.  This function will not be called by LuAshitacast, you'll have to call it yourself.
+            We'll place this after sets, but before the profile defined functions so that we can access it from any of them.  So, in place, it will look like:
+<pre><code>local Settings = {
+    UseRefreshIdle = true,
+    TpVariant = 1
+};
 
-            <font face="Courier" color="#0080FF">&emsp;local function HandlePetAction(PetAction)<br>
-            &emsp;end<br></font>
+profile.Sets = sets;
 
-            We'll place this after sets, but before the profile defined functions so that we can access it from any of them.  So, in place, it will look like:<br>
-            
-            <img src="Tutorial/petactionfunc.png" /><br><br><br>
+local function HandlePetAction(PetAction)
+end
 
-            Breaking it down, we've just created a function called HandlePetAction with an argument of PetAction.  We'll call it like this:<br>
+profile.OnLoad = function()</code></pre>
 
-            <font face="Courier" color="#0080FF">local petAction = gData.GetPetAction();<br>
-            HandlePetAction(petAction);</font><br>
+            Breaking it down, we've just created a function called HandlePetAction with an argument of PetAction.  We'll call it like this:
+<pre><code>local petAction = gData.GetPetAction();
+HandlePetAction(petAction);</code></pre>
 
             This will save us the hassle of calling GetPetAction twice.  If you're wondering why it isn't simply a predefined function, it's to allow the user the option to ignore the pet action
-            and continue with their own swaps.  So, we need to add some rules around it.  Let's use ashita tables again, and create a list of pet actions we care to swap gear for:<br>
-
-            <font face="Courier" color="#0080FF">local PetSkillSwaps = T{'Wind Blade', 'Thunderstorm', 'Volt Strike', 'Thunderspark'};<br></font>
-
+            and continue with their own swaps.  So, we need to add some rules around it.  Let's use ashita tables again, and create a list of pet actions we care to swap gear for.
             In this case, since we may want to override multiple actions with pet swaps, we want the table to be at file scope so we can access it anywhere.
-            Place it with your other tables after sets.<br>
+            Place it with your other tables after sets.
+<pre><code>local PetSkillSwaps = T{'Wind Blade', 'Thunderstorm', 'Volt Strike', 'Thunderspark'};
 
-            <img src="Tutorial/petactiontable.png" /><br><br><br>
+local Settings = {
+    UseRefreshIdle = true,
+    TpVariant = 1
+};
 
-            Now, to actually utilize it, we expand the earlier code a bit and place it into HandleDefault:<br>
+profile.Sets = sets;</code></pre>
 
-            <font face="Courier" color="#0080FF">&emsp;local petAction = gData.GetPetAction();<br>
-                &emsp;if (petAction ~= nil) and PetSkillSwaps:contains(petAction.Name) then<br>
-                &emsp;&emsp;HandlePetAction(petAction);<br>
-                &emsp;&emsp;return;<br>
-                &emsp;end<br></font>
+            Now, to actually utilize it, we expand the earlier code a bit and place it into HandleDefault:
+<pre><code>profile.HandleDefault = function()
+    local petAction = gData.GetPetAction();
+    if (petAction ~= nil) and PetSkillSwaps:contains(petAction.Name) then
+        HandlePetAction(petAction);
+        return;
+    end
+                
+    local player = gData.GetPlayer();
+    if (player.Status == 'engaged') then
+        gFunc.EquipSet('TP_' .. TpVariant);
+    elseif (player.Status == 'resting') then
+        gFunc.EquipSet(sets.Resting);
+    else
+        if (Settings.UseRefreshIdle == true) then
+            gFunc.EquipSet(sets.IdleRefresh);
+        else
+            gFunc.EquipSet(sets.IdleDefense);
+        end
+    end
+end</code></pre>
 
             First, we check if petAction isn't nil(if pet is not performing an action, it will be nil!), then we check if our table contains an action.  If it does, we call the HandlePetAction function,
             then we call return.  Return ends the current processing immediately, so any later swaps can't occur.  This is necessary, so your normal sets don't override the pet action.
-            Let's start by adding it to HandleDefault, as we certainly would rather wear our blood pact gear than our idle gear.<br>
-
-            <img src="Tutorial/petdefault.png" /><br><br><br>
-            
             Now our function is linked.  Whenever we're idle and our pet is in the middle of an action, we'll end up calling the HandlePetAction function we created, and passing in the petAction table.
-            From here, we just go into our function and handle the equipment swaps the same way we'd done anything else:<br>
-
-            &emsp;if (PetAction.Name == 'Wind Blade') or (PetAction.Name == 'Thunderstorm') or (PetAction.Name == 'Thunderspark') then<br>
-            &emsp;&emsp;gFunc.EquipSet(sets.PetMAB);<br>
-            &emsp;elseif (PetAction.Name == 'Volt Strike') then<br>
-            &emsp;&emsp;gFunc.EquipSet(sets.VoltStrike);<br>
-            &emsp;end<br>
-
-            Put it all in the function, and we have:<br>
-            
-            <img src="Tutorial/petaction2.png" /><br><br><br>
+            Note that while I used a table listing only a few moves to decide if I want to override idle, you could also use petAction.Type or even default to overriding anytime it is not nil.
+            You have all the flexibility to decide which moves are worth overriding, and if you plan to override for most moves it's best to either use a table of moves you won't swap for or not use a table at all.
+            This way, you don't have to maintain a massive table of little value.
+            From here, we just go into our function and handle the equipment swaps the same way we've done everything else:
+    
+<pre><code>local function HandlePetAction(PetAction)
+    if (PetAction.Name == 'Wind Blade') or (PetAction.Name == 'Thunderstorm') or (PetAction.Name == 'Thunderspark') then
+        gFunc.EquipSet(sets.PetMAB);
+    elseif (PetAction.Name == 'Volt Strike') then
+        gFunc.EquipSet(sets.VoltStrike);
+    end
+end</code></pre>
 
             The first if statement could use a table to look cleaner.  I'm not going to go too deeply into this, the same rules apply as anything else, you want to design branching functions
             to get to the set you need.  If you need variants, toggles, etc.. add them.  But, we also have to consider that we can cast and perform other actions while a pet acts.  Let's say
-            we want to be able to cast haste during blood pacts, without ruining our blood pact gear.  We move down to HandleMidcast, and add much of the same code:<br>
-
-            <font face="Courier" color="#0080FF">&emsp;if (action.Name == 'Haste') then<br>
-                &emsp;&emsp;local petAction = gData.GetPetAction();<br>
-                &emsp;&emsp;if (petAction ~= nil) and PetSkillSwaps:contains(petAction.Name) then<br>
-                &emsp;&emsp;&emsp;HandlePetAction(petAction);<br>
-                &emsp;&emsp;&emsp;return;<br>
-                &emsp;&emsp;end<br>
-                &emsp;end<br></font>
+            we want to be able to cast haste during blood pacts, without ruining our blood pact gear.  We move down to HandleMidcast, and add much of the same code:
+<pre><code>profile.HandleMidcast = function()
+    local MndDebuffs = T{ 'Slow', 'Paralyze', 'Slow II', 'Paralyze II', 'Addle', 'Addle II' };
+    local ElementalDebuffs = T{ 'Burn', 'Rasp', 'Drown', 'Choke', 'Frost', 'Shock' };
+    local action = gData.GetAction();
+    
+    if (action.Name == 'Haste') then
+        local petAction = gData.GetPetAction();
+        if (petAction ~= nil) and PetSkillSwaps:contains(petAction.Name) then
+            HandlePetAction(petAction);
+            return;
+        end
+    end
+                
+    if (action.Skill == 'Enfeebling Magic') then
+        if (MndDebuffs:contains(action.Name)) then
+            gFunc.EquipSet(sets.DebuffMND);
+        else
+            gFunc.EquipSet(sets.DebuffINT);
+        end
+    elseif (action.Skill == 'Elemental Magic') then
+        if (ElementalDebuffs:contains(action.Name)) then
+            gFunc.EquipSet(sets.ElementalDebuff);
+        elseif (action.Name == 'Impact') then
+            gFunc.EquipSet(sets.Impact);
+        else
+            gFunc.EquipSet(sets.Nuke);
+        end</code></pre>
 
             Now we'll also wear BP gear if pet is BPing while we're casting haste.  Because Precast is instant, we don't need to alter that, we should keep it
-            so we keep maximum cast speed.  You can add a table of spells, or even override all spells, all abilities, etc by not using that outer if statement.
-            This allows the utmost flexibility when optimizing for pet behavior.<br>
-
-            <img src="Tutorial/petmidcast.png" /><br>            
-            <font color="#A00020"><b>A note on Puppetmaster: Your puppet's weaponskills execute almost instantly.  It is highly probable that by the time the client
+            so we keep maximum cast speed.  You can add a table of spells, or even override all spells, all abilities, etc.  As I've said, pet abilities are very
+            circumstantial and different people will have different outlooks on ideal handling for them.  I feel this design allows you the maximum flexibility.
+            
+            <h2>A note on Puppetmaster: Your puppet's weaponskills execute almost instantly.  It is highly probable that by the time the client
                 is aware the weaponskill is happening, it is too late to send a swap to the server.  For this reason, it is not recommended to try to code PUP
-                weaponskill gear in this manner.  BST, SMN, DRG, and GEO(Radial Arcana, for example) pets have a longer ready time and will function fine.<br>
-                A further note on SMN and BST: Ready and BP commands are considered job abilities internally, so put your recast- gear there.  I recommend also
-                having a check so that you don't bother to equip recast- gear during astral conduit(or simply ensure that pet abilities have priority over the job abilities).</b></font>
-            <br><br><br>
+                weaponskill gear in this manner.  BST, SMN, DRG, and GEO(Radial Arcana, for example) pets have a longer ready time and will function fine.</h2>
+            <h2>A further note on SMN and BST: Ready and BP commands are considered job abilities internally, so put your recast- gear there.  I recommend also
+                having a check so that you don't bother to equip recast- gear during astral conduit(or simply ensure that pet abilities have priority over the job abilities).</h2><br>
             
-
-
-
-        </font><br>
-            
-        <h1 style="color:#FF7903">Snippet - Elemental staves</h1>
+        <h1 id="s1">Snippet - Cleanly use elemental staves.</h1>
         
-    <font color="#FFFFFF">Between the earlier lessons and the available lua documentation, I believe most reasonable tasks can be accomplished.  So, moving forward, I will provide small bits of
-        code to solve common problems.  In this case, elemental staves.  We start by adding a local table at file scope to map them out:<br>
-
-        <font face="Courier" color="#0080FF">local ElementalStaffTable = {<br>
-            &emsp;['fire'] = 'Fire Staff',<br>
-            &emsp;['earth'] = 'Terra\'s Staff',<br>
-            &emsp;['water'] = 'Water Staff',<br>
-            &emsp;['wind'] = 'Water Staff',<br>
-            &emsp;['ice'] = 'Aquilo\'s Staff',<br>
-            &emsp;['thunder'] = 'Thunder Staff',<br>
-            &emsp;['light'] = 'Light Staff',<br>
-            &emsp;['dark'] = 'Pluto\'s Staff'<br>
-        };<br>
-        </font>
+    Between the earlier lessons and the available lua documentation, I believe most reasonable tasks can be accomplished.  So, moving forward, I will provide small bits of
+        code to solve common problems.  In this case, elemental staves.  We start by adding a local table at file scope to map them out:
+<pre><code>local ElementalStaffTable = {
+    ['Fire'] = 'Fire Staff',
+    ['Earth'] = 'Terra\'s Staff',
+    ['Water'] = 'Water Staff',
+    ['Wind'] = 'Water Staff',
+    ['Ice'] = 'Aquilo\'s Staff',
+    ['Thunder'] = 'Thunder Staff',
+    ['Light'] = 'Light Staff',
+    ['Dark'] = 'Pluto\'s Staff'
+};</code></pre>
+        
 
         Note that I use \ as an 'escape code' prior to '.  This allows lua to understand that ' will not end the string and is meant as it's own character.
         You may have already noticed this when using addset.  So, now we have a table mapped to element strings, we jump to midcast, where we're equipping our stuff:<br>
+<pre><code>local action = gData.GetAction();</code></pre>
 
-        <font face="Courier" color="#0080FF">local action = gData.GetAction();</font><br>
-
-        If you have written your midcast section, you likely already have this in there to split out results by spell.  If not, you'll need it.<br>
-
-        <font face="Courier" color="#0080FF">gFunc.Equip('main', ElementalStaffTable[action.Element]);</font><br>
+        If you have written your midcast section, you likely already have this in there to split out results by spell.  If not, you'll need it to look up the spell's element.
+<pre><code>gFunc.Equip('main', ElementalStaffTable[action.Element]);</code></pre>
 
         We pull the element from the action table, and since the possible return values match the keys of the table, we can grab our matching staff for the equip command.  Done!
-        Note that in the example picture, I've included the call in elemental magic, enfeebling magic, and dark magic, but left it out of curing, enhancing, and haste.
-        This is, again, a design choice.  I placed it outside of the inner if-elseif-else statements as I want it to apply to all sets.<br>
+        Note that in the example below, I've included the call in elemental magic, enfeebling magic, and dark magic, but left it out of curing, enhancing, and haste.
+        This is, again, a design choice.  I placed it outside of the inner if-elseif-else statements as I want it to apply to all sets.
         
-        <img src="Tutorial/midcaststaff.png" /><br><br><br>
+<pre><code>profile.HandleMidcast = function()
+    local MndDebuffs = T{ 'Slow', 'Paralyze', 'Slow II', 'Paralyze II', 'Addle', 'Addle II' };
+    local ElementalDebuffs = T{ 'Burn', 'Rasp', 'Drown', 'Choke', 'Frost', 'Shock' };
+    local action = gData.GetAction();				
+    if (action.Skill == 'Enfeebling Magic') then
+        if (MndDebuffs:contains(action.Name)) then
+            gFunc.EquipSet(sets.DebuffMND);
+        else
+            gFunc.EquipSet(sets.DebuffINT);
+        end
+        gFunc.Equip('main', ElementalStaffTable[action.Element]);
+    elseif (action.Skill == 'Elemental Magic') then
+        if (ElementalDebuffs:contains(action.Name)) then
+            gFunc.EquipSet(sets.ElementalDebuff);
+        elseif (action.Name == 'Impact') then
+            gFunc.EquipSet(sets.Impact);
+        else
+            gFunc.EquipSet(sets.Nuke);
+        end
+        gFunc.Equip('main', ElementalStaffTable[action.Element]);
+    elseif (action.Skill == 'Dark Magic') then
+        if (action.Name == 'Stun') then
+            gFunc.EquipSet(sets.Stun);
+        else
+            gFunc.EquipSet(sets.DarkMagic);
+        end
+        gFunc.Equip('main', ElementalStaffTable[action.Element]);
+    elseif string.match(action.Name, 'Cure') or string.match(action.Name, 'Curaga') then
+        gFunc.EquipSet(sets.Cure);
+    elseif (action.Skill == 'Enhancing Magic') then
+        gFunc.EquipSet(sets.Enhancing);
+    else
+        gFunc.EquipSet(sets.Haste);
+    end
+end</code></pre>
+<br><br>
+
+
+
+
         
-        <h1 style="color:#FF7903">To be continued... (potentially)</h1>
+        <h1 id="s2">Snippet - Use a helper library to manage and display variables.</h1>
+
+        First, take the included file <font class="code">ashita/docs/luashitacast/common/varhelper.lua</font> and copy it to <font class="code">ashita/config/addons/luashitacast/common</font>.  We'll be using this for this example.
+        Next, add to the top of your profile:
+<pre><code>local profile = {};
+local varhelper = gFunc.LoadFile('common/varhelper.lua');
+local sets = {</code></pre>
+
+        <font class="code">gFunc.LoadFile</font> can be used to load an outside lua file from your ashitacast config directory.  Now, we have a lua class called varhelper accessible to us with a few functions inside it:<br>
+
+        <font class="code">varhelper.Initialize()</font> - This will 'start' the varhelper class and it's font object.  You should call it OnLoad, like so:
+
+<pre><code>profile.OnLoad = function()
+    gSettings.AllowAddSet = true;
+    AshitaCore:GetChatManager():QueueCommand(-1, '/alias /rdm /lac fwd');
+    varhelper.Initialize();
+end</code></pre>
+
+        <font class="code">varhelper.Destroy()</font> - This will destroy the varhelper class's font object.  It belongs in unload, like so:
+
+<pre><code>profile.OnUnload = function()
+    AshitaCore:GetChatManager():QueueCommand(-1, '/alias delete /rdm');
+    varhelper.Destroy();
+end</code></pre>
+
+        Now you're all set up to use the library.  First, you want to go back to OnLoad and set up your variables.  varhelper supports both toggles(true/false variables) and cycles(variables that shuffle through values).
+        To set up the examples from earlier in the document, we'll use varhelper.CreateToggle(name, default) and varhelper.CreateCycle(name, array).  The first entry of array should be the default.
+
+<pre><code>profile.OnLoad = function()
+    gSettings.AllowAddSet = true;
+    AshitaCore:GetChatManager():QueueCommand(-1, '/alias /rdm /lac fwd');
+    varhelper.Initialize();
+    varhelper.CreateToggle('UseRefreshIdle', true);
+    varhelper.CreateCycle('TpVariant', { [1] = 'Default', [2] = 'Hybrid', [3] = 'HighAcc', [4] = 'LowAcc' });
+end</code></pre>
+
+        This will set up a toggle and cycle inside of varhelper, and we can delete TpVariantTable and Settings if we no longer need them.  Varhelper will simplify the code by reducing it to a single line of setup,
+        but it will also display the current values onscreen for ease of use and convenience.  But, we still have to go through and change the other references to use.  To get the values of variables, we will use varhelper.GetToggle(name) and varhelper.GetCycle(name).
+
+<pre><code>profile.HandleDefault = function()
+    local player = gData.GetPlayer();
+    if (player.Status == 'engaged') then
+        gFunc.EquipSet('TP_' .. varhelper.GetCycle('TpVariant'));
+    elseif (player.Status == 'resting') then
+        gFunc.EquipSet(sets.Resting);
+    else
+        if (varhelper.GetToggle('UseRefreshIdle') == true) then
+            gFunc.EquipSet(sets.IdleRefresh);
+        else
+            gFunc.EquipSet(sets.IdleDefense);
+        end
+    end
+end</code></pre>
+
+        Now, your swaps are using the variables from varhelper.  But, we still have to change our commands.  We do this with varhelper.AdvanceToggle(name) and varhelper.AdvanceCycle(name).
+<pre><code>profile.HandleCommand = function(args)
+    if (args[1] == 'idlerefresh') then
+		varhelper.AdvanceToggle('UseRefreshIdle');
+    elseif (args[1] == 'tpset') then
+		varhelper.AdvanceCycle('TpVariant');
+    end
+end</code></pre>
+
+        All done!  Now you have an onscreen display of your toggles in real time, and you've reduced the code in your profile significantly.  Note that varhelper is a pretty simple helper class, and there's a whole lot more that can be done with lua.
+        Advanced users may want to make their own libraries and explore with them.
 
 
     </body>

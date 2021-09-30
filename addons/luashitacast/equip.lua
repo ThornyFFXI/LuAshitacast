@@ -36,8 +36,8 @@ local MakeItemTable = function(item)
         for k,v in pairs(item) do
             if (k == 'Name') then
                 itemTable.Name = string.lower(v);
-            elseif (k == 'Augments') then
-                itemTable.Augments = v;
+            elseif (k == 'Augment') then
+                itemTable.Augment = v;
             elseif (k == 'Bag') then
                 if (type(v) == 'string') then
                     itemTable.Bag = gData.Constants.Containers[v];
@@ -403,13 +403,13 @@ local ProcessEquip = function(equipInfo, set)
         Internal[equipEntry.Slot + 1] = internalEntry;
         if (gSettings.Debug) then
             if (equipEntry.Index == 0) then
-                print(chat.header('LuAshitacast') .. chat.message('Unequipping item from ' .. gData.ResolveString(gData.Constants.EquipSlotNames, equipEntry.Slot) .. '.'));
+                print(chat.header('LuAshitacast:' .. gState.CurrentCall) .. chat.message('Unequipping item from ' .. gData.ResolveString(gData.Constants.EquipSlotNames, equipEntry.Slot) .. '.'));
             else
                 local resource = AshitaCore:GetResourceManager():GetItemById(internalEntry.Item.Id);
                 if (resource ~= nil) then
-                    print(chat.header('LuAshitacast') .. chat.message('Equipping ' .. resource.Name[1] .. ' to ' .. gData.ResolveString(gData.Constants.EquipSlotNames, equipEntry.Slot) .. '.'));
+                    print(chat.header('LuAshitacast:' .. gState.CurrentCall) .. chat.message('Equipping ' .. resource.Name[1] .. ' to ' .. gData.ResolveString(gData.Constants.EquipSlotNames, equipEntry.Slot) .. '.'));
                 else
-                    print(chat.header('LuAshitacast') .. chat.message('Equipping ItemID:' .. internalEntry.Item.Id .. ' to ' .. gData.ResolveString(gData.Constants.EquipSlotNames, equipEntry.Slot) .. '.'));
+                    print(chat.header('LuAshitacast:' .. gState.CurrentCall) .. chat.message('Equipping ItemID:' .. internalEntry.Item.Id .. ' to ' .. gData.ResolveString(gData.Constants.EquipSlotNames, equipEntry.Slot) .. '.'));
                 end
             end
         end
@@ -445,13 +445,13 @@ local ProcessEquipSet = function(equipInfo, set)
 
         if (gSettings.Debug) then
             if (equipEntry.Index == 0) then
-                print(chat.header('LuAshitacast') .. chat.message('Adding unequip to equipset for ' .. gData.ResolveString(gData.Constants.EquipSlotNames, equipEntry.Slot) .. '.'));
+                print(chat.header('LuAshitacast:' .. gState.CurrentCall) .. chat.message('Adding unequip to equipset for ' .. gData.ResolveString(gData.Constants.EquipSlotNames, equipEntry.Slot) .. '.'));
             else
                 local resource = AshitaCore:GetResourceManager():GetItemById(internalEntry.Item.Id);
                 if (resource ~= nil) then
-                    print(chat.header('LuAshitacast') .. chat.message('Adding ' .. resource.Name[1] .. ' to equipset for ' .. gData.ResolveString(gData.Constants.EquipSlotNames, equipEntry.Slot) .. '.'));
+                    print(chat.header('LuAshitacast:' .. gState.CurrentCall) .. chat.message('Adding ' .. resource.Name[1] .. ' to equipset for ' .. gData.ResolveString(gData.Constants.EquipSlotNames, equipEntry.Slot) .. '.'));
                 else
-                    print(chat.header('LuAshitacast') .. chat.message('Adding ItemID:' .. internalEntry.Item.Id .. ' to equipset for ' .. gData.ResolveString(gData.Constants.EquipSlotNames, equipEntry.Slot) .. '.'));
+                    print(chat.header('LuAshitacast:' .. gState.CurrentCall) .. chat.message('Adding ItemID:' .. internalEntry.Item.Id .. ' to equipset for ' .. gData.ResolveString(gData.Constants.EquipSlotNames, equipEntry.Slot) .. '.'));
                 end
             end
         end
@@ -468,7 +468,7 @@ local Unequip = function(slot, container)
     packet[7] = container;
     AshitaCore:GetPacketManager():AddOutgoingPacket(0x50, packet);
     if (gSettings.Debug) then
-        print(chat.header('LuAshitacast') .. chat.message('Unequipping item from ' .. gData.ResolveString(gData.Constants.EquipSlotNames, slot - 1) .. '.'));
+        print(chat.header('LuAshitacast:' .. gState.CurrentCall) .. chat.message('Unequipping item from ' .. gData.ResolveString(gData.Constants.EquipSlotNames, slot - 1) .. '.'));
     end
 
     local internalEntry = {};
