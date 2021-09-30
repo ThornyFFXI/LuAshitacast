@@ -137,12 +137,14 @@ state.HandleEquipEvent = function(eventName, equipStyle)
         local event = gProfile[eventName];
         if (event ~= nil) and (type(event) == 'function') then
             gEquip.ClearBuffer();
+            gState.CurrentCall = eventName;
             gState.SafeCall(eventName);
             if (eventName == 'HandleDefault') then
                 gEquip.ProcessBuffer(equipStyle);
             elseif (gState.PlayerAction ~= nil) and (gState.PlayerAction.Block ~= true) then
                 gEquip.ProcessBuffer(equipStyle);
             end
+            gState.CurrentCall = 'N/A';
         end
     end
 end
@@ -178,9 +180,7 @@ end
 state.SafeCall = function(name,...)
     if (gProfile ~= nil) then
         if (type(gProfile[name]) == 'function') then
-            gState.CurrentCall = name;
             local success,error = pcall(gProfile[name],...);
-            gState.CurrentCall = 'N/A';
             if (not success) then
                 print (chat.header('LuAshitacast') .. chat.error('Error in profile function: ') .. chat.color1(2, name));
                 print (chat.header('LuAshitacast') .. chat.error(error));
