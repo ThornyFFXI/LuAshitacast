@@ -1,6 +1,6 @@
 addon.name      = 'LuAshitacast';
 addon.author    = 'Thorny';
-addon.version   = '1.05';
+addon.version   = '1.06';
 addon.desc      = 'A lua-based equipment swapping system for Ashita';
 addon.link      = 'https://github.com/ThornyFFXI/LuAshitacast';
 
