@@ -155,9 +155,10 @@ commands.HandleCommand = function(e)
     
     if (args[2] == 'unload') then
         if (gProfile == nil) then
-            print(chat.header('LuAshitacast') .. chat.error("No profile loaded."));
+            print(chat.header('LuAshitacast') .. chat.error('No profile loaded.'));
         else
             gState.UnloadProfile();
+            print(chat.header('LuAshitacast') .. chat.message('Profile unloaded.'));
         end
     end
 end
