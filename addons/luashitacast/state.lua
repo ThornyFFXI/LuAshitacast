@@ -64,20 +64,20 @@ end
 
 state.LoadProfile = function(profilePath)
     local shortFileName = profilePath:match("[^\\]*.$");
-    local status, err = pcall(function ()
-        gProfile = loadfile(profilePath)();
-    end);
-    if (status == false) then
+    local success, loadError = loadfile(profilePath);
+    if not success then
         gProfile = nil;
         print(chat.header('LuAshitacast') .. chat.error('Failed to load profile: ') .. chat.color1(2, shortFileName));
-        print(chat.header('LuAshitacast') .. chat.error(err));
+        print(chat.header('LuAshitacast') .. chat.error(loadError));
         return;
-    elseif (gProfile ~= nil) then
+	end
+	gProfile = success();
+	if (gProfile ~= nil) then
         print(chat.header('LuAshitacast') .. chat.message('Loaded profile: ') .. chat.color1(2, shortFileName));
         if (gProfile.OnLoad ~= nil) and (type(gProfile.OnLoad) == 'function') then
             gProfile.FilePath = profilePath;
             gProfile.FileName = shortFileName;
-            gProfile.OnLoad();
+            gState.SafeCall('OnLoad');
         end
     end
 end
@@ -124,11 +124,7 @@ state.LoadProfileEx = function(path)
 end
 
 state.UnloadProfile = function()
-    if (gProfile ~= nil) then
-        if (gProfile.OnUnload ~= nil) and (type(gProfile.OnUnload) == 'function') then
-            gProfile.OnUnload();
-        end
-    end
+	gState.SafeCall('OnUnload');
     gState.Reset();
 end
 
@@ -180,10 +176,10 @@ end
 state.SafeCall = function(name,...)
     if (gProfile ~= nil) then
         if (type(gProfile[name]) == 'function') then
-            local success,error = pcall(gProfile[name],...);
+            local success,err = pcall(gProfile[name],...);
             if (not success) then
                 print (chat.header('LuAshitacast') .. chat.error('Error in profile function: ') .. chat.color1(2, name));
-                print (chat.header('LuAshitacast') .. chat.error(error));
+                print (chat.header('LuAshitacast') .. chat.error(err));
             end
         elseif (gProfile[name] ~= nil) then
             print (chat.header('LuAshitacast') .. chat.error('Profile member exists but is not a function: ') .. chat.color1(2, name));

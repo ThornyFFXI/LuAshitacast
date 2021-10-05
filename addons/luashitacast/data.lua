@@ -425,10 +425,10 @@ data.GetBuffCount = function(matchBuff)
     local count = 0;
     local buffs = AshitaCore:GetMemoryManager():GetPlayer():GetBuffs();    
     if (type(matchBuff) == 'string') then
-        local match = string.lower(matchBuff);
+        local matchText = string.lower(matchBuff);
         for _, buff in pairs(buffs) do
-            local buffString = string.lower(AshitaCore:GetResourceManager():GetString("buffs", buff));
-            if ((buffString ~= nil) and (match == buffString)) then
+            local buffString = AshitaCore:GetResourceManager():GetString("buffs", buff);
+			if (buffString ~= nil) and (string.lower(buffString) == matchText) then
                 count = count + 1;
             end
         end

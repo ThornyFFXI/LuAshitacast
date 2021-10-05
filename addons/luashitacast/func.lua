@@ -286,24 +286,21 @@ local LoadFile = function(path)
             end
         end
     end
-
-    local func = nil;
-    local success,error = pcall(function()
-        func  = loadfile(filePath);
-    end);
-    if (not success) then
+	
+    local func, loadError = loadfile(filePath);
+    if (not func) then
         print (chat.header('LuAshitacast') .. chat.error('Failed to load file: ') .. chat.color1(2,filePath));
-        print (chat.header('LuAshitacast') .. chat.error(error));
+        print (chat.header('LuAshitacast') .. chat.error(loadError));
         return nil;
     end
 
     local fileValue = nil;
-    success, error = pcall(function ()
+    local success, execError = pcall(function ()
         fileValue = func();
     end);
     if (not success) then
-        print (chat.header('LuAshitacast') .. chat.error('Failed to process file: ') .. chat.color1(2,filePath));
-        print (chat.header('LuAshitacast') .. chat.error(error));
+        print (chat.header('LuAshitacast') .. chat.error('Failed to execute file: ') .. chat.color1(2,filePath));
+        print (chat.header('LuAshitacast') .. chat.error(execError));
         return nil;
     end
 
