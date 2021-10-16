@@ -1,11 +1,10 @@
 addon.name      = 'LuAshitacast';
 addon.author    = 'Thorny';
-addon.version   = '1.09';
+addon.version   = '1.10';
 addon.desc      = 'A lua-based equipment swapping system for Ashita';
 addon.link      = 'https://github.com/ThornyFFXI/LuAshitacast';
 
 require('common');
-require('globals');
 chat = require('chat');
 
 gBase = {};
