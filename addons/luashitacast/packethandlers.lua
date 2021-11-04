@@ -53,6 +53,12 @@ packethandlers.HandleIncoming0x28 = function(e)
         if (gData.Constants.PetActionCompleteTypes:containskey(actionType)) then
             gState.PetAction = nil;
             return;
+        elseif (actionType == 8) or (actionType == 12) then
+            --Ranged or magic interrupt resets delay so idlegear resumes.
+            if (ashita.bits.unpack_be(e.data_raw, 10, 6, 16) == 28787) then
+                gState.PetAction = nil;
+				return;
+            end
         end
 
         if (actionType == 7) or (actionType == 8) then

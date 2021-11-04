@@ -78,12 +78,21 @@ commands.HandleCommand = function(e)
     end
     
     if (args[2] == 'equip') then
-        if (#args < 4) then  
-            print(chat.header('LuAshitacast') .. chat.error("Correct syntax is:  /lac equip [slot] [item]"));
+        local argCount = #args;
+        if (argCount < 4) or (argCount % 2) ~= 0 then  
+            print(chat.header('LuAshitacast') .. chat.error("Correct syntax is:  /lac equip [slot] [item] [optional: slot2] [optional: item2] [repeating]"));
             return;
-        else
+        elseif (argCount == 4) then
             local slot = gData.GetEquipSlot(args[3]);
             gFunc.ForceEquip(args[3], args[4]);
+        else
+            local set = {};
+            local i = 3;
+            while i < argCount do
+                set[args[i]] = args[i + 1];
+				i = i + 2;
+            end
+            gFunc.ForceEquipSet(set);
         end
     end
 
