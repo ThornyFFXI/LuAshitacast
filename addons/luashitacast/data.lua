@@ -189,6 +189,7 @@ data.GetAugment = function(item)
         augment.Type = 'Magian';
         augment.Trial = ashita.bits.unpack_be(itemTable, 80, 15);
         augment.TrialComplete = (ashita.bits.unpack_be(itemTable, 95, 1) == 1);
+		maxAugments = 4;
     else
         augment.Type = 'Oseem';
     end
@@ -595,7 +596,7 @@ data.GetPlayer = function()
     playerTable.Name = pParty:GetMemberName(0);
     playerTable.Status = gData.ResolveString(gData.Constants.EntityStatus, pEntity:GetStatus(myIndex));
     local subJob = pPlayer:GetSubJob();
-    playerTable.SubJob = AshitaCore:GetResourceManager():GetString("jobs_abbr", mainJob);
+    playerTable.SubJob = AshitaCore:GetResourceManager():GetString("jobs_abbr", subJob);
     playerTable.SubJobLevel = pPlayer:GetJobLevel(subJob);
     playerTable.SubJobSync = pPlayer:GetSubJobLevel();
     playerTable.TP = pParty:GetMemberTP(0);
