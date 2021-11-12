@@ -288,7 +288,7 @@ local FlagEquippedItems = function(set)
             local resource = AshitaCore:GetResourceManager():GetItemById(currItem.Item.Id);
             if (equipTable ~= nil) then
                 if (CheckItemMatch(currItem.Container, currItem.Item, equipTable)) then
-                    equipTable.Index = currItem.Index;
+                    equipTable.Index = currItem.Item.Index;
                     equipTable.Container = currItem.Container;
                     equipTable.Skip = true;
                     eqItem.Reserved = true;
