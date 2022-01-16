@@ -113,10 +113,12 @@ local CheckAugments = function(equipTable, item)
         elseif (type(equipTable.Augment) == 'table') then
             for _,matchAugment in pairs(equipTable.Augment) do
                 local match = false;
-                for _,checkAugment in pairs(augment.Augs) do
-                    if (checkAugment.String == matchAugment) then
-                        match = true;
-                        break;
+                if (type(augment.Augs) == 'table') then
+                    for _,checkAugment in pairs(augment.Augs) do
+                        if (checkAugment.String == matchAugment) then
+                            match = true;
+                            break;
+                        end
                     end
                 end
                 if (match == false) then
