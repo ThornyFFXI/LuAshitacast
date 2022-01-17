@@ -549,7 +549,7 @@ data.GetPetAction = function()
 
     local actionTable = {};
     actionTable.ActionType = action.Type;
-    if (action.ActionType == 'Spell') then
+    if (action.Type == 'Spell') then
         actionTable.CastTime = action.Resource.CastTime * 250;
         actionTable.Element = gData.ResolveString(gData.Constants.SpellElements, action.Resource.Element);
         actionTable.Id = action.Resource.Index;
@@ -558,7 +558,7 @@ data.GetPetAction = function()
         actionTable.Recast = action.Resource.RecastDelay * 250;
         actionTable.Skill = gData.ResolveString(gData.Constants.SpellSkills, action.Resource.Skill);
         actionTable.Type = gData.ResolveString(gData.Constants.SpellTypes, action.Resource.Type);
-    elseif (action.ActionType == 'Ability') then
+    elseif (action.Type == 'Ability') then
         actionTable.Name = action.Resource.Name[1];
         actionTable.Id = action.Resource.Id - 0x200;
         local abilityType = gData.Constants.AbilityTypes[action.Resource.RecastTimerId];
