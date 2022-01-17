@@ -8,7 +8,10 @@
         <font color="#FFFFFF">Arguments:</font><br>
         <font color="#208020">setName</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): the name of the set you want to add or replace</font><br>
         <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
-        <font color="#FFFFFF">Effects: Adds a new set or replaces an existing set in your profile, then rewrites your profile to disk.  Can be blocked with the gSettings.AllowAddSet setting.  Can delete unintended parts of improperly formatted profiles.  Use with caution.</font><br>
+        <font color="#FFFFFF">Effects: Backs up your profile, replaces the set with your current equipment, then writes your profile back to disc.
+            Will no longer modify anything besides the set in question.  If the set doesn't already exist, it will be added to the end of your sets.
+            This can be blocked with the gSettings.AllowAddSet setting.  The gSettings.AddSetBackup setting can be set to false to prevent backups.
+            For this to function, your main sets table must be initialized <font color="#0080FF">local sets = {</font>, <font color="#0080FF">local Sets = {</font>, or <font color="#0080FF">profile.Sets = {</font>.<br>
         <br><br>
 
         <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.CancelAction()</font><br>
@@ -123,5 +126,13 @@
         <font color="#208020">set</font><font color="#FFFFFF"> (</font><font color="#FF7908">table</font><font color="#FFFFFF">): a set table</font><br>
         <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
         <font color="#FFFFFF">Effects: Overrides all state processing and equips a set for the specified period of time.  This does not bypass disable/enable.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.LockStyle(set)</font><br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#208020">set</font><font color="#FFFFFF"> (</font><font color="#FF7908">table</font><font color="#FFFFFF">): a set table</font><br>
+        <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
+        <font color="#FFFFFF">Effects: Uses the main, sub, range, ammo, head, body, hands, legs, and feet components of the input set to send a lockstyle packet to server.  This happens immediately, unlike the equip functions.  Fields besides name are not considered.</font><br>
+        <br><br>
     </body>
 </html>

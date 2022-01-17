@@ -70,6 +70,17 @@
         <font color="#FFFFFF">Member Type: </font><font color="#FF7903">table</font><br>
         <font color="#FFFFFF">Effects: If specified, each table entry must be a string, and at least one of the item's augments must match each table entry for the item to be equipped.</font><br>
         <br><br>
+
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">Quantity</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">number</font><br>
+        <font color="#FFFFFF">Effects: This is used to tell Packer to retrieve more than one of an item.  It is not needed for cases such as 2 of the same ring, as that will be handled internally.
+            Best used for medications inside the Packer section, or ammo inside sets.  No bearing on equipment swaps.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">Quantity</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">string</font><br>
+        <font color="#FFFFFF">Effects: If Quantity exists as a string, it must be the term 'all'.  This will tell Packer to retrieve all matching items to wardrobes or inventory.</font><br>
+        <br><br>
         
         <font color="#FFFFFF">Member Name: </font><font color="#208020">Bag</font><br>
         <font color="#FFFFFF">Member Type: </font><font color="#FF7903">string</font><br>
@@ -96,6 +107,13 @@
         <font color="#FFFFFF">Member Name: </font><font color="#208020">Sets</font><br>
         <font color="#FFFFFF">Member Type: </font><font color="#FF7903">table</font><br>
         <font color="#FFFFFF">Effects: This table should contain all of your sets.  While you can directly equip set objects that are not contained within this table, only sets within this table will be written with '/lac addset', equipped with '/lac set', or respond to string based EquipSet calls.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">Packer</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">table</font><br>
+        <font color="#FFFFFF">Effects: This table should contain a list of items for use with <font color="#0080FF">/lac gear</font> and <font color="#0080FF">/lac validate</font>.
+        Keys can be anything, values can be strings or tables, such as in sets.
+        An additional parameter, </font><br>
         <br><br>
         
         <font color="#FFFFFF">Member Name: </font><font color="#208020">OnLoad()</font><br>

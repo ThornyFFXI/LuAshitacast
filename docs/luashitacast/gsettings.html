@@ -16,12 +16,18 @@
         <font color="#FFFFFF">Effects: If true, LuAshitacast will judge equipment based on your real level and attempt to equip pieces above your current sync level.  If false, LuAshitacast will not try to equip anything above your current sync level.</font><br>
         <br><br>
         
-        <font color="#FFFFFF">Member Name: </font><font color="#208020">AllowAddSet</font><br>
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">AddSetBackups</font><br>
         <font color="#FFFFFF">Member Type: </font><font color="#FF7903">boolean</font><br>
-        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">false</font><br>
-        <font color="#FFFFFF">Effects: If true, you will be able to use the '/lac addset' command.  If false, it will be blocked.</font><br>
+        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">true</font><br>
+        <font color="#FFFFFF">Effects: If true, a timestamped backup of your profile will be saved to the 'backups' subdirectory of the folder it is in whenever you use addset.</font><br>
         <br><br>
         
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">AddSetEquipScreenOrder</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">boolean</font><br>
+        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">true</font><br>
+        <font color="#FFFFFF">Effects: If true, addset will write your sets in the order of equip screen rows.  If false, addset will write them in the order of equipment slot IDs.</font><br>
+        <br><br>
+
         <font color="#FFFFFF">Member Name: </font><font color="#208020">Debug</font><br>
         <font color="#FFFFFF">Member Type: </font><font color="#FF7903">boolean</font><br>
         <font color="#FFFFFF">Default Value: </font><font color="#FF7903">false</font><br>
@@ -52,6 +58,12 @@
         <font color="#FFFFFF">Default Value: </font><font color="#FF7903">{ }</font><br>
         <font color="#FFFFFF">Effects: Any container indices listed in this table will be treated as if you have access to them, regardless of whether you do.  This is intended for Topaz servers that do not enable wardrobes the same way as retail.</font><br>
         <font color="#FFFFFF">Example Value: </font><font color="#FF7903">{ 8, 10, 11, 12 }</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">RemoveEquipmentForPacker</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">boolean</font><br>
+        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">true</font><br>
+        <font color="#FFFFFF">Effects: If true, LuAshitacast will remove all equipment when you call '/ac gear', and wait 3 seconds before triggering Packer.  This allows currently equipped gear to be moved during Packer's process.</font><br>
         <br><br>
 
         <font color="#A00020"><b>Note: The following settings are used for defaults, and setting them too high will not reduce efficiency as the action is marked complete anyway when you receive the action complete packet.<br>

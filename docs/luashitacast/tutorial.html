@@ -105,7 +105,8 @@
         Next, browse to your ashita folder and go into the subdirectories: config, addons, luashitacast, then the one named after your current character.  It should look like this(windows 10):<br>
         <img src="Tutorial/directories.png" /><br><br>
         Right click and choose 'edit with notepad++'.  Then, under the Language heading, ensure that the category L, and further the language Lua are selected.
-            This will highlight some parts of the profile for easier viewing.  You should have your profile open and be looking at something like this:<br>
+            This will highlight some parts of the profile for easier viewing.  You should have your profile open and be looking at something similar to the below screenshot.
+            Note that colors may vary if you use a different theme.  My notepad++ theme is <a href="https://github.com/naderi/material-theme-for-npp">Material-Dark</a> if you like it.<br>
         <img src="Tutorial/profile.png" /><br><br>
     
         Now you have a blank profile to work with and notepad++ set up to highlight lua syntax for you.<br><br>
@@ -120,7 +121,7 @@
         Repeat for a few other sets you'd like to use, such as nuking, healing, weaponskill, fast cast, etc.
         Look back at Notepad++(you may need to click File..Reload From Disk to ensure changes applied).  You should have something resembling this:<br>
 <pre><code>local profile = {};
-local sets = {
+profile.Sets = {
     Idle = {
         Main = { Name = 'Lathi', AugPath='A' },
         Sub = 'Enki Strap',
@@ -173,11 +174,23 @@ local sets = {
         Feet = { Name = 'Merlinic Crackows', Augment = { [1] = '"Fast Cast"+7', [2] = 'MND+10' } },
     },
 };</code></pre>    
+
+    If you also plan on using Packer, a plugin that can collect gear listed in your LuAshitacast profile, you can add some meds and other necessities to the packer section:<br>
+<pre><code>profile.Packer = {
+    'Vile Elixir',
+    { Name = 'Vile Elixir +1' },
+    { Name = 'Remedy', Quantity = 12 },
+    { Name = 'Panacea', Quantity = 24 },
+    { Name = 'Red Curry Bun', Quantity = 12},
+    { Name = 'Chrono Bullet', Quantity = 'all'}
+};</code></pre>
+    Using a plain string, as in Vile Elixir, is no different than a table with only Name key, as in Vile Elixir +1.  If you do not specify quantity, the default is 1.<br>
+
     <h2>A warning about AddSet: As this is using string parsing to replace your sets in place,
                 if you modify your sets table in a way that it encompasses more of your profile than it should,
                 it is possible for addset to remove huge chunks of your profile.  For beginners, I recommend adding as
-                many sets as you can think of before proceeding, and backing up your profile before using addset if you have
-                to use it later.  If you're using profiles downloaded from the internet, it's possible for them to disable
+                many sets as you can think of before proceeding and leave the AddSetBackup setting enabled(it is enabled by default!).
+                If you're using profiles downloaded from the internet, it's possible for the author to have disabled
                 addset via setting in OnLoad.  This is intended to be used for your own safety and you should not enable it
                 if the author has it disabled, unless specifically told it is ok to do so by the author.</h2><br>
 

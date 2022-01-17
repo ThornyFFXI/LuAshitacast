@@ -170,6 +170,22 @@ commands.HandleCommand = function(e)
             print(chat.header('LuAshitacast') .. chat.message('Profile unloaded.'));
         end
     end
+    
+    if (args[2] == 'gear') then
+        if (gProfile == nil) then
+            print(chat.header('LuAshitacast') .. chat.error('No profile loaded.'));
+        else
+            gPacker.Gear();
+        end
+    end
+    
+    if (args[2] == 'validate') then
+        if (gProfile == nil) then
+            print(chat.header('LuAshitacast') .. chat.error('No profile loaded.'));
+        else
+            gPacker.Validate();
+        end
+    end
 end
 
 return commands;

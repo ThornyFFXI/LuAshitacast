@@ -3,6 +3,8 @@ local EquippedItems = {};
 local Internal = {};
 local CurrentJob = 0;
 local CurrentLevel = 0;
+local inventoryManager = AshitaCore:GetMemoryManager():GetInventory();
+local resourceManager = AshitaCore:GetResourceManager();
 
 --Gets current equipment based on outgoing packet history
 local GetCurrentEquip = function(slot)
@@ -10,7 +12,7 @@ local GetCurrentEquip = function(slot)
         return Internal[slot];
     else
         Internal[slot] = nil;
-        local equippedItem = AshitaCore:GetMemoryManager():GetInventory():GetEquippedItem(slot - 1);
+        local equippedItem = inventoryManager:GetEquippedItem(slot - 1);
         local index = bit.band(equippedItem.Index, 0x00FF);
         local eqEntry = {};
         if (index == 0) then
@@ -18,7 +20,7 @@ local GetCurrentEquip = function(slot)
             eqEntry.Item = nil;
         else
             eqEntry.Container = bit.band(equippedItem.Index, 0xFF00) / 256;
-            eqEntry.Item = AshitaCore:GetMemoryManager():GetInventory():GetContainerItem(eqEntry.Container, index);
+            eqEntry.Item = inventoryManager:GetContainerItem(eqEntry.Container, index);
             if (eqEntry.Item.Id == 0) or (eqEntry.Item.Count == 0) then
                 eqEntry.Item = nil;
             end
@@ -208,7 +210,7 @@ local CheckItem = function(set, container, item)
     end
 
     --Skip item that can't be equipped by current job, or item that can't resolve resource(~5 cheap operations vs potentially 16 equip slots)
-    local resource = AshitaCore:GetResourceManager():GetItemById(item.Id);
+    local resource = resourceManager:GetItemById(item.Id);
     if (CheckResource(resource) == false) then
         return;
     end
@@ -227,7 +229,7 @@ local CheckItemMatch = function(container, item, equipTable)
     if (item.Id == 0) then
         return (equipTable.Name == 'remove');
     end
-    local resource = AshitaCore:GetResourceManager():GetItemById(item.Id);
+    local resource = resourceManager:GetItemById(item.Id);
     if (CheckResource(resource) == false) then
         return false;
     end
@@ -287,7 +289,7 @@ local FlagEquippedItems = function(set)
             eqItem.Reserved = false;
             
             local equipTable = set[i];
-            local resource = AshitaCore:GetResourceManager():GetItemById(currItem.Item.Id);
+            local resource = resourceManager:GetItemById(currItem.Item.Id);
             if (equipTable ~= nil) then
                 if (CheckItemMatch(currItem.Container, currItem.Item, equipTable)) then
                     equipTable.Index = currItem.Item.Index;
@@ -319,7 +321,7 @@ local LocateItems = function(set)
         if (available == true) then
             local max = gData.GetContainerMax(container);
             for index = 1,max,1 do
-                local containerItem = AshitaCore:GetMemoryManager():GetInventory():GetContainerItem(container, index);
+                local containerItem = inventoryManager:GetContainerItem(container, index);
                 if containerItem ~= nil and containerItem.Count > 0 and containerItem.Id > 0 then
                     CheckItem(set, container, containerItem);
                 end
@@ -399,7 +401,7 @@ local ProcessEquip = function(equipInfo, set)
             internalEntry.Item = nil;
         else
             internalEntry.Container = equipEntry.Container;
-            internalEntry.Item = AshitaCore:GetMemoryManager():GetInventory():GetContainerItem(equipEntry.Container, equipEntry.Index);
+            internalEntry.Item = inventoryManager:GetContainerItem(equipEntry.Container, equipEntry.Index);
         end
         internalEntry.Timer = os.clock() + 2;
         Internal[equipEntry.Slot + 1] = internalEntry;
@@ -407,7 +409,7 @@ local ProcessEquip = function(equipInfo, set)
             if (equipEntry.Index == 0) then
                 print(chat.header('LuAshitacast:' .. gState.CurrentCall) .. chat.message('Unequipping item from ' .. gData.ResolveString(gData.Constants.EquipSlotNames, equipEntry.Slot) .. '.'));
             else
-                local resource = AshitaCore:GetResourceManager():GetItemById(internalEntry.Item.Id);
+                local resource = resourceManager:GetItemById(internalEntry.Item.Id);
                 if (resource ~= nil) then
                     print(chat.header('LuAshitacast:' .. gState.CurrentCall) .. chat.message('Equipping ' .. resource.Name[1] .. ' to ' .. gData.ResolveString(gData.Constants.EquipSlotNames, equipEntry.Slot) .. '.'));
                 else
@@ -440,7 +442,7 @@ local ProcessEquipSet = function(equipInfo, set)
             internalEntry.Item = nil;
         else
             internalEntry.Container = equipEntry.Container;
-            internalEntry.Item = AshitaCore:GetMemoryManager():GetInventory():GetContainerItem(equipEntry.Container, equipEntry.Index);
+            internalEntry.Item = inventoryManager:GetContainerItem(equipEntry.Container, equipEntry.Index);
         end
         internalEntry.Timer = os.clock() + 2;
         Internal[equipEntry.Slot + 1] = internalEntry;
@@ -449,7 +451,7 @@ local ProcessEquipSet = function(equipInfo, set)
             if (equipEntry.Index == 0) then
                 print(chat.header('LuAshitacast:' .. gState.CurrentCall) .. chat.message('Adding unequip to equipset for ' .. gData.ResolveString(gData.Constants.EquipSlotNames, equipEntry.Slot) .. '.'));
             else
-                local resource = AshitaCore:GetResourceManager():GetItemById(internalEntry.Item.Id);
+                local resource = resourceManager:GetItemById(internalEntry.Item.Id);
                 if (resource ~= nil) then
                     print(chat.header('LuAshitacast:' .. gState.CurrentCall) .. chat.message('Adding ' .. resource.Name[1] .. ' to equipset for ' .. gData.ResolveString(gData.Constants.EquipSlotNames, equipEntry.Slot) .. '.'));
                 else
@@ -584,11 +586,61 @@ local ProcessBuffer = function(style)
     EquipSet(Buffer, style);
 end
 
+--Called with a table of slot,string.
+local LockStyle = function(set)
+    local packet = {};
+    for i = 1,136,1 do
+        packet[i] = 0x00;
+    end
+    packet[5 + 1] = 3;
+
+    local count = 0;
+    for i = 1,10,1 do
+        local found = false;
+        local equip = set[i];
+        if equip then
+            for container = 0,12,1 do
+                --Only need to check access to wardrobe3/4, any other container can always be lockstyled from.
+                if container < 11 or gData.GetContainerAvailable(container) then
+                    local max = gData.GetContainerMax(container);
+                    for index = 1,max,1 do
+                        local containerItem = inventoryManager:GetContainerItem(container, index);
+                        if containerItem ~= nil and containerItem.Count > 0 and containerItem.Id > 0 then
+                            local resource = resourceManager:GetItemById(containerItem.Id);
+                            if (resource ~= nil) then
+                                if (string.lower(resource.Name[1]) == equip) and (bit.band(resource.Slots, math.pow(2, i - 1)) ~= 0) then
+                                    local offset = 8 + (count * 8) + 1;
+                                    packet[offset] = index;
+                                    packet[offset + 1] = i - 1;
+                                    packet[offset + 2] = container;
+                                    packet[offset + 4] = bit.band(containerItem.Id, 0xFF);
+                                    packet[offset + 5] = bit.rshift(containerItem.Id, 8);
+                                    count = count + 1;
+                                    packet[4 + 1] = count;
+                                    break;
+                                end
+                            end
+                        end
+                    end  
+                    if found then
+                        break;
+                    end          
+                end
+            end
+        end
+    end
+
+    if (count > 0) then
+        AshitaCore:GetPacketManager():AddOutgoingPacket(0x53, packet);
+    end
+end
+
 local exports = {
     ClearBuffer = ClearBuffer,
     EquipItemToBuffer = EquipItemToBuffer,
     EquipSet = EquipSet,
     GetCurrentEquip = GetCurrentEquip,
+    LockStyle = LockStyle,
     MakeItemTable = MakeItemTable,
     ProcessBuffer = ProcessBuffer,
     UnequipSlot = UnequipSlot,

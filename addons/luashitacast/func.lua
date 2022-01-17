@@ -14,28 +14,32 @@ local AddSet = function(setName)
         return;
     end
 
-    local lowerName = string.lower(setName);
+    --Try to match an exact case set.
     local setTableName = nil;
     for name,set in pairs(gProfile.Sets) do
-        if (string.lower(name) == lowerName) then
+        if (setName == name) then
             setTableName = name;
         end
     end
 
-    local replaced = false;
-    if (setTableName ~= nil) then
-        gProfile.Sets[setTableName] = gData.GetCurrentSet();
-        replaced = true;
-    else
-        gProfile.Sets[setName] = gData.GetCurrentSet();
-    end
-
-    if gFileTools.SaveSets() then
-        if (replaced) then
-            print(chat.header('LuAshitacast') .. chat.message('Replaced Set: ') .. chat.color1(2, setTableName));
-        else
-            print(chat.header('LuAshitacast') .. chat.message('Added Set: ') .. chat.color1(2, setName));
+    --Try to match differing case.
+    if setTableName == nil then
+        local lowerName = string.lower(setName);
+        for name,set in pairs(gProfile.Sets) do
+            if (string.lower(name) == lowerName) then
+                setTableName = name;
+            end
         end
+        if setTableName == nil then
+            setTableName = setName;
+        end
+    end
+    
+    local set = gData.GetCurrentSet();
+    if gFileTools.SaveSet(setTableName, set) then
+        --Mixed feelings about forcing a reload here.
+        --If user is assigning augments in OnLoad or anything of the sort, I think it's better to ensure those get applied.
+        gState.LoadProfileEx(gProfile.FilePath);
     end
 end
 
@@ -52,7 +56,7 @@ local ChangeActionId = function(id)
         local resource = AshitaCore:GetResourceManager():GetSpellById(id);
         if (resource ~= nil) then
             packet[0x0C + 1] = bit.band(id, 0x00FF);
-            packet[0x0D + 1] = bit.band(id, 0xFF00) / 256;
+            packet[0x0D + 1] = bit.rshift(id, 8);
             action.Resource = resource;
             local baseCast = action.Resource.CastTime * 250;
             baseCast = (baseCast * (100 - gSettings.FastCast)) / 100;
@@ -62,7 +66,7 @@ local ChangeActionId = function(id)
         local resource = AshitaCore:GetResourceManager():GetAbilityById(id);
         if (resource ~= nil) then
             packet[0x0C + 1] = bit.band(id, 0x00FF);
-            packet[0x0D + 1] = bit.band(id, 0xFF00) / 256;
+            packet[0x0D + 1] = bit.rshift(id, 8);
             action.Resource = resource;
             action.Completion = (os.clock() * 1000) + gSettings.WeaponskillDelay;
         end
@@ -70,7 +74,7 @@ local ChangeActionId = function(id)
         local resource = AshitaCore:GetResourceManager():GetAbilityById(id + 0x200);
         if (resource ~= nil) then
             packet[0x0C + 1] = bit.band(id, 0x00FF);
-            packet[0x0D + 1] = bit.band(id, 0xFF00) / 256;
+            packet[0x0D + 1] = bit.rshift(id, 8);
             action.Resource = resource;
             action.Completion = (os.clock() * 1000) + gSettings.AbilityDelay;
         end
@@ -99,20 +103,20 @@ local ChangeActionTarget = function(target)
     local packet = action.Packet;
 
     if (action.Type == 'Item') then
-        packet[0x04 + 1] = bit.band(targetId, 0x000000FF);
-        packet[0x05 + 1] = bit.band(targetId, 0x0000FF00) / 256;
-        packet[0x06 + 1] = bit.band(targetId, 0x00FF0000) / 65536;
-        packet[0x07 + 1] = bit.band(targetId, 0xFF000000) / 16777216;
+        packet[0x04 + 1] = bit.band(targetId, 0xFF);
+        packet[0x05 + 1] = bit.band(bit.rshift(targetId, 8), 0xFF)
+        packet[0x06 + 1] = bit.band(bit.rshift(targetId, 16), 0xFF)
+        packet[0x07 + 1] = bit.band(bit.rshift(targetId, 24), 0xFF)
         packet[0x0C + 1] = bit.band(target, 0x00FF);
-        packet[0x0D + 1] = bit.band(target, 0xFF00) / 256;
+        packet[0x0D + 1] = bit.band(bit.rshift(target, 8), 0xFF);
         action.Target = target;
     else
-        packet[0x04 + 1] = bit.band(targetId, 0x000000FF);
-        packet[0x05 + 1] = bit.band(targetId, 0x0000FF00) / 256;
-        packet[0x06 + 1] = bit.band(targetId, 0x00FF0000) / 65536;
-        packet[0x07 + 1] = bit.band(targetId, 0xFF000000) / 16777216;
-        packet[0x08 + 1] = bit.band(target, 0x00FF);
-        packet[0x09 + 1] = bit.band(target, 0xFF00) / 256;
+        packet[0x04 + 1] = bit.band(targetId, 0xFF);
+        packet[0x05 + 1] = bit.band(bit.rshift(targetId, 8), 0xFF)
+        packet[0x06 + 1] = bit.band(bit.rshift(targetId, 16), 0xFF)
+        packet[0x07 + 1] = bit.band(bit.rshift(targetId, 24), 0xFF)
+        packet[0x08 + 1] = bit.band(target, 0xFF);
+        packet[0x09 + 1] = bit.band(bit.rshift(target, 8), 0xFF);
         action.Target = target;
     end
 end
@@ -146,7 +150,7 @@ local Enable = function(slot)
     if (slot == 'all') then
         for i = 1,16,1 do
             gState.Disabled[i] = false;
-        end            
+        end
         print(chat.header('LuAshitacast') .. chat.message('All slots enabled.'));
         return;
     end
@@ -357,6 +361,21 @@ local LockSet = function(set, seconds)
     gEquip.EquipSet(newTable, 'auto');
 end
 
+local LockStyle = function(set)
+    local reducedSet = {};
+    for slot,equip in pairs(set) do
+        local equipSlot = gData.GetEquipSlot(slot);
+        if (equipSlot ~= 0) and (equipSlot < 10) then
+            if type(equip) == 'string' then
+                reducedSet[equipSlot] = string.lower(equip);
+            elseif (type(equip) == 'table') and equip.Name then
+                reducedSet[equipSlot] = string.lower(equip.Name);
+            end
+        end
+    end
+    gEquip.LockStyle(reducedSet);    
+end
+
 local exports = {
     AddSet = AddSet,
     CancelAction = CancelAction,
@@ -373,7 +392,8 @@ local exports = {
     ForceEquipSet = ForceEquipSet,
     Message = Message,
     LoadFile = LoadFile,
-    LockSet = LockSet
+    LockSet = LockSet,
+    LockStyle = LockStyle
 };
 
 return exports;
