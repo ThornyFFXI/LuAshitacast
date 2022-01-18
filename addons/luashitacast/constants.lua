@@ -1152,7 +1152,7 @@ constants.DelveAugments = {
     [29] = { Stat='DMG:', Offset=256},
     [114] = { Stat='Weapon skill damage ', Offset=1, Percent=true},
     [115] = { Stat='Magic damage', Offset=1},
-    [116] = { Multi=true, [1] = { Stat='Blood Pact Dmg.', Offset=1}, [2] = { Stat='Blood Pact Dmg.', Offset=1} };
+    [116] = { Stat='Blood Pact Dmg.', Offset=1 },
     [117] = { Stat='"Avatar perpetuation cost"', Offset=1},
     [118] = { Stat='"Blood Pact" ability delay', Offset=1},
     [119] = { Stat='Haste', Offset=1, Percent=true},

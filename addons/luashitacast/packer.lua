@@ -19,10 +19,10 @@ ffi.cdef[[
 
 ashita.events.register('plugin_event', 'plugin_event_cb', function (e)
     if gSettings.RemoveEquipmentForPacker then
-        if (e.name == 'LAC_GEAR_FAILED') or (e.name == 'LAC_GEAR_SUCCEEDED') or (e.name == 'LAC_GEAR_INTERRUPTED') then            
+        if (e.name == 'LAC_GEAR_FAILED') or (e.name == 'LAC_GEAR_SUCCEEDED') or (e.name == 'LAC_GEAR_INTERRUPTED') then
             for i = 1,16,1 do
                 gState.Disabled[i] = false;
-            end            
+            end
         end
     end
 end);
