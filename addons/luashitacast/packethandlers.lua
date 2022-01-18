@@ -83,7 +83,6 @@ packethandlers.HandleIncoming0x28 = function(e)
                 Id = actionId;
                 Target = actionTargetIndex
             };
-            print(actionType);
 
             if (actionType == 7) then
                 --Pet Ability
