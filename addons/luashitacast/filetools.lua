@@ -238,7 +238,8 @@ local SaveSet = function(name, set)
         return false;
     end
     local wholeFile = file:read('*all');
-
+    file:close();
+    
     local matchStrings = {
         'local sets = {',
         'local Sets = {',

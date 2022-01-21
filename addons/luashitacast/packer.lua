@@ -71,6 +71,7 @@ end
 --Unlike combine, this will take the larger count, so that we take the highest requirement of any set.
 local function IntegrateItems(baseTable, orders)
     for _,order in ipairs(orders) do
+        local addNewOrder = true;
         for _,v in pairs(baseTable) do
             if CheckOrdersEqual(order, v) then
                 if ((order.Quantity == -1) or (v.Quantity == -1)) then
@@ -78,10 +79,12 @@ local function IntegrateItems(baseTable, orders)
                 elseif (order.Quantity > v.Quantity) then
                     v.Quantity = order.Quantity;
                 end
-                return;
+                addNewOrder = false;
             end
         end
-        baseTable:append(order);
+        if addNewOrder then
+            baseTable:append(order);
+        end
     end
 end
 
@@ -169,8 +172,6 @@ local function CreateOrder(item)
         order.AugCount = 0;
         order.AugStrings = {};
     end
-
-
 
     return order;
 end
