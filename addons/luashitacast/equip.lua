@@ -495,7 +495,7 @@ local UnequipConflicts = function(equipInfo)
     for _, equipEntry in pairs(equipInfo) do
         for k,v in pairs(EquippedItems) do
             if (v.Index == equipEntry.Index) and (v.Container == equipEntry.Container) and (v.Reserved == false) then
-                Unequip(equipEntry.Slot + 1, v.Container);
+                Unequip(k, v.Container);
             end
         end
     end
