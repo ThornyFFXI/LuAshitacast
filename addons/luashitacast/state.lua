@@ -16,7 +16,7 @@ local state = {
 
 state.Init = function()
     gState.pVanaTime = ashita.memory.find('FFXiMain.dll', 0, 'B0015EC390518B4C24088D4424005068', 0, 0);
-    gState.pWardrobe = ashita.memory.find('FFXiMain.dll', 0, 'A1????????568BF1578B88????????C1E902F6C101', 0, 0);
+    gState.pWardrobe = ashita.memory.find('FFXiMain.dll', 0, 'A1????????8B88B4000000C1E907F6C101E9', 1, 0);
     gState.pWeather = ashita.memory.find('FFXiMain.dll', 0, '66A1????????663D????72', 0, 0);
     gState.pZoneFlags = ashita.memory.find('FFXiMain.dll', 0, '8B8C24040100008B90????????0BD18990????????8B15????????8B82', 0, 0);
 

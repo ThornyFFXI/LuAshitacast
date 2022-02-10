@@ -53,10 +53,9 @@ data.GetContainerAvailable = function(container)
     
     if ((container == 0) or (container == 8) or (container == 10)) then --Inventory, Wardrobe, Wardrobe2
         return true;
-    elseif (container == 11) then --Wardrobe3
-        return (bit.band(gData.GetAccountFlags(), 0x04) == 0x04);
-    elseif (container == 12) then --Wardrobe4
-        return (bit.band(gData.GetAccountFlags(), 0x08) == 0x08);
+    elseif (container > 10) then --Wardrobe3
+        local flag = 2 ^ (container - 9);
+        return (bit.band(gData.GetAccountFlags(), flag) ~= 0);
     elseif ((container == 1) or (container == 4) or (container == 9)) then --Safe, Locker, Safe2
         return ((gData.CheckInMogHouse() == true) or (gData.CheckForNomad() == true));
     elseif (container == 2) then --Storage
@@ -110,7 +109,7 @@ data.ResolveString = function(table, value)
 end
 
 data.GetAccountFlags = function()
-    local subPointer = ashita.memory.read_uint32(gState.pWardrobe + 1);
+    local subPointer = ashita.memory.read_uint32(gState.pWardrobe);
 	subPointer = ashita.memory.read_uint32(subPointer);
     return ashita.memory.read_uint8(subPointer + 0xB4);
 end

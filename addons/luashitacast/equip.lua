@@ -103,10 +103,12 @@ local CheckAugments = function(equipTable, item)
     if (equipTable.Augment ~= nil) then
         if (type(equipTable.Augment) == 'string') then
             local match = false;
-            for _,augment in pairs(augment.Augs) do
-                if (augment.String == equipTable.Augment) then
-                    match = true;
-                    break;
+            if (type(augment.Augs) == 'table') then
+                for _,checkAugment in pairs(augment.Augs) do
+                    if (checkAugment.String == equipTable.Augment) then
+                        match = true;
+                        break;
+                    end
                 end
             end
             if (match == false) then
@@ -599,7 +601,7 @@ local LockStyle = function(set)
         local found = false;
         local equip = set[i];
         if equip then
-            for container = 0,12,1 do
+            for container = 0,16,1 do
                 --Only need to check access to wardrobe3/4, any other container can always be lockstyled from.
                 if container < 11 or gData.GetContainerAvailable(container) then
                     local max = gData.GetContainerMax(container);
