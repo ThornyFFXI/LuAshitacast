@@ -8,7 +8,6 @@ local defaultSettings = {
     EnableNomadStorage = false,
     ForceDisableBags = { },
     ForceEnableBags = { },
-    RemoveEquipmentForPacker = true,
     PetskillDelay = 4.0,
     WeaponskillDelay = 3.0,
     AbilityDelay = 2.5,
