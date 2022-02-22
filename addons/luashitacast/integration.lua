@@ -1,29 +1,40 @@
 local ffi = require('ffi');
 ffi.cdef[[
-    typedef struct lacItemOrder_t {
-        uint8_t Name[32];
+    typedef struct GearListEntry_t {
+        char Name[32];
         int32_t Quantity;
         int32_t AugPath;
         int32_t AugRank;
         int32_t AugTrial;
         int32_t AugCount;
-        uint8_t AugString[5][100];
-    } lacItemOrder_t;
+        uint8_t AugString[10][100];
+    } GearListEntry_t;
 ]];
 ffi.cdef[[
-    typedef struct lacPackerEvent_t {
+    typedef struct GearListEvent_t {
+        uint8_t ReturnEventPrefix[256];
         int32_t EntryCount;
-        lacItemOrder_t Entries[400];
-    } lacPackerEvent_t;
+        GearListEntry_t Entries[1000];
+    } GearListEvent_t;
 ]]
 
 ashita.events.register('plugin_event', 'plugin_event_cb', function (e)
-    if gSettings.RemoveEquipmentForPacker then
-        if (e.name == 'LAC_GEAR_FAILED') or (e.name == 'LAC_GEAR_SUCCEEDED') or (e.name == 'LAC_GEAR_INTERRUPTED') then
-            for i = 1,16,1 do
-                gState.Disabled[i] = false;
-            end
+    if (e.name == 'luashitacast_naked') or (e.name == 'ashitacastany_naked') then
+        for i = 1,16,1 do
+            gEquip.UnequipSlot(i);
+            gState.Disabled[i] = true;
         end
+    elseif (e.name == 'luashitacast_disable') or (e.name == 'ashitacastany_disable') then
+        for i = 1,16,1 do
+            gState.Disabled[i] = true;
+        end            
+    elseif (e.name == 'luashitacast_enable') or (e.name == 'ashitacastany_enable') then
+        for i = 1,16,1 do
+            gState.Disabled[i] = false;
+        end
+    elseif (e.name == 'luashitacast_unload') or (e.name == 'ashitacastany_unload') then
+        AshitaCore:GetPluginManager():RaiseEvent('luashitacast_unloading', {});
+        AshitaCore:GetChatManager():QueueCommand(-1, '/addon unload LuAshitacast');
     end
 end);
 
@@ -178,7 +189,11 @@ end
 
 local function AddToStructure(structure, order)
     local index = structure.EntryCount;
-    structure.Entries[index].Name = order.Name;
+    if (string.len(order.Name) > 31) then
+        structure.Entries[index].Name = string.sub(order.Name, 1, 31);        
+    else
+        structure.Entries[index].Name = order.Name;
+    end
     structure.Entries[index].Quantity = order.Quantity;
     structure.Entries[index].AugPath = order.AugPath;
     structure.Entries[index].AugRank = order.AugRank;
@@ -214,62 +229,20 @@ local function CreateOrderStruct()
         end
     end
 
-    local structure = ffi.new('lacPackerEvent_t');    
+    local structure = ffi.new('GearListEvent_t');    
     for _,v in ipairs(allOrders) do
         AddToStructure(structure, v);
     end
     return ffi.string(structure, ffi.sizeof(structure)):totable();
 end
 
-local function TriggerEvent(eventName, eventStructure)
-    AshitaCore:GetPluginManager():RaiseEvent(eventName, eventStructure);
-end
-
-local function Gear()
-    if not AshitaCore:GetPluginManager():IsLoaded('Packer') then
-        gFunc.Error('Could not perform gear.  Packer is not loaded.');
-        return;
-    end
-
-    if gProfile == nil then
-        gFunc.Error('Could not perform gear.  No profile loaded.');
-        return;
-    end
-
+local function HandleEvent(eventName)
     local eventStruct = CreateOrderStruct();
-
-    if gSettings.RemoveEquipmentForPacker then
-        for i = 1,16,1 do
-            gEquip.UnequipSlot(i);
-            gState.Disabled[i] = true;
-        end
-
-        gFunc.Message('Equipment removed.  Waiting 2 seconds to contact Packer.');
-        ashita.tasks.once(2, TriggerEvent:bindn('packer_lac_gear', eventStruct));
-        return;
-    else
-        TriggerEvent('packer_lac_gear', eventStruct);        
-    end
-end
-
-local function Validate()
-    if not AshitaCore:GetPluginManager():IsLoaded('Packer') then
-        gFunc.Error('Could not perform gear.  Packer is not loaded.');
-        return;
-    end
-
-    if gProfile == nil then
-        gFunc.Error('Could not perform gear.  No profile loaded.');
-        return;
-    end
-
-    local eventStruct = CreateOrderStruct();
-    TriggerEvent('packer_lac_validate', eventStruct);
+    AshitaCore:GetPluginManager():RaiseEvent(eventName, eventStruct);
 end
 
 local exports = {
-    Gear = Gear,
-    Validate = Validate
+    HandleEvent = HandleEvent;
 };
 
 return exports;

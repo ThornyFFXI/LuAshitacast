@@ -173,19 +173,58 @@ commands.HandleCommand = function(e)
     
     if (args[2] == 'gear') then
         if (gProfile == nil) then
-            print(chat.header('LuAshitacast') .. chat.error('No profile loaded.'));
+            print(chat.header('LuAshitacast') .. chat.error('Could not perform gear.  No profile loaded.'));            
+        elseif not AshitaCore:GetPluginManager():IsLoaded('Packer') then
+            gFunc.Error('Could not perform gear.  Packer is not loaded.');
+            return;
         else
-            gPacker.Gear();
+            gIntegration.HandleEvent('packer_gear');
         end
     end
     
     if (args[2] == 'validate') then
         if (gProfile == nil) then
-            print(chat.header('LuAshitacast') .. chat.error('No profile loaded.'));
+            print(chat.header('LuAshitacast') .. chat.error('Could not perform validate.  No profile loaded.'));            
+        elseif not AshitaCore:GetPluginManager():IsLoaded('Packer') then
+            gFunc.Error('Could not perform validate.  Packer is not loaded.');
+            return;
         else
-            gPacker.Validate();
+            gIntegration.HandleEvent('packer_validate');
         end
     end
+    
+    if (args[2] == 'pack') then
+        if (gProfile == nil) then
+            print(chat.header('LuAshitacast') .. chat.error('Could not perform pack.  No profile loaded.'));
+        else
+            gIntegration.HandleEvent('porter_pack');
+        end
+    end
+    
+    if (args[2] == 'unpack') then
+        if (gProfile == nil) then
+            print(chat.header('LuAshitacast') .. chat.error('Could not perform unpack.  No profile loaded.'));
+        else
+            gIntegration.HandleEvent('porter_unpack');
+        end
+    end
+    
+    if (args[2] == 'preppack') then
+        if (gProfile == nil) then
+            print(chat.header('LuAshitacast') .. chat.error('Could not perform preppack.  No profile loaded.'));
+        else
+            gIntegration.HandleEvent('porter_preppack');
+        end
+    end
+    
+    if (args[2] == 'prepunpack') then
+        if (gProfile == nil) then
+            print(chat.header('LuAshitacast') .. chat.error('Could not perform prepunpack.  No profile loaded.'));
+        else
+            gIntegration.HandleEvent('porter_prepunpack');
+        end
+    end
+
 end
 
 return commands;

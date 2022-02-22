@@ -1,6 +1,6 @@
 addon.name      = 'LuAshitacast';
 addon.author    = 'Thorny';
-addon.version   = '1.25';
+addon.version   = '1.30';
 addon.desc      = 'A lua-based equipment swapping system for Ashita';
 addon.link      = 'https://github.com/ThornyFFXI/LuAshitacast';
 
@@ -13,10 +13,10 @@ gDefaultSettings = require('settings');
 gFunc = require('func');
 gEquip = require('equip');
 gFileTools = require('filetools');
+gIntegration = require('integration');
 gProfile = nil;
 gState = require('state');
 gCommandHandlers = require('commandhandlers');
-gPacker = require('packer');
 gPacketHandlers = require('packethandlers');
 
 ashita.events.register('load', 'load_cb', function ()
