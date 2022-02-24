@@ -50,7 +50,7 @@ packethandlers.HandleIncoming0x28 = function(e)
     end
 
     if (userId == AshitaCore:GetMemoryManager():GetEntity():GetServerId(petIndex)) then
-        if (gData.Constants.PetActionCompleteTypes:containskey(actionType)) then
+        if (gData.Constants.PetActionCompleteTypes:contains(actionType)) then
             gState.PetAction = nil;
             return;
         elseif (actionType == 8) or (actionType == 12) then
@@ -63,6 +63,10 @@ packethandlers.HandleIncoming0x28 = function(e)
 
         if (actionType == 7) or (actionType == 8) then
             local actionId = ashita.bits.unpack_be(e.data_raw, 0, 213, 17);
+            if (actionId == 0) then
+                return;
+            end
+            
             local actionTargetId = ashita.bits.unpack_be(e.data_raw, 18, 6, 32);
 
             --Anything in zone dat should work here.
