@@ -84,7 +84,7 @@ packethandlers.HandleIncoming0x28 = function(e)
             end
             
             gState.PetAction = {
-                Id = actionId;
+                Id = actionId,
                 Target = actionTargetIndex
             };
 
