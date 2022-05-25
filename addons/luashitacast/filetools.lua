@@ -28,8 +28,9 @@ local CreateProfile = function(path)
         return false;
     end
     file:write('local profile = {};\n');
-    file:write('profile.Sets = {\n');
-    file:write('};\n\n');
+    file:write('local sets = {\n');
+    file:write('};\n');
+    file:write('profile.Sets = sets;\n\n');
     file:write('profile.Packer = {\n');
     file:write('};\n\n');
     file:write('profile.OnLoad = function()\n    gSettings.AllowAddSet = true;\nend\n\n');

@@ -121,7 +121,7 @@
         Repeat for a few other sets you'd like to use, such as nuking, healing, weaponskill, fast cast, etc.
         Look back at Notepad++(you may need to click File..Reload From Disk to ensure changes applied).  You should have something resembling this:<br>
 <pre><code>local profile = {};
-profile.Sets = {
+local sets = {
     Idle = {
         Main = { Name = 'Lathi', AugPath='A' },
         Sub = 'Enki Strap',
@@ -173,7 +173,8 @@ profile.Sets = {
         Legs = { Name = 'Psycloth Lappas', AugPath='D' },
         Feet = { Name = 'Merlinic Crackows', Augment = { [1] = '"Fast Cast"+7', [2] = 'MND+10' } },
     },
-};</code></pre>    
+};
+profile.Sets = sets;</code></pre>    
 
     If you also plan on using Packer, a plugin that can collect gear listed in your LuAshitacast profile, you can add some meds and other necessities to the packer section:<br>
 <pre><code>profile.Packer = {
@@ -427,8 +428,6 @@ end</code></pre>
 local Settings = {
     UseRefreshIdle = true
 };
-
-profile.Sets = sets;
 
 profile.OnLoad = function()</code></pre>
 
@@ -706,8 +705,6 @@ end</code></pre>
     TpVariant = 1
 };
 
-profile.Sets = sets;
-
 local function HandlePetAction(PetAction)
 end
 
@@ -726,9 +723,7 @@ HandlePetAction(petAction);</code></pre>
 local Settings = {
     UseRefreshIdle = true,
     TpVariant = 1
-};
-
-profile.Sets = sets;</code></pre>
+};</code></pre>
 
             Now, to actually utilize it, we expand the earlier code a bit and place it into HandleDefault:
 <pre><code>profile.HandleDefault = function()
