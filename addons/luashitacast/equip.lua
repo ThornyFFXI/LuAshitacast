@@ -306,8 +306,10 @@ local FlagEquippedItems = function(set)
         end
     end
 
-    for _,equipTable in pairs(set) do
+    for slot,equipTable in pairs(set) do
         if (equipTable.Index == nil) then
+            return false;
+        elseif (equipTable.Index == 0) and (GetCurrentEquip(slot) ~= nil) then
             return false;
         end
     end
