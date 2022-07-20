@@ -374,7 +374,7 @@ local PrepareEquip = function(set)
         --Handle remove item
         if (value.Index == 0) then
             local currItem = GetCurrentEquip(key);
-            if (currItem.Item ~= nil) then
+            if (currItem.Item ~= nil) and (gState.Disabled[key] ~= true) then
                 newTable.Container = currItem.Container;
                 retTable[index] = newTable; 
                 index = index + 1;
