@@ -36,7 +36,24 @@ commands.HandleCommand = function(e)
             return;
         end
 
-        gFunc.AddSet(args[3]);
+        local setName = AshitaCore:GetChatManager():ParseAutoTranslate(args[3], false);
+        local cleanSetName = setName:gsub('[^%w%s_]+', '');
+        if (setName ~= cleanSetName) then
+            print(chat.header('LuAshitacast') .. chat.error('Invalid characters located in set name.  Set must be only letters, numbers and underscores.'));
+            return;
+        end
+
+        if (string.sub(setName, 1, 1) == '_') then
+            print(chat.header('LuAshitacast') .. chat.error('Set name should not start with an underscore.'));            
+            return;
+        end
+        
+        if (tonumber(string.sub(setName, 1, 1)) ~= nil) then
+            print(chat.header('LuAshitacast') .. chat.error('Set name cannot start with a number.'));            
+            return;
+        end
+
+        gFunc.AddSet(setName);
         return;
     end
 

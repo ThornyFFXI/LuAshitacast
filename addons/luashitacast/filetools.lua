@@ -244,7 +244,10 @@ local SaveSet = function(name, set)
     local matchStrings = {
         'local sets = {',
         'local Sets = {',
-        'profile.Sets = {'
+        'profile.Sets = {',
+        'local sets = T{',
+        'local Sets = T{',
+        'profile.Sets = T{'
     };
 
     local setsStart, setsEnd;
