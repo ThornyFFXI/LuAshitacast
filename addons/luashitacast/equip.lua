@@ -603,32 +603,39 @@ local LockStyle = function(set)
         local found = false;
         local equip = set[i];
         if equip then
-            for container = 0,16,1 do
-                --Only need to check access to wardrobe3/4, any other container can always be lockstyled from.
-                if container < 11 or gData.GetContainerAvailable(container) then
-                    local max = gData.GetContainerMax(container);
-                    for index = 1,max,1 do
-                        local containerItem = inventoryManager:GetContainerItem(container, index);
-                        if containerItem ~= nil and containerItem.Count > 0 and containerItem.Id > 0 then
-                            local resource = resourceManager:GetItemById(containerItem.Id);
-                            if (resource ~= nil) then
-                                if (string.lower(resource.Name[1]) == equip) and (bit.band(resource.Slots, math.pow(2, i - 1)) ~= 0) then
-                                    local offset = 8 + (count * 8) + 1;
-                                    packet[offset] = index;
-                                    packet[offset + 1] = i - 1;
-                                    packet[offset + 2] = container;
-                                    packet[offset + 4] = bit.band(containerItem.Id, 0xFF);
-                                    packet[offset + 5] = bit.rshift(containerItem.Id, 8);
-                                    count = count + 1;
-                                    packet[4 + 1] = count;
-                                    break;
+            if (equip == 'remove') then
+                local offset = 8 + (count * 8) + 1;
+                packet[offset + 1] = i - 1;
+                count = count + 1;
+                packet[4 + 1] = count;
+            else
+                for container = 0,16,1 do
+                    --Only need to check access to wardrobe3/4, any other container can always be lockstyled from.
+                    if container < 11 or gData.GetContainerAvailable(container) then
+                        local max = gData.GetContainerMax(container);
+                        for index = 1,max,1 do
+                            local containerItem = inventoryManager:GetContainerItem(container, index);
+                            if containerItem ~= nil and containerItem.Count > 0 and containerItem.Id > 0 then
+                                local resource = resourceManager:GetItemById(containerItem.Id);
+                                if (resource ~= nil) then
+                                    if (string.lower(resource.Name[1]) == equip) and (bit.band(resource.Slots, math.pow(2, i - 1)) ~= 0) then
+                                        local offset = 8 + (count * 8) + 1;
+                                        packet[offset] = index;
+                                        packet[offset + 1] = i - 1;
+                                        packet[offset + 2] = container;
+                                        packet[offset + 4] = bit.band(containerItem.Id, 0xFF);
+                                        packet[offset + 5] = bit.rshift(containerItem.Id, 8);
+                                        count = count + 1;
+                                        packet[4 + 1] = count;
+                                        break;
+                                    end
                                 end
                             end
-                        end
-                    end  
-                    if found then
-                        break;
-                    end          
+                        end  
+                        if found then
+                            break;
+                        end          
+                    end
                 end
             end
         end

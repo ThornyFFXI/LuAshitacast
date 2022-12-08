@@ -1,3 +1,30 @@
+local function StringToSet(refString, baseTable)
+    refString = string.lower(refString);
+    local refTable = (type(baseTable) == 'table') and baseTable or gProfile.Sets;
+    local periodIndex = string.find(refString, '%.');
+    while (periodIndex ~= nil) and (type(refTable) == 'table') do
+        local matchName = string.sub(refString, 1, periodIndex - 1);
+        local oldTable = refTable;
+        refTable = nil;
+        for tableName,tableEntry in pairs(oldTable) do
+            if (string.lower(tableName) == matchName) then
+                refTable = tableEntry;
+                break;
+            end
+        end
+        refString = string.sub(refString, periodIndex + 1);
+        periodIndex = string.find(refString, '%.');
+    end
+
+    if (type(refTable) == 'table') then
+        for name,setEntry in pairs(refTable) do
+            if (string.lower(name) == refString) then
+                return setEntry;
+            end
+        end
+    end
+end
+
 local AddSet = function(setName)
     if (gSettings.AllowAddSet == false) then
         print(chat.header('LuAshitacast') .. chat.error('Your profile has addset disabled.'));
@@ -40,6 +67,38 @@ local AddSet = function(setName)
         --Mixed feelings about forcing a reload here.
         --If user is assigning augments in OnLoad or anything of the sort, I think it's better to ensure those get applied.
         gState.LoadProfileEx(gProfile.FilePath);
+    end
+end
+
+local function EvaluateBaseSets(refCount, baseTable, currentTable)
+    for _,set in pairs(currentTable) do
+        if (type(set) == 'table') and (set.BaseSet ~= nil) then
+            local refString = set.BaseSet;
+            local refTable = StringToSet(refString, baseTable);
+            if (refTable.BaseSet == nil) then
+                for slotName,slotEntry in pairs(refTable) do                    
+                    if (gData.Constants.EquipSlots[slotName] ~= nil) then
+                        if (set[slotName] == nil) then
+                            set[slotName] = slotEntry;
+                        end
+                    end
+                end
+                set.BaseSet = nil;
+                refCount[1] = refCount[1] + 1;
+            end
+        end
+        if (type(set) == 'table') then
+            EvaluateBaseSets(refCount, baseTable, set);
+        end
+    end
+    return refCount;
+end
+
+local ApplyBaseSets = function(baseTable)
+    local refCount = { 1 };
+    while (refCount[1] ~= 0) do
+        refCount[1] = 0;
+        EvaluateBaseSets(refCount, baseTable, baseTable);
     end
 end
 
@@ -125,6 +184,18 @@ local ClearEquipBuffer = function()
     gEquip.ClearBuffer();
 end
 
+local Combine = function(base, override)
+    local newSet = {};
+    for slotname,_ in pairs(gData.Constants.EquipSlots) do
+        if type(override[slotname]) ~= 'nil' then
+            newSet[slotname] = override[slotname];
+        else
+            newSet[slotname] = base[slotname];
+        end
+    end
+    return newSet;
+end
+
 local Disable = function(slot)
     if (slot == 'all') then
         for i = 1,16,1 do
@@ -189,14 +260,12 @@ local EquipSet = function(set)
             return;
         end
         
-        local setName = string.lower(set);
-        for name,setEntry in pairs(gProfile.Sets) do
-            if (string.lower(name) == setName) then
-                for k, v in pairs(setEntry) do
-                    Equip(k, v);
-                end
-                return;
+        local setTable = StringToSet(set);
+        if (type(setTable) == 'table') then
+            for k, v in pairs(setTable) do
+                Equip(k, v);
             end
+            return;
         end
         
         print(chat.header('LuAshitacast') .. chat.error('Set not found: ' .. set));
@@ -209,6 +278,53 @@ end
 
 local Error = function(text)
     print(chat.header('LuAshitacast') .. chat.error(text));
+end
+
+local function EvaluateItem(item, level)
+    if type(item) == 'string' then
+        local resource = AshitaCore:GetResourceManager():GetItemByName(item, 0);
+        if (resource ~= nil) then
+            return (level >= resource.Level);
+        end
+    elseif type(item) == 'table' then
+        if type(item.Level) == 'number' then
+            return (level >= item.Level);
+        else
+            local resource = AshitaCore:GetResourceManager():GetItemByName(item.Name, 0);
+            if (resource ~= nil) then
+                return (level >= resource.Level);
+            end
+        end
+    end
+    return false;
+end
+
+local EvaluateLevels = function(baseTable, level)
+    for name,set in pairs(baseTable) do
+        if (#name > 9) and (string.sub(name, #name - 9) == '_Priority') then
+            local newSet = {};
+            for slotName,slotEntries in pairs(set) do
+                if (gData.Constants.EquipSlots[slotName] ~= nil) then
+                    if type(slotEntries) == 'string' then
+                        newSet[slotName] = slotEntries;
+                    elseif type(slotEntries) == 'table' then
+                        if slotEntries[1] == nil then
+                            newSet[slotName] = slotEntries;
+                        else
+                            for _,potentialEntry in ipairs(slotEntries) do
+                                if EvaluateItem(potentialEntry, level) then
+                                    newSet[slotName] = potentialEntry;
+                                    break;
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+            local newKey = string.sub(name, 1, #name - 10);
+            baseTable[newKey] = newSet;
+        end
+    end
 end
 
 local ForceEquip = function(slot, item)
@@ -227,7 +343,7 @@ local ForceEquip = function(slot, item)
 end
 
 local ForceEquipSet = function(set)
-    local table = nil;
+    local setTable = nil;
     if (type(set) == 'string') then
         if (gProfile == nil) then
             print(chat.header('LuAshitacast') .. chat.error('You must have a profile loaded to use ForceEquipSet(string).'));
@@ -239,24 +355,19 @@ local ForceEquipSet = function(set)
             return;
         end
         
-        local setName = string.lower(set);
-        for name,setEntry in pairs(gProfile.Sets) do
-            if (string.lower(name) == setName) then
-                table = setEntry;
-            end
-        end
+        setTable = StringToSet(set);
         
-        if (table == nil) then
+        if (setTable == nil) then
             print(chat.header('LuAshitacast') .. chat.error('Set not found: ' .. set));
             return;
         end
     elseif (type(set) == 'table') then
-        table = set;
+        setTable = set;
     else
         return;
     end
     local newTable = {};
-    for k,v in pairs(table) do
+    for k,v in pairs(setTable) do
         local equipSlot = gData.GetEquipSlot(k);
         if (equipSlot == 0) then
             print(chat.header('LuAshitacast') .. chat.error("Invalid slot specified: ") .. chat.color1(2, k));
@@ -313,7 +424,7 @@ end
 
 --Equips a set and locks it in for a given period of time
 local LockSet = function(set, seconds)
-    local table = nil;
+    local setTable = nil;
     if (type(set) == 'string') then
         if (gProfile == nil) then
             print(chat.header('LuAshitacast') .. chat.error('You must have a profile loaded to use LockSet(string).'));
@@ -324,29 +435,24 @@ local LockSet = function(set, seconds)
             print(chat.header('LuAshitacast') .. chat.error('Your profile must have a sets table to use LockSet(string).'));
             return;
         end
-        
-        local setName = string.lower(set);
-        for name,setEntry in pairs(gProfile.Sets) do
-            if (string.lower(name) == setName) then
-                table = setEntry;
-            end
-        end
-        
-        if (table == nil) then
+
+        setTable = StringToSet(set);
+
+        if (setTable == nil) then
             print(chat.header('LuAshitacast') .. chat.error('Set not found: ' .. set));
             return;
         end
     elseif (type(set) == 'table') then
-        table = set;
+        setTable = set;
     else
         return;
     end
 
-    gState.ForceSet = table;
+    gState.ForceSet = setTable;
     gState.ForceSetTimer = os.clock() + seconds;
 
     local newTable = {};
-    for k,v in pairs(table) do
+    for k,v in pairs(setTable) do
         local equipSlot = gData.GetEquipSlot(k);
         if (equipSlot == 0) then
             print(chat.header('LuAshitacast') .. chat.error("Invalid slot specified: ") .. chat.color1(2, k));
@@ -373,21 +479,24 @@ local LockStyle = function(set)
             end
         end
     end
-    gEquip.LockStyle(reducedSet);    
+    gEquip.LockStyle(reducedSet);
 end
 
 local exports = {
     AddSet = AddSet,
+    ApplyBaseSets = ApplyBaseSets,
     CancelAction = CancelAction,
     ChangeActionId = ChangeActionId,
     ChangeActionTarget = ChangeActionTarget,
     ClearEquipBuffer = ClearEquipBuffer,
+    Combine = Combine,
     Disable = Disable,
     Echo = Echo,
     Enable = Enable,
     Equip = Equip,
     EquipSet = EquipSet,
     Error = Error,
+    EvaluateLevels = EvaluateLevels,
     ForceEquip = ForceEquip,
     ForceEquipSet = ForceEquipSet,
     Message = Message,

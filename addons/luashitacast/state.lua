@@ -124,7 +124,10 @@ state.LoadProfileEx = function(path)
 end
 
 state.UnloadProfile = function()
-	gState.SafeCall('OnUnload');
+    if (gProfile ~= nil) then
+        gState.SafeCall('OnUnload');
+        coroutine.sleep(0.5);
+    end
     gState.Reset();
 end
 
@@ -151,7 +154,7 @@ state.Inject = function(id, data)
     gState.Injecting = false;
 end
 
-state.Reset = function()    
+state.Reset = function()
     gProfile = nil;
     state.Disabled = {};
     state.Encumbrance = {};

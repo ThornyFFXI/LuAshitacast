@@ -444,7 +444,7 @@ end
 
 data.GetEntity = function(index)
     local entityTable = {};
-    entityTable.Distance = AshitaCore:GetMemoryManager():GetEntity():GetDistance(index);
+    entityTable.Distance = math.sqrt(AshitaCore:GetMemoryManager():GetEntity():GetDistance(index));
     entityTable.HPP = AshitaCore:GetMemoryManager():GetEntity():GetHPPercent(index);
     entityTable.Id = AshitaCore:GetMemoryManager():GetEntity():GetServerId(index);
     entityTable.Index = index;
@@ -524,7 +524,7 @@ data.GetPet = function()
     end
 
     local petTable = {};
-    petTable.Distance = AshitaCore:GetMemoryManager():GetEntity():GetDistance(petIndex);
+    petTable.Distance = math.sqrt(AshitaCore:GetMemoryManager():GetEntity():GetDistance(petIndex));
     petTable.HPP = AshitaCore:GetMemoryManager():GetEntity():GetHPPercent(petIndex);
     petTable.Id = AshitaCore:GetMemoryManager():GetEntity():GetServerId(petIndex);
     petTable.Index = petIndex;
@@ -566,7 +566,7 @@ data.GetPetAction = function()
         else
             actionTable.Type = 'Generic';
         end
-    elseif (action.Type == 'MobSkill') then        
+    elseif (action.Type == 'MobSkill') then
         actionTable.Id = action.Id;
         actionTable.Name = action.Name;
     end

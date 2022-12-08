@@ -79,6 +79,7 @@
         <a href="#l13">Lesson 13 - Enable swaps for pet actions.</a><br>
         <a href="#s1">Snippet - Cleanly use elemental staves.</a><br>
         <a href="#s2">Snippet - Use a helper library to manage and display variables.</a><br>
+        <a href="#s3">Snippet - Automatically evaluate level sync gear.</a><br>
 
         <h1 id="l1">Lesson 1 - Install an editor.</h1>
         Lua is a full featured language, and syntax highlighting will make your experience much easier.
@@ -938,6 +939,41 @@ end</code></pre>
         All done!  Now you have an onscreen display of your toggles in real time, and you've reduced the code in your profile significantly.  Note that varhelper is a pretty simple helper class, and there's a whole lot more that can be done with lua.
         Advanced users may want to make their own libraries and explore with them.
 
+        <h1 id="s3">Snippet - Automatically evaluate level sync gear.</h1>
+        To evaluate level sync gear, we will use the function <font class="code">gFunc.EvaluateLevels()</font> in combination with a specialized sets format.  First, you'll need to define your sets in this manner:
+<pre><code>
+    local sets = {
+        TP_Priority = {
+            Main = { {Name = 'Mandau', Level=75}, 'Blau Dolch', 'Cermet Kukri' },
+            Head = { 'Walahra Turban', 'Optical Hat', 'Voyager Sallet', 'Empress Hairpin' },
+            Body = { 'Adaman Hauberk', 'Hauberk', 'Haubergeon', 'Scorpion Harness', 'Brigandine' },
+            Hands = { 'Bandomusha Kote', 'Dusk Gloves +1', 'Battle Gloves' },
+            Legs = { 'Byakko\'s Haidate', 'Dusk Trousers', 'Tiger Trousers' },
+            Feet = { 'Dusk Ledelsens +1', 'Fuma Sune-Ate', 'Fuma Kyahan', 'Bounding Boots' },
+        }
+    };</code></pre>
+    Specifically, you add the suffix <font class="code">_Priority</font> after each set name.  Then, each slot contains a table of potential items.  The first listed entry in each table to be below your current level
+    will be used.  If an item name is shared between multiple items, you should use a table and specify the level parameter to be more specific.  This is important because Ashita has no way of knowing if the Mandau
+    you specified is the level 75 version or the level 95 version, for example. If you need to use augment tags or other similar tags, embed them within the item table.  Once you've built all your sets out this way,
+    you'll need to add code to trigger the function.  First, go to your settings table and add a new variable to store your level:
+<pre><code>local Settings = {
+    UseRefreshIdle = true,
+    TpVariant = 'Default',
+    CurrentLevel = 0,
+};</code></pre>
+    Next, we need to make sure sets are evaluated every time your level changes, so over to HandleDefault:
+<pre><code>
+profile.HandleDefault = function()
+    local myLevel = AshitaCore:GetMemoryManager():GetPlayer():GetMainJobLevel();
+    if (myLevel ~= Settings.CurrentLevel) then
+        gData.EvaluateLevels(profile.Sets, myLevel);
+        Settings.CurrentLevel = myLevel;
+    end</pre></code>
+    This belongs at the start of the section so it happens before your swaps.  Specifically what we're doing here is asking a built in function to collapse these tables.  After it's executed, the set
+    <font class="code">sets.TP</font> will contain a set with the first valid option from each entry in <font class="code">sets.TP_Priority</font>.  Then, you can just use the set as normal anywhere in
+    your configuration file:
+<pre><code>
+    gFunc.EquipSet(sets.TP);</code></pre>
 
     </body>
 </html>

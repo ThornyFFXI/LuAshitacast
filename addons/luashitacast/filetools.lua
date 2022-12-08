@@ -62,6 +62,7 @@ local ParseTable = function(wholeFile, startIndex)
     local singleQuote = string.byte('\'');
     local doubleQuote = string.byte('\"');
     local lineBreak = string.byte('\n');
+    local underscore = string.byte('_');
     local function isLetter(byte)
         if ((byte >= 65) and (byte <= 90)) then
             return true;

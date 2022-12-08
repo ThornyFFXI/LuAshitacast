@@ -13,6 +13,13 @@
             This can be blocked with the gSettings.AllowAddSet setting.  The gSettings.AddSetBackup setting can be set to false to prevent backups.
             For this to function, your main sets table must be initialized <font color="#0080FF">local sets = {</font>, <font color="#0080FF">local Sets = {</font>, or <font color="#0080FF">profile.Sets = {</font>.<br>
         <br><br>
+        
+        <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.ApplyBaseSets(baseTable)</font><br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#208020">sets</font><font color="#FFFFFF"> (</font><font color="#FF7908">table</font><font color="#FFFFFF">): your profile's base sets table</font><br>
+        <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
+        <font color="#FFFFFF">Effects: Recursively searches all sets for 'BaseSet' attributes, and references those sets to incorporate their items.  Subtables should be notated with '.'<br>
+        <br><br>
 
         <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.CancelAction()</font><br>
         <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
@@ -35,6 +42,15 @@
         <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.ClearEquipBuffer()</font><br>
         <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
         <font color="#FFFFFF">Effects: Clears all pending swaps.</font><br>
+        <br><br>
+        
+        
+        <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.Combine(base, override)</font><br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#208020">base</font><font color="#FFFFFF"> (</font><font color="#FF7908">table</font><font color="#FFFFFF">): A set to start with.</font><br>
+        <font color="#208020">override</font><font color="#FFFFFF"> (</font><font color="#FF7908">table</font><font color="#FFFFFF">): A set to override the initial set's slots with.</font><br>
+        <font color="#FFFFFF">Return Type: </font><font color="#FF7903">table</font><br>
+        <font color="#FFFFFF">Effects: Returns a new table containing the slots from override, and the slots from base where a slot in override was not present.</font><br>
         <br><br>
         
         <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.Disable(slot)</font><br>
@@ -86,6 +102,15 @@
         <font color="#FFFFFF">Effects: Prints text of the default error color to chat log using the LuAshitacast header.</font><br>
         <br><br>
         
+        <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.EvaluateLevels(sets, level)</font><br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#208020">sets</font><font color="#FFFFFF"> (</font><font color="#FF7908">table</font><font color="#FFFFFF">): your profile's base sets table</font><br>
+        <font color="#208020">level</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the level to match against<font><br>
+        <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
+        <font color="#FFFFFF">Effects: Looks for any set ending in _Priority, then treats each slot entry containing a table as a priority list.
+            Creates a new set without the _Priority suffix using the first item in each priority list to be below or at your level as the active slot.
+            See example usage in tutorial.</font><br>
+
         <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.ForceEquip(slot, item)</font><br>
         <font color="#FFFFFF">Arguments:</font><br>
         <font color="#208020">slot</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the 1-based index of the slot you want to equip to(1-16)</font><br>
