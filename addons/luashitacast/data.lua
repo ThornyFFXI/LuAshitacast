@@ -613,7 +613,7 @@ data.GetParty = function()
     local myTarget = gData.GetTargetIndex();
 
     for i = 1,18,1 do
-        if (AshitaCore:GetMemoryManager():GetParty():GetMemberIsActive(i - 1)) then
+        if (AshitaCore:GetMemoryManager():GetParty():GetMemberIsActive(i - 1) == 1) then
             partyTable.Count = partyTable.Count + 1;
             if (i > 1) then
                 partyTable.InParty = true;
