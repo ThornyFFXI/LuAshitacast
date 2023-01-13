@@ -597,9 +597,10 @@ local LockStyle = function(set)
         packet[i] = 0x00;
     end
     packet[5 + 1] = 3;
+    packet[6 + 1] = 1;
 
     local count = 0;
-    for i = 1,10,1 do
+    for i = 1,9 do
         local found = false;
         local equip = set[i];
         if equip then
@@ -627,6 +628,7 @@ local LockStyle = function(set)
                                         packet[offset + 5] = bit.rshift(containerItem.Id, 8);
                                         count = count + 1;
                                         packet[4 + 1] = count;
+                                        found = true;
                                         break;
                                     end
                                 end
