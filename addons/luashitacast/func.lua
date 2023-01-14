@@ -301,7 +301,7 @@ end
 
 local EvaluateLevels = function(baseTable, level)
     for name,set in pairs(baseTable) do
-        if (#name > 9) and (string.sub(name, #name - 9) == '_Priority') then
+        if (#name > 9) and (string.sub(name, -9) == '_Priority') then
             local newSet = {};
             for slotName,slotEntries in pairs(set) do
                 if (gData.Constants.EquipSlots[slotName] ~= nil) then
@@ -321,7 +321,7 @@ local EvaluateLevels = function(baseTable, level)
                     end
                 end
             end
-            local newKey = string.sub(name, 1, #name - 10);
+            local newKey = string.sub(name, 1, -10);
             baseTable[newKey] = newSet;
         end
     end
