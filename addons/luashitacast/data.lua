@@ -1,52 +1,5 @@
 local data = {};
 data.Constants = require('constants');
-local language = AshitaCore:GetConfigurationManager():GetInt32('boot', 'ashita.language', 'ashita', 2);
-local shiftjis;
-if (language ~= 2) then
-    shiftjis = require('shiftjis');
-end
-
-local function ResolveEscapeCodes(stringName)
-    local length = string.len(stringName);
-    local offset = 1;
-    local stringBuilder = '';
-    while (offset <= length) do
-        local char = string.byte(string.sub(stringName, offset, offset));
-        local escapeKeyMap = shiftjis[char];
-        if escapeKeyMap then
-            if (offset == length) then
-                print('Missing escape value.');
-                break;
-            end
-
-            local char2 = string.byte(string.sub(stringName, offset + 1, offset + 1));
-            local escapeEntry = escapeKeyMap[char2];
-            if escapeEntry then
-                stringBuilder = stringBuilder .. escapeEntry;
-            else
-                print(string.format('Missing escape code: %02X:%02X  (Abil:%s)', char, char2, resource.Name[1]));
-            end
-            offset = offset + 2;
-        elseif (char >= 0x80) then
-            local char2 = string.byte(string.sub(stringName, offset + 1, offset + 1));
-            print(string.format('Missing escape code: %02X:%02X  (Abil:%s)', char, char2, resource.Name[1]));
-            offset = offset + 2;
-        else
-            stringBuilder = stringBuilder .. string.sub(stringName, offset, offset);
-            offset = offset + 1;            
-        end
-    end
-    return stringBuilder;
-end
-
-local function LocalizeResource(string)
-    if (language == 2) then
-        return string;
-    end
-
-    return ResolveEscapeCodes(string);
-end
-
 
 data.CheckInMogHouse = function()
     --Default to false if pointer scan failed
@@ -432,15 +385,15 @@ data.GetAction = function()
         local currentMp = AshitaCore:GetMemoryManager():GetParty():GetMemberMP(0)
         actionTable.MpAftercast = currentMp - actionTable.MpCost;
         actionTable.MppAftercast = (actionTable.MpAftercast * 100) / AshitaCore:GetMemoryManager():GetPlayer():GetMPMax();
-        actionTable.Name = LocalizeResource(action.Resource.Name[1]);
+        actionTable.Name = action.Resource.Name[1];
         actionTable.Recast = action.Resource.RecastDelay * 250;
         actionTable.Skill = gData.ResolveString(gData.Constants.SpellSkills, action.Resource.Skill);
         actionTable.Type = gData.ResolveString(gData.Constants.SpellTypes, action.Resource.Type);
     elseif (action.Type == 'Weaponskill') then
-        actionTable.Name = LocalizeResource(action.Resource.Name[1]);
+        actionTable.Name = action.Resource.Name[1];
         actionTable.Id = action.Resource.Id;
     elseif (action.Type == 'Ability') then
-        actionTable.Name = LocalizeResource(action.Resource.Name[1]);
+        actionTable.Name = action.Resource.Name[1];
         actionTable.Id = action.Resource.Id - 0x200;
         local abilityType = gData.Constants.AbilityTypes[action.Resource.RecastTimerId];
         if (abilityType ~= nil) then
@@ -454,7 +407,7 @@ data.GetAction = function()
     elseif (action.Type == 'Item') then
         actionTable.CastTime = action.Resource.CastTime * 250;
         actionTable.Id = action.Resource.Id;
-        actionTable.Name = LocalizeResource(action.Resource.Name[1]);
+        actionTable.Name = action.Resource.Name[1];
         actionTable.Recast = action.Resource.RecastDelay * 250;
     end
 
@@ -535,7 +488,7 @@ data.GetEquipment = function()
                 local singleTable = {};
                 singleTable.Container = equip.Container;
                 singleTable.Item = equip.Item;
-                singleTable.Name = LocalizeResource(resource.Name[1]);
+                singleTable.Name = resource.Name[1];
                 singleTable.Resource = resource;
                 local slot = gData.Constants.EquipSlotNames[i];
                 equipTable[slot] = singleTable;
@@ -600,12 +553,12 @@ data.GetPetAction = function()
         actionTable.Element = gData.ResolveString(gData.Constants.SpellElements, action.Resource.Element);
         actionTable.Id = action.Resource.Index;
         actionTable.MpCost = action.Resource.ManaCost;
-        actionTable.Name = LocalizeResource(action.Resource.Name[1]);
+        actionTable.Name = action.Resource.Name[1];
         actionTable.Recast = action.Resource.RecastDelay * 250;
         actionTable.Skill = gData.ResolveString(gData.Constants.SpellSkills, action.Resource.Skill);
         actionTable.Type = gData.ResolveString(gData.Constants.SpellTypes, action.Resource.Type);
     elseif (action.Type == 'Ability') then
-        actionTable.Name = LocalizeResource(action.Resource.Name[1]);
+        actionTable.Name = action.Resource.Name[1];
         actionTable.Id = action.Resource.Id - 0x200;
         local abilityType = gData.Constants.AbilityTypes[action.Resource.RecastTimerId];
         if (abilityType ~= nil) then
