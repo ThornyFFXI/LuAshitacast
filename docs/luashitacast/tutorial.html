@@ -966,7 +966,7 @@ end</code></pre>
 profile.HandleDefault = function()
     local myLevel = AshitaCore:GetMemoryManager():GetPlayer():GetMainJobLevel();
     if (myLevel ~= Settings.CurrentLevel) then
-        gData.EvaluateLevels(profile.Sets, myLevel);
+        gFunc.EvaluateLevels(profile.Sets, myLevel);
         Settings.CurrentLevel = myLevel;
     end</pre></code>
     This belongs at the start of the section so it happens before your swaps.  Specifically what we're doing here is asking a built in function to collapse these tables.  After it's executed, the set

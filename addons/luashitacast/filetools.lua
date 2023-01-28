@@ -178,7 +178,7 @@ local ParseTable = function(wholeFile, startIndex)
 end
 
 local WriteSet = function(file, name, set)
-    file:write(name .. ' = {\n');
+    file:write('[\'' .. name .. '\'] = {\n');
     for i = 1,16,1 do
         local index = i;
         if (gSettings.AddSetEquipScreenOrder == true) then
