@@ -39,7 +39,7 @@ packethandlers.HandleIncoming0x28 = function(e)
             gState.PlayerAction = nil;
         elseif (actionType == 8) or (actionType == 12) then
             --Ranged or magic interrupt resets delay so idlegear resumes.
-            if (ashita.bits.unpack_be(e.data_raw, 10, 6, 16) == 28787) then                
+            if (ashita.bits.unpack_be(e.data_raw, 10, 6, 16) == 28787) then
                 if (gSettings.Debug) and (gState.PlayerAction ~= nil) then
                     print(chat.header('LuAshitacast') .. chat.message('Action ending due to action packet of type ' .. tostring(actionType) .. ' with parameters indicating interruption.'));
                 end
@@ -57,11 +57,17 @@ packethandlers.HandleIncoming0x28 = function(e)
 
     if (userId == AshitaCore:GetMemoryManager():GetEntity():GetServerId(petIndex)) then
         if (gData.Constants.PetActionCompleteTypes:contains(actionType)) then
+            if (gSettings.Debug) and (gState.PetAction ~= nil) then
+                print(chat.header('LuAshitacast') .. chat.message('Pet action ending due to action packet of type ' .. tostring(actionType) .. '.'));
+            end
             gState.PetAction = nil;
             return;
         elseif (actionType == 8) or (actionType == 12) then
             --Ranged or magic interrupt resets delay so idlegear resumes.
             if (ashita.bits.unpack_be(e.data_raw, 10, 6, 16) == 28787) then
+                if (gSettings.Debug) and (gState.PetAction ~= nil) then
+                    print(chat.header('LuAshitacast') .. chat.message('Pet action ending due to action packet of type ' .. tostring(actionType) .. ' with parameters indicating interruption.'));
+                end
                 gState.PetAction = nil;
 				return;
             end
@@ -207,12 +213,15 @@ packethandlers.HandleOutgoingChunk = function(e)
     --Clear expired actions.
     local time = os.clock();
     if (gState.PlayerAction ~= nil) and (gState.PlayerAction.Completion < time) then
-        if (gSettings.Debug) and (gState.PlayerAction ~= nil) then
+        if (gSettings.Debug) then
             print(chat.header('LuAshitacast') .. chat.message('Action ending due to timeout.'));
         end
         gState.PlayerAction = nil;
     end
     if (gState.PetAction ~= nil) and (gState.PetAction.Completion < time) then
+        if (gSettings.Debug) then
+            print(chat.header('LuAshitacast') .. chat.message('Pet action ending due to timeout.'));
+        end
         gState.PetAction = nil;
     end
 
