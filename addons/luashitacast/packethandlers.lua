@@ -32,7 +32,7 @@ packethandlers.HandleIncoming0x28 = function(e)
     local actionType = ashita.bits.unpack_be(e.data_raw, 10, 2, 4);
 
     if (userId == gState.PlayerId) then
-        if (gData.Constants.ActionCompleteTypes:containskey(actionType)) then
+        if (gData.Constants.ActionCompleteTypes:contains(actionType)) then
             if (gSettings.Debug) and (gState.PlayerAction ~= nil) then
                 print(chat.header('LuAshitacast') .. chat.message('Action ending due to action packet of type ' .. tostring(actionType) .. '.'));
             end
@@ -41,7 +41,7 @@ packethandlers.HandleIncoming0x28 = function(e)
             --Ranged or magic interrupt resets delay so idlegear resumes.
             if (ashita.bits.unpack_be(e.data_raw, 10, 6, 16) == 28787) then                
                 if (gSettings.Debug) and (gState.PlayerAction ~= nil) then
-                    print(chat.header('LuAshitacast') .. chat.message('Action ending due to action packet of type ' .. tostring(actionType) .. ' with 28787 param[suspected interruption].'));
+                    print(chat.header('LuAshitacast') .. chat.message('Action ending due to action packet of type ' .. tostring(actionType) .. ' with parameters indicating interruption.'));
                 end
                 gState.PlayerAction = nil;
             end
