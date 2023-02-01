@@ -1,5 +1,5 @@
 local constants = {};
-constants.ActionCompleteTypes = T{ 2, 3, 4, 5, 6, 14 };
+constants.ActionCompleteTypes = T{ 2, 3, 4, 5, 6, 14, 15 };
 constants.PetActionCompleteTypes = T{4, 11, 13};
 constants.Containers = T{
     Inventory = 0,

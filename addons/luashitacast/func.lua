@@ -300,6 +300,7 @@ local function EvaluateItem(item, level)
 end
 
 local EvaluateLevels = function(baseTable, level)
+    local buffer = {};
     for name,set in pairs(baseTable) do
         if (#name > 9) and (string.sub(name, -9) == '_Priority') then
             local newSet = {};
@@ -322,8 +323,11 @@ local EvaluateLevels = function(baseTable, level)
                 end
             end
             local newKey = string.sub(name, 1, -10);
-            baseTable[newKey] = newSet;
+            buffer[newKey] = newSet;
         end
+    end
+    for key,val in pairs(buffer) do
+        baseTable[key] = val;
     end
 end
 
