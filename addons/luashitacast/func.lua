@@ -386,6 +386,48 @@ local ForceEquipSet = function(set)
     gEquip.EquipSet(newTable, 'auto');
 end
 
+local InterimEquip = function(slot, item)
+    local equipSlot = gData.GetEquipSlot(slot);
+    if (equipSlot == 0) then
+        print(chat.header('LuAshitacast') .. chat.error("Invalid slot specified: ") .. chat.color1(2, slot));
+        return;
+    end
+
+    local table = gEquip.MakeItemTable(item);
+    if (table == nil) or (type(table.Name) ~= 'string') then
+        return;
+    end    
+    gEquip.EquipItemToBuffer(equipSlot, table, true);
+end
+
+local InterimEquipSet = function(set)
+    if (type(set) == 'string') then
+        if (gProfile == nil) then
+            print(chat.header('LuAshitacast') .. chat.error('You must have a profile loaded to use InterimEquipSet(string).'));
+            return;
+        end
+        
+        if (gProfile.Sets == nil) then
+            print(chat.header('LuAshitacast') .. chat.error('Your profile must have a sets table to use InterimEquipSet(string).'));
+            return;
+        end
+        
+        local setTable = StringToSet(set);
+        if (type(setTable) == 'table') then
+            for k, v in pairs(setTable) do
+                Equip(k, v);
+            end
+            return;
+        end
+        
+        print(chat.header('LuAshitacast') .. chat.error('Set not found: ' .. set));
+    elseif (type(set) == 'table') then
+        for k, v in pairs(set) do
+            InterimEquip(k, v);
+        end
+    end
+end
+
 local Message = function(text)
     print(chat.header('LuAshitacast') .. chat.message(text));
 end
@@ -486,6 +528,10 @@ local LockStyle = function(set)
     gEquip.LockStyle(reducedSet);
 end
 
+local SetMidDelay = function(delay)
+    gState.DelayedEquip.Timer = os.clock() + delay;
+end
+
 local exports = {
     AddSet = AddSet,
     ApplyBaseSets = ApplyBaseSets,
@@ -503,10 +549,13 @@ local exports = {
     EvaluateLevels = EvaluateLevels,
     ForceEquip = ForceEquip,
     ForceEquipSet = ForceEquipSet,
+    InterimEquip = InterimEquip,
+    InterimEquipSet = InterimEquipSet,
     Message = Message,
     LoadFile = LoadFile,
     LockSet = LockSet,
-    LockStyle = LockStyle
+    LockStyle = LockStyle,
+    SetMidDelay = SetMidDelay,
 };
 
 return exports;

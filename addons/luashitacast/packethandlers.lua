@@ -19,11 +19,25 @@ packethandlers.HandleIncoming0x0A = function(e)
         gState.PlayerJob = job;
         gState.AutoLoadProfile();
     end
+    gState.ZoneTimer = os.clock() + 10;
 end
 
 packethandlers.HandleIncoming0x1B = function(e)
+    local job = struct.unpack('B', e.data, 0x08 + 1);
     for i = 1,16,1 do
         gState.Encumbrance[i] = (ashita.bits.unpack_be(e.data_raw, 0x60, i - 1, 1) == 1);
+    end
+    if (job ~= gState.PlayerJob) then
+        gState.PlayerJob = job;
+        gState.AutoLoadProfile();
+    end
+end
+
+packethandlers.HandleIncoming0x61 = function(e)
+    local job = struct.unpack('B', e.data, 0x0C + 1);
+    if (job ~= gState.PlayerJob) then
+        gState.PlayerJob = job;
+        gState.AutoLoadProfile();
     end
 end
 
@@ -36,6 +50,7 @@ packethandlers.HandleIncoming0x28 = function(e)
             if (gSettings.Debug) and (gState.PlayerAction ~= nil) then
                 print(chat.header('LuAshitacast') .. chat.message('Action ending due to action packet of type ' .. tostring(actionType) .. '.'));
             end
+            gState.DelayedEquip = {};
             gState.PlayerAction = nil;
         elseif (actionType == 8) or (actionType == 12) then
             --Ranged or magic interrupt resets delay so idlegear resumes.
@@ -43,6 +58,7 @@ packethandlers.HandleIncoming0x28 = function(e)
                 if (gSettings.Debug) and (gState.PlayerAction ~= nil) then
                     print(chat.header('LuAshitacast') .. chat.message('Action ending due to action packet of type ' .. tostring(actionType) .. ' with parameters indicating interruption.'));
                 end
+                gState.DelayedEquip = {};
                 gState.PlayerAction = nil;
             end
         end
@@ -126,6 +142,7 @@ packethandlers.HandleActionPacket = function(packet)
     local actionId = struct.unpack('H', packet, 0x0C + 0x01);
     local targetIndex = struct.unpack('H', packet, 0x08 + 0x01);
     if (category == 0x03) then
+        gState.DelayedEquip = {};
         gState.PlayerAction = { Block = false };
         gState.PlayerAction.Packet = packet:totable();
         gState.PlayerAction.Target = targetIndex;
@@ -136,6 +153,7 @@ packethandlers.HandleActionPacket = function(packet)
         gState.PlayerAction.Completion = os.clock() + baseCast + gSettings.SpellOffset;
         gState.HandleEquipEvent('HandlePrecast', 'set');
     elseif (category == 0x07) then
+        gState.DelayedEquip = {};
         gState.PlayerAction = { Block = false };
         gState.PlayerAction.Packet = packet:totable();
         gState.PlayerAction.Target = targetIndex;
@@ -144,6 +162,7 @@ packethandlers.HandleActionPacket = function(packet)
         gState.PlayerAction.Completion = os.clock() + gSettings.WeaponskillDelay;
         gState.HandleEquipEvent('HandleWeaponskill', 'auto');
     elseif (category == 0x09) then
+        gState.DelayedEquip = {};
         gState.PlayerAction = { Block = false };
         gState.PlayerAction.Packet = packet:totable();
         gState.PlayerAction.Target = targetIndex;
@@ -152,6 +171,7 @@ packethandlers.HandleActionPacket = function(packet)
         gState.PlayerAction.Completion = os.clock() + gSettings.AbilityDelay;
         gState.HandleEquipEvent('HandleAbility', 'auto');
     elseif (category == 0x10) then
+        gState.DelayedEquip = {};
         gState.PlayerAction = { Block = false };
         gState.PlayerAction.Packet = packet:totable();
         gState.PlayerAction.Target = targetIndex;
@@ -189,6 +209,7 @@ packethandlers.HandleItemPacket = function(packet)
     local targetIndex = struct.unpack('H', packet, 0x0C + 0x01);
     local item = AshitaCore:GetMemoryManager():GetInventory():GetContainerItem(itemContainer, itemIndex);
     
+    gState.DelayedEquip = {};
     gState.PlayerAction = { Block = false };
     gState.PlayerAction.Packet = packet:totable();
     gState.PlayerAction.Target = targetIndex;
@@ -240,8 +261,6 @@ packethandlers.HandleOutgoingChunk = function(e)
             newPositionY = struct.unpack('f', e.chunk_data, offset + 0x0C + 1);
         elseif (id == 0x37) then
             gPacketHandlers.HandleItemPacket(struct.unpack('c' .. size, e.chunk_data, offset + 1));
-        elseif (id == 0x100) then
-            gPacketHandlers.HandleOutgoing0x100(struct.unpack('c' .. size, e.chunk_data, offset + 1));
         end
         offset = offset + size;
     end
@@ -249,18 +268,19 @@ packethandlers.HandleOutgoingChunk = function(e)
 
     if (gState.PlayerAction == nil) then
         gState.HandleEquipEvent('HandleDefault', 'auto');
+    elseif (gState.DelayedEquip.Timer ~= nil) then
+        local timer = os.clock() + (AshitaCore:GetPluginManager():Get('PacketFlow') and 0.25 or 0.4);
+        if (timer > gState.DelayedEquip.Timer) then
+            local backup = gState.CurrentCall;
+            gState.CurrentCall = gState.DelayedEquip.Tag;
+            gFunc.ForceEquipSet(gState.DelayedEquip.Set);
+            gState.DelayedEquip = {};
+            gState.CurrentCall = backup;
+        end
     end
 
     gState.PositionX = newPositionX;
     gState.PositionY = newPositionY;
-end
-
-packethandlers.HandleOutgoing0x100 = function(packet)
-    local newJob = struct.unpack('B', packet, 0x04 + 1);
-    if (newJob ~= 0) then
-        gState.PlayerJob = newJob;
-        gState.AutoLoadProfile();
-    end
 end
 
 packethandlers.HandleIncomingPacket = function(e)
@@ -268,6 +288,8 @@ packethandlers.HandleIncomingPacket = function(e)
         gPacketHandlers.HandleIncoming0x0A(e);
     elseif (e.id == 0x1B) then
         gPacketHandlers.HandleIncoming0x1B(e);
+    elseif (e.id == 0x61) then
+        gPacketHandlers.HandleIncoming0x61(e);
     elseif (e.id == 0x028) then
         gPacketHandlers.HandleIncoming0x28(e);
     end
@@ -285,9 +307,6 @@ packethandlers.HandleOutgoingPacket = function(e)
                 e.blocked = true;
             end
         end
-        if (e.id == 0x100) then
-            gPacketHandlers.HandleOutgoing0x100(struct.unpack('c' .. e.size, e.data, 1));
-        end
         return;
     end
 
@@ -301,6 +320,23 @@ packethandlers.HandleOutgoingPacket = function(e)
     if (e.id == 0x1A) or (e.id == 0x37) then
         e.blocked = true;
         return;
+    end
+
+    --Manual lockstyle packet
+    if (e.id == 0x53) and (e.injected == false) then
+        local type = struct.unpack('B', e.data, 0x05 + 1);
+
+        if (type == 0) then
+            if (gState.ZoneTimer ~= nil) and (os.clock() < gState.ZoneTimer) and (gState.LockStyle ~= nil) then
+                ashita.bits.pack_be(e.data_modified_raw, 1, 5, 0, 8);
+            else
+                gState.LockStyle = nil;
+            end
+        
+        --Clear lockstyle state if player manually did a lockstyle.
+        elseif (type == 3) then
+            gState.LockStyle = nil;
+        end
     end
 end
 

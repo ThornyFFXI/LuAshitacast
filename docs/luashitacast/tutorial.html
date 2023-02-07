@@ -80,6 +80,7 @@
         <a href="#s1">Snippet - Cleanly use elemental staves.</a><br>
         <a href="#s2">Snippet - Use a helper library to manage and display variables.</a><br>
         <a href="#s3">Snippet - Automatically evaluate level sync gear.</a><br>
+        <a href="#s4">Snippet - Use multiple midcast sets, swapping to final gear just before cast completes.</a><br>
 
         <h1 id="l1">Lesson 1 - Install an editor.</h1>
         Lua is a full featured language, and syntax highlighting will make your experience much easier.
@@ -974,6 +975,28 @@ profile.HandleDefault = function()
     your configuration file:
 <pre><code>
     gFunc.EquipSet(sets.TP);</code></pre>
-
+    
+    <h1 id="s4">Snippet - Use multiple midcast sets, swapping to final gear just before cast completes.</h1>
+    This was added by request from private server users.  Because communications are subject to latency, there is always a possibility that when using this function you will not have your final gear on in time.
+    First, you must calculate how long your midcast will be, this is an example:
+<pre><code>local spell = gData.GetAction();
+local fastCastValue = 0.30;
+local minimumBuffer = 0.1;
+local packetDelay = 0.4;
+local castDelay = ((spell.CastTime * (1 - fastCastValue)) / 1000) - minimumBuffer;
+if (castDelay >= packetDelay) then
+    gFunc.SetMidDelay(castDelay);
+end</code></pre>
+    This can be done in precast or midcast, though it is often better to put it in precast so that you can adjust your fast cast value based on your precast set.  Let's break down the values:<br>
+    -fastCastValue represents your expected *total* level of casttime reduction for the spell.  This should include traits, gear, etc.<br>
+    -minimumBuffer represents how much extra time you should build in for variance in latency, measured in seconds.  This does not include packet interval fluctuation.<br>
+    -packetDelay represents how long your client waits between sending packets, in seconds.  This is 0.4 unless you use PacketFlow plugin, in which case it is 0.25.<br>
+    Once these values are filled in, the calculation will figure out how long you should wait before putting your final gear on.  AC will internally offset it by a packet interval to ensure it gets on by that time.
+    This is all you need to do to delay the midcast gear, but as is you would be sitting in your precast set the whole time.  If you want to further improve it, you can add the following to midcast[cannot be in precast].
+<pre><code>gFunc.InterimEquipSet(sets.PDT);</code></pre>
+    This function exists only for this purpose, it will equip a set after precast so that you're wearing it until your midcast gear activates.  It works exactly like <font class="code">gFunc.EquipSet</font>.  
+    A PDT or defensive set here will help you get the most out of your swaps.  If you want to further optimize your interim set, you can also use the function <font class="code">gFunc.InterimEquip</font> in
+    the same way as you would use <font class="code">gFunc.Equip</font>.   The same functions can be used the same way in preshot/midshot for ranged, though the calculation will require you figure out your ranged delay.
+    None of these functions will do anything when called outside of the appropriate sections.
     </body>
 </html>

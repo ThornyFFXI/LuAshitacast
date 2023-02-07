@@ -95,6 +95,7 @@
         <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
         <font color="#FFFFFF">Effects: Equips an item set to the internal buffer.  This does not send a packet and can be safely called multiple times.  When your current stage finishes, the equipment will all be put on.</font><br>
         <br><br>
+
         <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.Error(text)</font><br>
         <font color="#FFFFFF">Arguments:</font><br>
         <font color="#208020">text</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the text you would like to print</font><br>
@@ -128,6 +129,24 @@
         <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
         <font color="#FFFFFF">Effects: Sends equip packets to directly to equip a set.  This should not be used unless you specifically understand why you're using it.</font><br>
         <br><br>
+        
+        <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.InterimEquip(slot, item)</font><br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#208020">slot</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the 1-based index of the slot you want to equip to(1-16)</font><br>
+        <font color="#208020">slot</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): the name of the slot you want to equip to</font><br>
+        <font color="#208020">item</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): the name of a piece of equipment you want to put on</font><br>
+        <font color="#208020">item</font><font color="#FFFFFF"> (</font><font color="#FF7908">table</font><font color="#FFFFFF">): a single item table representing the piece of equipment you want to put on.  Valid members are Name, Augment, AugRank, AugTrial, AugPath, Bag</font><br>
+        <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
+        <font color="#FFFFFF">Effects: Equips an item to a secondary internal buffer.  If used in midcast or midranged in combination with gFunc.SetMidDelay, this equipment will be worn after precast/preranged until the final equipment is put on.  This will not do anything elsewhere.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.InterimEquipSet(set)</font><br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#208020">set</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): the name of a set table, which must be located directly inside the profile.Sets table</font><br>
+        <font color="#208020">set</font><font color="#FFFFFF"> (</font><font color="#FF7908">table</font><font color="#FFFFFF">): a set table</font><br>
+        <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
+        <font color="#FFFFFF">Effects: Equips an item set to a secondary internal buffer.  If used in midcast or midranged in combination with gFunc.SetMidDelay, this equipment will be worn after precast/preranged until the final equipment is put on.  This will not do anything elsewhere.</font><br>
+        <br><br>
 
         <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.Message(text)</font><br>
         <font color="#FFFFFF">Arguments:</font><br>
@@ -158,6 +177,13 @@
         <font color="#208020">set</font><font color="#FFFFFF"> (</font><font color="#FF7908">table</font><font color="#FFFFFF">): a set table</font><br>
         <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
         <font color="#FFFFFF">Effects: Uses the main, sub, range, ammo, head, body, hands, legs, and feet components of the input set to send a lockstyle packet to server.  This happens immediately, unlike the equip functions.  Fields besides name are not considered.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.SetMidDelay(delaye)</font><br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#208020">delay</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): how long, in seconds, to delay midcast/midshot</font><br>
+        <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
+        <font color="#FFFFFF">Effects: When used in precast, midcast, preshot, or midshot callbacks, delays the midcast/midshot gear from going on for this period of time.  If action completes before delay finishes, equipment won't go on at all.  This can be called in the pre-events to allow easier synergy with fast cast and snapshot calculations.</font><br>
         <br><br>
     </body>
 </html>

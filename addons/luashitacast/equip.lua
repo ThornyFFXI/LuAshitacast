@@ -1,4 +1,5 @@
 local Buffer = {};
+local ImmediateBuffer = {};
 local EquippedItems = {};
 local Internal = {};
 local CurrentJob = 0;
@@ -258,12 +259,15 @@ end
 --Clears the internal buffer for current executing state
 local ClearBuffer = function()
     Buffer =  {};
+    ImmediateBuffer = {};
 end
 
 --Equips an item to the internal buffer for current executing state
-local EquipItemToBuffer = function(slot, itemTable)
-    if (Buffer[slot] ~= nil) then
-        if (Buffer[slot].Locked == true) then
+local EquipItemToBuffer = function(slot, itemTable, immediate)
+    local targetBuffer = immediate and ImmediateBuffer or Buffer;
+
+    if (targetBuffer[slot] ~= nil) then
+        if (targetBuffer[slot].Locked == true) then
             if (itemTable.Locked ~= true) then
                 return;
             end
@@ -271,11 +275,11 @@ local EquipItemToBuffer = function(slot, itemTable)
     end
     
     if (itemTable.Name == 'ignore') then
-        Buffer[slot] = nil;
+        targetBuffer[slot] = nil;
         return;
     end
 
-    Buffer[slot] = itemTable;
+    targetBuffer[slot] = itemTable;
 end
 
 --Flags equipped items.  Returns true if all items are equipped.
@@ -564,6 +568,38 @@ local EquipSet = function(set, style)
     end
 end
 
+--Called from state to equip the immediate set and store the buffered set in delayed struct.
+local ProcessImmediateBuffer = function(style)
+    --Copy buffer into delayed storage
+    gState.DelayedEquip.Set = {};
+    for k,v in pairs(Buffer) do
+        gState.DelayedEquip.Set[k] = v;
+    end
+
+    if (gState.ForceSet ~= nil) then
+        if (os.clock() > gState.ForceSetTimer) then
+            gState.ForceSet = nil;
+        else
+            local newTable = {};
+            for k,v in pairs(gState.ForceSet) do
+                local equipSlot = gData.GetEquipSlot(k);
+                if (equipSlot == 0) then
+                    print(chat.header('LuAshitacast') .. chat.error("Invalid slot specified: ") .. chat.color1(2, k));
+                end
+            
+                local table = MakeItemTable(v);
+                if (table ~= nil) and (type(table.Name) == 'string') then
+                    newTable[equipSlot] = table;
+                end
+            end
+            EquipSet(newTable, style);
+            return;
+        end
+    end
+
+    EquipSet(ImmediateBuffer, style);
+end
+
 --Called from state to equip the set player has decided on
 --style can be 'single' (equip with single equip packets)  'set' (equip with equipset packet) or 'auto' (whichever is smaller)
 local ProcessBuffer = function(style)
@@ -583,7 +619,7 @@ local ProcessBuffer = function(style)
                     newTable[equipSlot] = table;
                 end
             end
-            EquipSet(newTable, 'auto');
+            EquipSet(newTable, style);
             return;
         end
     end
@@ -596,8 +632,8 @@ local LockStyle = function(set)
     for i = 1,136,1 do
         packet[i] = 0x00;
     end
-    packet[5 + 1] = 3;
-    packet[6 + 1] = 1;
+    packet[0x05 + 1] = 3;
+    packet[0x06 + 1] = 1;
 
     local count = 0;
     for i = 1,9 do
@@ -644,6 +680,7 @@ local LockStyle = function(set)
     end
 
     if (count > 0) then
+        gState.LockStyle = true;
         AshitaCore:GetPacketManager():AddOutgoingPacket(0x53, packet);
     end
 end
@@ -656,6 +693,7 @@ local exports = {
     LockStyle = LockStyle,
     MakeItemTable = MakeItemTable,
     ProcessBuffer = ProcessBuffer,
+    ProcessImmediateBuffer = ProcessImmediateBuffer,
     UnequipSlot = UnequipSlot,
 };
 

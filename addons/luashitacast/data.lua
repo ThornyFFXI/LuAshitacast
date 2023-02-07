@@ -86,7 +86,7 @@ data.GetEquipSlot = function(slot)
     if (type(slot) == 'string') then
         for tableKey,tableEntry in pairs(gData.Constants.EquipSlots) do
             if string.lower(tableKey) == string.lower(slot) then
-                equipSlot = tableEntry;                
+                equipSlot = tableEntry;
             end
         end
     elseif (type(slot) == 'number') then

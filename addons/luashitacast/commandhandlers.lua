@@ -122,12 +122,38 @@ commands.HandleCommand = function(e)
         return;
     end
 
+    if (args[2] == 'list') then
+        if (#args > 2) then
+            if (args[3] == 'gui') then
+                gSetDisplay:Initialize();
+            else
+                gSetDisplay:ListSet(args[3]);
+            end
+        else
+            gSetDisplay:ListSets();
+        end
+        return;
+    end
 
     if (args[2] == 'load') then
         if (#args > 2) then
             gState.LoadProfileEx(args[3]);
         else
             gState.AutoLoadProfile();
+        end
+        return;
+    end
+    
+    if (args[2] == 'lockstyle') then
+        if (#args > 2) then
+            local compString = string.lower(args[3]);
+            if (type(gProfile) == 'table') and (type(gProfile.Sets) == 'table') then
+                for setName,set in pairs(gProfile.Sets) do
+                    if (string.lower(setName) == compString) then
+                        gFunc.LockStyle(set);
+                    end
+                end
+            end
         end
         return;
     end

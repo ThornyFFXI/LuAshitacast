@@ -1,6 +1,7 @@
 local state = {
     ActionDelay = 0,
     CurrentCall = 'N/A',
+    DelayedEquip = {},
     ForceSet = nil,
     ForceSetTimer = 0,
     Injecting = false,
@@ -78,6 +79,7 @@ state.LoadProfile = function(profilePath)
             gProfile.FilePath = profilePath;
             gProfile.FileName = shortFileName;
             gState.SafeCall('OnLoad');
+            gSetDisplay:Reload();
         end
     end
 end
@@ -125,6 +127,7 @@ end
 
 state.UnloadProfile = function()
     if (gProfile ~= nil) then
+        gSetDisplay:Hide();
         gState.SafeCall('OnUnload');
         coroutine.sleep(0.5);
     end
@@ -141,7 +144,12 @@ state.HandleEquipEvent = function(eventName, equipStyle)
             if (eventName == 'HandleDefault') then
                 gEquip.ProcessBuffer(equipStyle);
             elseif (gState.PlayerAction ~= nil) and (gState.PlayerAction.Block ~= true) then
-                gEquip.ProcessBuffer(equipStyle);
+                if (gState.DelayedEquip.Timer ~= nil) and ((eventName == 'HandleMidcast') or (eventName == 'HandleMidshot')) then
+                    gState.DelayedEquip.Tag = eventName .. 'Delayed';
+                    gEquip.ProcessImmediateBuffer(equipStyle);
+                else
+                    gEquip.ProcessBuffer(equipStyle);
+                end
             end
             gState.CurrentCall = 'N/A';
         end
@@ -162,7 +170,23 @@ state.Reset = function()
         state.Disabled[i] = false;
         state.Encumbrance[i] = false;
     end
+    state.LockStyle = nil;
+    state.DelayedEquip = {};
     gState.ForceSet = nil;
+    
+    --Iterate global table to look for any leftover globals that didn't exist before profile was loaded.
+    local newGlobs = T{};
+    for key,_ in pairs(_G) do
+        if gPreservedGlobalKeys[key] == nil then
+            newGlobs:append(key);
+        end
+    end
+
+    --Get rid of all new values so new profile has a clean state.
+    for _,glob in ipairs(newGlobs) do
+        _G[glob] = nil;
+    end 
+
     gSettings = {};
     for k,v in pairs(gDefaultSettings) do
         if (type(v) == 'table') then
@@ -181,11 +205,11 @@ state.SafeCall = function(name,...)
         if (type(gProfile[name]) == 'function') then
             local success,err = pcall(gProfile[name],...);
             if (not success) then
-                print (chat.header('LuAshitacast') .. chat.error('Error in profile function: ') .. chat.color1(2, name));
-                print (chat.header('LuAshitacast') .. chat.error(err));
+                print(chat.header('LuAshitacast') .. chat.error('Error in profile function: ') .. chat.color1(2, name));
+                print(chat.header('LuAshitacast') .. chat.error(err));
             end
         elseif (gProfile[name] ~= nil) then
-            print (chat.header('LuAshitacast') .. chat.error('Profile member exists but is not a function: ') .. chat.color1(2, name));
+            print(chat.header('LuAshitacast') .. chat.error('Profile member exists but is not a function: ') .. chat.color1(2, name));
         end
     end
 end
