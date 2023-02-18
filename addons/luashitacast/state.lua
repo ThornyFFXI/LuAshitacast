@@ -181,11 +181,22 @@ state.Reset = function()
             newGlobs:append(key);
         end
     end
+    local newPackages = T{};
+    for packageName,_ in pairs(package.loaded) do
+        if (gPreservedPackages[packageName] == nil) then
+            newPackages:append(packageName);
+        end
+    end
 
-    --Get rid of all new values so new profile has a clean state.
+    --Get rid of all new globals..
     for _,glob in ipairs(newGlobs) do
         _G[glob] = nil;
-    end 
+    end
+
+    --Get rid of all new packages..
+    for _,packageName in ipairs(newPackages) do
+        package.loaded[packageName] = nil;
+    end
 
     gSettings = {};
     for k,v in pairs(gDefaultSettings) do
