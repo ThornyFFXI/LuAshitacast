@@ -433,21 +433,31 @@ local Message = function(text)
 end
 
 local LoadFile = function(path)
-    if not string.match(path, '.lua') then
-        path = path .. '.lua';
+    local paths = T{
+        path,
+        string.format('%s.lua', path),
+        string.format('%sconfig\\addons\\luashitacast\\%s_%u\\%s', AshitaCore:GetInstallPath(), gState.PlayerName, gState.PlayerId, path),
+        string.format('%sconfig\\addons\\luashitacast\\%s_%u\\%s.lua', AshitaCore:GetInstallPath(), gState.PlayerName, gState.PlayerId, path),
+        string.format('%sconfig\\addons\\luashitacast\\%s', AshitaCore:GetInstallPath(), path),
+        string.format('%sconfig\\addons\\luashitacast\\%s.lua', AshitaCore:GetInstallPath(), path),
+    };
+    for token in string.gmatch(package.path, "[^;]+") do
+        paths:append(string.gsub(token, '?', path));
     end
-    local filePath = path;
-    if (not ashita.fs.exists(filePath)) then
-        filePath = ('%sconfig\\addons\\luashitacast\\%s_%u\\%s'):fmt(AshitaCore:GetInstallPath(), gState.PlayerName, gState.PlayerId, path);
-        if (not ashita.fs.exists(filePath)) then
-            filePath = ('%sconfig\\addons\\luashitacast\\%s'):fmt(AshitaCore:GetInstallPath(), path);
-            if (not ashita.fs.exists(filePath)) then
-                print(chat.header('LuAshitacast') .. chat.error('File not found matching: ') .. chat.color1(2, path));
-                return nil;
-            end
+
+    local filePath;
+    for _,path in ipairs(paths) do
+        if (ashita.fs.exists(path)) then
+            filePath = path;
+            break;
         end
     end
-	
+
+    if (filePath == nil) then
+        print(chat.header('LuAshitacast') .. chat.error('File not found matching: ') .. chat.color1(2, path));
+        return nil;
+    end
+
     local func, loadError = loadfile(filePath);
     if (not func) then
         print (chat.header('LuAshitacast') .. chat.error('Failed to load file: ') .. chat.color1(2,filePath));
