@@ -13,10 +13,12 @@ packethandlers.HandleIncoming0x0A = function(e)
         name = string.sub(name, 1, i - 1);
     end
     local job = struct.unpack('B', e.data, 0xB4 + 1);
-    if (gState.PlayerJob ~= job) or (gState.PlayerId ~= id) or (gState.PlayerName ~= name) then
+    local subJob = struct.unpack('B', e.data, 0xB7 + 1);
+    if (gState.PlayerJob ~= job) or (gState.PlayerSubJob ~= subJob) or (gState.PlayerId ~= id) or (gState.PlayerName ~= name) then
         gState.PlayerId = id;
         gState.PlayerName = name;
         gState.PlayerJob = job;
+        gState.PlayerSubJob = subJob;
         gState.AutoLoadProfile();
     end
     gState.ZoneTimer = os.clock() + 10;
@@ -24,19 +26,23 @@ end
 
 packethandlers.HandleIncoming0x1B = function(e)
     local job = struct.unpack('B', e.data, 0x08 + 1);
+    local subJob = struct.unpack('B', e.data, 0x0B + 1);
     for i = 1,16,1 do
         gState.Encumbrance[i] = (ashita.bits.unpack_be(e.data_raw, 0x60, i - 1, 1) == 1);
     end
-    if (job ~= gState.PlayerJob) then
+    if (job ~= gState.PlayerJob) or (subJob ~= gState.PlayerSubJob) then
         gState.PlayerJob = job;
+        gState.PlayerSubJob = subJob;
         gState.AutoLoadProfile();
     end
 end
 
 packethandlers.HandleIncoming0x61 = function(e)
     local job = struct.unpack('B', e.data, 0x0C + 1);
-    if (job ~= gState.PlayerJob) then
+    local subJob = struct.unpack('B', e.data, 0x0E + 1);
+    if (job ~= gState.PlayerJob) or (subJob ~= gState.PlayerSubJob) then
         gState.PlayerJob = job;
+        gState.PlayerSubJob = subJob;
         gState.AutoLoadProfile();
     end
 end

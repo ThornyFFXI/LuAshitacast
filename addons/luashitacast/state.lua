@@ -9,6 +9,7 @@ local state = {
     PlayerAction = nil,
     PlayerId = 0,
     PlayerJob = 0,
+    PlayerSubJob = 0,
     PlayerName = '',
     pWardrobe = 0,
     pZoneFlags = 0,
@@ -59,6 +60,7 @@ state.Init = function()
         gState.PlayerId = AshitaCore:GetMemoryManager():GetParty():GetMemberServerId(0);
         gState.PlayerName = AshitaCore:GetMemoryManager():GetParty():GetMemberName(0);
         gState.PlayerJob = AshitaCore:GetMemoryManager():GetPlayer():GetMainJob();
+        gState.PlayerSubJob = AshitaCore:GetMemoryManager():GetPlayer():GetSubJob();
         gState.AutoLoadProfile();
     end    
 end
