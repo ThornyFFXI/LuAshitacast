@@ -568,7 +568,7 @@ data.GetPetAction = function()
         end
     elseif (action.Type == 'MobSkill') then
         actionTable.Id = action.Id;
-        actionTable.Name = action.Name;
+        actionTable.Name = action.Name:trimend('\x00');
     end
 
     return actionTable;

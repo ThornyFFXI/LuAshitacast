@@ -1,6 +1,6 @@
 addon.name      = 'LuAshitacast';
 addon.author    = 'Thorny';
-addon.version   = '1.52';
+addon.version   = '1.53';
 addon.desc      = 'A lua-based equipment swapping system for Ashita';
 addon.link      = 'https://github.com/ThornyFFXI/LuAshitacast';
 
@@ -18,16 +18,12 @@ gCommandHandlers     = require('commandhandlers');
 gPacketHandlers      = require('packethandlers');
 gSetDisplay          = require('setdisplay');
 gPreservedGlobalKeys = T{};
-gPreservedPackages   = T{};
 
 ashita.events.register('load', 'load_cb', function ()
     --Create a list of all globals the ashita environment has created.
     --This will be used to clear all leftover globals when loading a new profile.
     for key,_ in pairs(_G) do
         gPreservedGlobalKeys[key] = true;
-    end
-    for packageName,_ in pairs(package.loaded) do
-        gPreservedPackages[packageName] = true;
     end
     gState.Init();
 end);
