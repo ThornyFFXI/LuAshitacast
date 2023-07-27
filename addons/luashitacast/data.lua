@@ -427,7 +427,7 @@ data.GetBuffCount = function(matchBuff)
     if (type(matchBuff) == 'string') then
         local matchText = string.lower(matchBuff);
         for _, buff in pairs(buffs) do
-            local buffString = AshitaCore:GetResourceManager():GetString("buffs.names", buff);
+            local buffString = AshitaCore:GetResourceManager():GetString("buffs.names", buff):trimend('\x00');
 			if (buffString ~= nil) and (string.lower(buffString) == matchText) then
                 count = count + 1;
             end
@@ -456,7 +456,7 @@ end
 
 data.GetEnvironment = function()
     local environmentTable = {};
-    environmentTable.Area = AshitaCore:GetResourceManager():GetString("zones.names", AshitaCore:GetMemoryManager():GetParty():GetMemberZone(0));
+    environmentTable.Area = AshitaCore:GetResourceManager():GetString("zones.names", AshitaCore:GetMemoryManager():GetParty():GetMemberZone(0)):trimend('\x00');
     local timestamp = gData.GetTimestamp();
     environmentTable.Day = gData.Constants.WeekDay[(timestamp.day % 8) + 1];
     environmentTable.DayElement = gData.Constants.WeekDayElement[(timestamp.day % 8) + 1];
@@ -586,7 +586,7 @@ data.GetPlayer = function()
     playerTable.HPP = pParty:GetMemberHPPercent(0);
     playerTable.IsMoving =  ((pEntity:GetLocalPositionX(myIndex) ~= gState.PositionX) or (pEntity:GetLocalPositionY(myIndex) ~= gState.PositionY));
     local mainJob = pPlayer:GetMainJob();
-    playerTable.MainJob = AshitaCore:GetResourceManager():GetString("jobs.names_abbr", mainJob);
+    playerTable.MainJob = AshitaCore:GetResourceManager():GetString("jobs.names_abbr", mainJob):trimend('\x00');
     playerTable.MainJobLevel = pPlayer:GetJobLevel(mainJob);
     playerTable.MainJobSync = pPlayer:GetMainJobLevel();
     playerTable.MP = pParty:GetMemberMP(0);
@@ -595,7 +595,7 @@ data.GetPlayer = function()
     playerTable.Name = pParty:GetMemberName(0);
     playerTable.Status = gData.ResolveString(gData.Constants.EntityStatus, pEntity:GetStatus(myIndex));
     local subJob = pPlayer:GetSubJob();
-    playerTable.SubJob = AshitaCore:GetResourceManager():GetString("jobs.names_abbr", subJob);
+    playerTable.SubJob = AshitaCore:GetResourceManager():GetString("jobs.names_abbr", subJob):trimend('\x00');
     playerTable.SubJobLevel = pPlayer:GetJobLevel(subJob);
     playerTable.SubJobSync = pPlayer:GetSubJobLevel();
     playerTable.TP = pParty:GetMemberTP(0);
