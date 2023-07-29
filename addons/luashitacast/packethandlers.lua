@@ -122,7 +122,7 @@ packethandlers.HandleIncoming0x28 = function(e)
                 local actionMessage = ashita.bits.unpack_be(e.data_raw, 28, 6, 10);
                 if (actionMessage == 43) then
                     gState.PetAction.Type = 'MobSkill';
-                    gState.PetAction.Name = AshitaCore:GetResourceManager():GetString("monsters.abilities", actionId - 256):trimend('\x00');
+                    gState.PetAction.Name = AshitaCore:GetResourceManager():GetString("monsters.abilities", actionId - 256);
                 else
                     gState.PetAction.Type = 'Ability';
                     gState.PetAction.Resource = AshitaCore:GetResourceManager():GetAbilityById(actionId + 512);
@@ -230,6 +230,46 @@ packethandlers.HandleItemPacket = function(packet)
     gState.Inject(0x37, gState.PlayerAction.Packet);
 end
 
+packethandlers.HandleItemTradePacket = function(packet)
+
+	local itemCount = struct.unpack('B', packet, 0x3C + 0x01);
+	
+	if(itemCount == 1) then 
+		local targetIndex = struct.unpack('H', packet, 0x3A + 0x01);
+		local npcId = struct.unpack('H', packet, 0x04 + 0x01);
+		local itemIndex = struct.unpack('B', packet, 0x30 + 0x01);
+		local itemContainer = 0;
+		local item = AshitaCore:GetMemoryManager():GetInventory():GetContainerItem(itemContainer, itemIndex);
+
+		if (item == nil) or (item.Id == 0) or (item.Count == 0) then
+			gState.PlayerAction.Completion = os.clock() + gSettings.ItemBase + gSettings.ItemOffset;
+		else
+			gState.DelayedEquip = {};
+			gState.PlayerAction = { Block = false };
+			gState.PlayerAction.Packet = packet:totable();
+			gState.PlayerAction.Target = targetIndex;
+			gState.PlayerAction.Type = 'TradeItem';
+
+			gState.PlayerAction.Resource = AshitaCore:GetResourceManager():GetItemById(item.Id);
+			gState.PlayerAction.Completion = os.clock() + (gState.PlayerAction.Resource.CastTime * 0.25) + gSettings.ItemOffset;
+			
+			local itemname = gState.PlayerAction.Resource.Name[1];
+			if (itemname == 'Hatchet') or (itemname == 'Pickaxe') or (itemname == 'Sickle') then
+			
+				gState.HandleEquipEvent('HandleHelm', 'auto');
+			end
+		end 
+		
+		if (gState.PlayerAction.Block == true) then
+			gState.PlayerAction = nil;
+			return;
+		end
+		
+		gState.Inject(0x36, gState.PlayerAction.Packet);
+	end 
+end
+
+
 packethandlers.HandleOutgoingChunk = function(e)
     --Clear expired actions.
     local time = os.clock();
@@ -259,7 +299,9 @@ packethandlers.HandleOutgoingChunk = function(e)
         elseif (id == 0x15) then
             newPositionX = struct.unpack('f', e.chunk_data, offset + 0x04 + 1);
             newPositionY = struct.unpack('f', e.chunk_data, offset + 0x0C + 1);
-        elseif (id == 0x37) then
+        elseif (id == 0x36) then
+            gPacketHandlers.HandleItemTradePacket(struct.unpack('c' .. size, e.chunk_data, offset + 1));
+		elseif (id == 0x37) then
             gPacketHandlers.HandleItemPacket(struct.unpack('c' .. size, e.chunk_data, offset + 1));
         end
         offset = offset + size;
@@ -302,7 +344,10 @@ packethandlers.HandleOutgoingPacket = function(e)
             if (e.id == 0x1A) then
                 gPacketHandlers.HandleActionPacket(struct.unpack('c' .. e.size, e.data, 1));
                 e.blocked = true;
-            elseif (e.id == 0x37) then
+            elseif (e.id == 0x36) then
+                gPacketHandlers.HandleItemTradePacket(struct.unpack('c' .. e.size, e.data, 1));
+                e.blocked = true;
+			elseif (e.id == 0x37) then
                 gPacketHandlers.HandleItemPacket(struct.unpack('c' .. e.size, e.data, 1));
                 e.blocked = true;
             end
@@ -317,7 +362,7 @@ packethandlers.HandleOutgoingPacket = function(e)
 
     --Block all action and item packets that aren't injected.
     --HandleOutgoingChunk will automatically reinject them if keeping them.
-    if (e.id == 0x1A) or (e.id == 0x37) then
+    if (e.id == 0x1A) or (e.id == 0x36) or (e.id == 0x37) then
         e.blocked = true;
         return;
     end
