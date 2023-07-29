@@ -39,6 +39,7 @@ local CreateProfile = function(path)
     file:write('profile.HandleDefault = function()\nend\n\n');
     file:write('profile.HandleAbility = function()\nend\n\n');
     file:write('profile.HandleItem = function()\nend\n\n');
+    file:write('profile.HandleHelm = function()\nend\n\n');
     file:write('profile.HandlePrecast = function()\nend\n\n');
     file:write('profile.HandleMidcast = function()\nend\n\n');
     file:write('profile.HandlePreshot = function()\nend\n\n');

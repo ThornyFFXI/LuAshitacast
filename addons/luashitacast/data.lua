@@ -409,6 +409,11 @@ data.GetAction = function()
         actionTable.Id = action.Resource.Id;
         actionTable.Name = action.Resource.Name[1];
         actionTable.Recast = action.Resource.RecastDelay * 250;
+    elseif (action.Type == 'TradeItem') then
+        actionTable.CastTime = action.Resource.CastTime * 250;
+        actionTable.Id = action.Resource.Id;
+        actionTable.Name = action.Resource.Name[1];
+        actionTable.Recast = action.Resource.RecastDelay * 250;
     end
 
     return actionTable;
