@@ -87,7 +87,10 @@ end
 state.AutoLoadProfile = function()
     gState.UnloadProfile();
     
-    local jobString = AshitaCore:GetResourceManager():GetString("jobs.names_abbr", gState.PlayerJob):trimend('\x00');
+    local jobString = AshitaCore:GetResourceManager():GetString("jobs.names_abbr", gState.PlayerJob);
+    if type(jobString) == 'string'then
+        jobString = jobString:trimend('\x00');
+    end
     local profilePath = ('%sconfig\\addons\\luashitacast\\%s_%u\\%s.lua'):fmt(AshitaCore:GetInstallPath(), gState.PlayerName, gState.PlayerId, jobString);
     if (not ashita.fs.exists(profilePath)) then
         profilePath = ('%sconfig\\addons\\luashitacast\\%s_%s.lua'):fmt(AshitaCore:GetInstallPath(), gState.PlayerName, jobString);

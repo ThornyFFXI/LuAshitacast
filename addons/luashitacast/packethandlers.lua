@@ -122,7 +122,10 @@ packethandlers.HandleIncoming0x28 = function(e)
                 local actionMessage = ashita.bits.unpack_be(e.data_raw, 28, 6, 10);
                 if (actionMessage == 43) then
                     gState.PetAction.Type = 'MobSkill';
-                    gState.PetAction.Name = AshitaCore:GetResourceManager():GetString("monsters.abilities", actionId - 256):trimend('\x00');
+                    gState.PetAction.Name = AshitaCore:GetResourceManager():GetString("monsters.abilities", actionId - 256);
+                    if type(gState.PetAction.Name) == 'string'then
+                        gState.PetAction.Name = gState.PetAction.Name:trimend('\x00');
+                    end
                 else
                     gState.PetAction.Type = 'Ability';
                     gState.PetAction.Resource = AshitaCore:GetResourceManager():GetAbilityById(actionId + 512);

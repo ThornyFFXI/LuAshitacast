@@ -169,7 +169,11 @@ commands.HandleCommand = function(e)
     if (args[2] == 'newlua') then
         local path = ('%sconfig\\addons\\luashitacast\\%s_%u\\'):fmt(AshitaCore:GetInstallPath(), gState.PlayerName, gState.PlayerId);
         if (#args == 2) then
-            path = path .. AshitaCore:GetResourceManager():GetString("jobs.names_abbr", gState.PlayerJob):trimend('\x00') .. '.lua';
+            local job = AshitaCore:GetResourceManager():GetString("jobs.names_abbr", gState.PlayerJob);
+            if (type(job) == 'string') then
+                job = job:trimend('\x00');
+            end
+            path = path .. job .. '.lua';
         else
             if (string.match(args[3], '.') == true) then
                 path = path .. args[3];
