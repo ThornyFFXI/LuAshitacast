@@ -213,6 +213,7 @@ local CompareItem = function(item, itemEntry, container)
     local newItem = gEquip.MakeItemTable(itemEntry);
     if (container == nil) then
         newItem.Bag = nil;
+        container = 0;
     end
     return gEquip.CheckItemMatch(container, item, newItem);
 end
