@@ -686,6 +686,7 @@ local LockStyle = function(set)
 end
 
 local exports = {
+    CheckItemMatch = CheckItemMatch,
     ClearBuffer = ClearBuffer,
     EquipItemToBuffer = EquipItemToBuffer,
     EquipSet = EquipSet,

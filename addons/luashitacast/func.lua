@@ -186,14 +186,35 @@ end
 
 local Combine = function(base, override)
     local newSet = {};
-    for slotname,_ in pairs(gData.Constants.EquipSlots) do
-        if type(override[slotname]) ~= 'nil' then
-            newSet[slotname] = override[slotname];
-        else
-            newSet[slotname] = base[slotname];
+    local const = gData.Constants;
+
+    for key,val in pairs(base) do
+        if type(key) == 'string' then
+            local index = const.EquipSlotsLC[string.lower(key)];
+            if index then
+                newSet[const.EquipSlotNames[index]] = val;
+            end
         end
     end
+    
+    for key,val in pairs(override) do
+        if type(key) == 'string' then
+            local index = const.EquipSlotsLC[string.lower(key)];
+            if index then
+                newSet[const.EquipSlotNames[index]] = val;
+            end
+        end
+    end
+    
     return newSet;
+end
+
+local CompareItem = function(item, itemEntry, container)
+    local newItem = gEquip.MakeItemTable(itemEntry);
+    if (container == nil) then
+        newItem.Bag = nil;
+    end
+    return gEquip.CheckItemMatch(container, item, newItem);
 end
 
 local Disable = function(slot)
@@ -415,7 +436,7 @@ local InterimEquipSet = function(set)
         local setTable = StringToSet(set);
         if (type(setTable) == 'table') then
             for k, v in pairs(setTable) do
-                Equip(k, v);
+                InterimEquip(k, v);
             end
             return;
         end
@@ -550,6 +571,7 @@ local exports = {
     ChangeActionTarget = ChangeActionTarget,
     ClearEquipBuffer = ClearEquipBuffer,
     Combine = Combine,
+    CompareItem = CompareItem,
     Disable = Disable,
     Echo = Echo,
     Enable = Enable,

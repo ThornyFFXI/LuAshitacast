@@ -53,6 +53,16 @@
         <font color="#FFFFFF">Effects: Returns a new table containing the slots from override, and the slots from base where a slot in override was not present.</font><br>
         <br><br>
         
+        <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.CompareItem(item, itemEntry, container)</font><br>
+        <font color="#FFFFFF">Arguments:</font><br>
+        <font color="#208020">item</font><font color="#FFFFFF"> (</font><font color="#FF7908">userdata</font><font color="#FFFFFF">): An Ashita::FFXI::item_t userdata representing an item in container.</font><br>
+        <font color="#208020">itemEntry</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): the name of a piece of equipment you want to check.</font><br>
+        <font color="#208020">itemEntry</font><font color="#FFFFFF"> (</font><font color="#FF7908">table</font><font color="#FFFFFF">): a single item table representing the piece of equipment you want to check.  Valid members are Name, Augment, AugRank, AugTrial, AugPath, Bag</font><br>
+        <font color="#208020">container</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the container the userdata item is located in, for checking Bag attributes.  If nil, bag will not be checked.</font><br>
+        <font color="#FFFFFF">Return Type: </font><font color="#FF7903">boolean</font><br>
+        <font color="#FFFFFF">Effects: Returns true if the provided userdata item matches the provided itemEntry using LAC's internal checks.</font><br>
+        <br><br>
+        
         <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.Disable(slot)</font><br>
         <font color="#FFFFFF">Arguments:</font><br>
         <font color="#208020">slot</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the 1-based index of the slot(1-16)</font><br>
