@@ -14,6 +14,7 @@ local defaultSettings = {
     SpellOffset = 1.0,
     RangedBase = 10.0,
     RangedOffset = 0.5,
+    ItemBase = 8,
     ItemOffset = 1.0,
     FastCast = 0,
     Snapshot = 0
