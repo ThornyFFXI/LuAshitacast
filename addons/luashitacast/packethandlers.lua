@@ -17,6 +17,8 @@ packethandlers.HandleIncoming0x0A = function(e)
         gState.PlayerId = id;
         gState.PlayerName = name;
         gState.PlayerJob = job;
+        local configPath = string.format('%sconfig\\addons\\luashitacast\\%s_%u\\?.lua;', AshitaCore:GetInstallPath(), gState.PlayerName, gState.PlayerId);
+        package.path = configPath .. gState.BasePath;
         gState.AutoLoadProfile();
     end
     gState.ZoneTimer = os.clock() + 10;

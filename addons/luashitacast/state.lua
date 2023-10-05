@@ -55,12 +55,18 @@ state.Init = function()
         state.Encumbrance[i] = false;
     end
     
+    local configPath = string.format('%sconfig\\addons\\luashitacast\\?.lua;', AshitaCore:GetInstallPath());
+    package.path = configPath .. package.path;
+    gState.BasePath = package.path;
+    
     if (AshitaCore:GetMemoryManager():GetParty():GetMemberIsActive(0) == 1) then
         gState.PlayerId = AshitaCore:GetMemoryManager():GetParty():GetMemberServerId(0);
         gState.PlayerName = AshitaCore:GetMemoryManager():GetParty():GetMemberName(0);
         gState.PlayerJob = AshitaCore:GetMemoryManager():GetPlayer():GetMainJob();
+        configPath = string.format('%sconfig\\addons\\luashitacast\\%s_%u\\?.lua;', AshitaCore:GetInstallPath(), gState.PlayerName, gState.PlayerId);
+        package.path = configPath .. gState.BasePath;
         gState.AutoLoadProfile();
-    end    
+    end
 end
 
 state.LoadProfile = function(profilePath)
