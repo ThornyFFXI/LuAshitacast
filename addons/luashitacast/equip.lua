@@ -7,6 +7,14 @@ local CurrentLevel = 0;
 local inventoryManager = AshitaCore:GetMemoryManager():GetInventory();
 local resourceManager = AshitaCore:GetResourceManager();
 
+local UpdateJobLevel = function()    
+    CurrentJob = AshitaCore:GetMemoryManager():GetPlayer():GetMainJob();
+    CurrentLevel = AshitaCore:GetMemoryManager():GetPlayer():GetJobLevel(CurrentJob);
+    if (gSettings.AllowSyncEquip == false) then
+        CurrentLevel = AshitaCore:GetMemoryManager():GetPlayer():GetMainJobLevel();
+    end
+end
+
 --Gets current equipment based on outgoing packet history
 local GetCurrentEquip = function(slot)
     if (Internal[slot] ~= nil) and (os.clock() < Internal[slot].Timer) then
@@ -511,13 +519,7 @@ end
 
 
 local EquipSet = function(set, style)
-    --Grab job/etc once for easy access
-    CurrentJob = AshitaCore:GetMemoryManager():GetPlayer():GetMainJob();
-    CurrentLevel = AshitaCore:GetMemoryManager():GetPlayer():GetJobLevel(CurrentJob);    
-    if (gSettings.AllowSyncEquip == false) then
-        CurrentLevel = AshitaCore:GetMemoryManager():GetPlayer():GetMainJobLevel();
-    end
-
+    UpdateJobLevel();
     if (type(set) ~= 'table') then
         return;
     end
@@ -696,6 +698,7 @@ local exports = {
     ProcessBuffer = ProcessBuffer,
     ProcessImmediateBuffer = ProcessImmediateBuffer,
     UnequipSlot = UnequipSlot,
+    UpdateJobLevel = UpdateJobLevel,
 };
 
 return exports;

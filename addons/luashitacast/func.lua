@@ -210,6 +210,7 @@ local Combine = function(base, override)
 end
 
 local CompareItem = function(item, itemEntry, container)
+    gEquip.UpdateJobLevel();
     local newItem = gEquip.MakeItemTable(itemEntry);
     if (container == nil) then
         newItem.Bag = nil;

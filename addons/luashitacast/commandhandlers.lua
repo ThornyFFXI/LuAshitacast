@@ -166,6 +166,12 @@ commands.HandleCommand = function(e)
         return;
     end
     
+    if (args[2] == 'safecall') then
+        gSettings.SafeCall = not gSettings.SafeCall;
+        print(chat.header('LuAshitacast') .. chat.message('Safecall ') .. chat.color1(2, gSettings.SafeCall and 'enabled' or 'disabled') .. chat.message('.'));
+        return;
+    end
+    
     if (args[2] == 'newlua') then
         local path = ('%sconfig\\addons\\luashitacast\\%s_%u\\'):fmt(AshitaCore:GetInstallPath(), gState.PlayerName, gState.PlayerId);
         if (#args == 2) then

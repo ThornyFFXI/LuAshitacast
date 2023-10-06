@@ -17,7 +17,8 @@ local defaultSettings = {
     ItemBase = 8,
     ItemOffset = 1.0,
     FastCast = 0,
-    Snapshot = 0
+    Snapshot = 0,
+    SafeCall = true,
 };
 
 return defaultSettings;

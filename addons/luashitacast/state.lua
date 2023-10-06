@@ -213,10 +213,14 @@ end
 state.SafeCall = function(name,...)
     if (gProfile ~= nil) then
         if (type(gProfile[name]) == 'function') then
-            local success,err = pcall(gProfile[name],...);
-            if (not success) then
-                print(chat.header('LuAshitacast') .. chat.error('Error in profile function: ') .. chat.color1(2, name));
-                print(chat.header('LuAshitacast') .. chat.error(err));
+            if (gSettings.SafeCall) then
+                local success,err = pcall(gProfile[name],...);
+                if (not success) then
+                    print(chat.header('LuAshitacast') .. chat.error('Error in profile function: ') .. chat.color1(2, name));
+                    print(chat.header('LuAshitacast') .. chat.error(err));
+                end
+            else
+                gProfile[name](...);
             end
         elseif (gProfile[name] ~= nil) then
             print(chat.header('LuAshitacast') .. chat.error('Profile member exists but is not a function: ') .. chat.color1(2, name));
