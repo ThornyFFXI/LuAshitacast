@@ -2,6 +2,7 @@ local defaultSettings = {
     AddSetEquipScreenOrder = true,
     AllowSyncEquip = true,
     AllowAddSet = false,
+    AllowRetry = true,
     AddSetBackups = true,
     Debug = false,
     EquipBags = { 8, 10, 11, 12, 13, 14, 15, 16, 0 };

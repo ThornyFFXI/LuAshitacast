@@ -419,7 +419,7 @@ local ProcessEquip = function(equipInfo, set)
             internalEntry.Container = equipEntry.Container;
             internalEntry.Item = inventoryManager:GetContainerItem(equipEntry.Container, equipEntry.Index);
         end
-        internalEntry.Timer = os.clock() + 2;
+        internalEntry.Timer = os.clock() + 0.2;
         Internal[equipEntry.Slot + 1] = internalEntry;
         if (gSettings.Debug) then
             if (equipEntry.Index == 0) then
@@ -460,7 +460,7 @@ local ProcessEquipSet = function(equipInfo, set)
             internalEntry.Container = equipEntry.Container;
             internalEntry.Item = inventoryManager:GetContainerItem(equipEntry.Container, equipEntry.Index);
         end
-        internalEntry.Timer = os.clock() + 2;
+        internalEntry.Timer = os.clock() + 0.2;
         Internal[equipEntry.Slot + 1] = internalEntry;
 
         if (gSettings.Debug) then
@@ -494,7 +494,7 @@ local Unequip = function(slot, container)
     local internalEntry = {};
     internalEntry.Container = 0;
     internalEntry.Item = nil;
-    internalEntry.Timer = os.clock() + 2;
+    internalEntry.Timer = os.clock() + 0.2;
     Internal[slot] = internalEntry;
 end
 
@@ -564,7 +564,7 @@ local EquipSet = function(set, style)
             local internalEntry = {};
             internalEntry.Container = 0;
             internalEntry.Item = nil;
-            internalEntry.Timer = os.clock() + 2;
+            internalEntry.Timer = os.clock() + 0.2;
             Internal[k] = internalEntry;
         end
     end

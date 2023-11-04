@@ -260,7 +260,11 @@ packethandlers.HandleOutgoingChunk = function(e)
         local id    = ashita.bits.unpack_be(e.chunk_data_raw, offset, 0, 9);
         local size  = ashita.bits.unpack_be(e.chunk_data_raw, offset, 9, 7) * 4;
         if (id == 0x1A) then
-            gPacketHandlers.HandleActionPacket(struct.unpack('c' .. size, e.chunk_data, offset + 1));
+            local syncBytes = ashita.bits.unpack_be(e.chunk_data_raw, offset, 16, 16);
+            if (syncBytes ~= gState.LastActionSync) or (gSettings.AllowRetry) then
+                gPacketHandlers.HandleActionPacket(struct.unpack('c' .. size, e.chunk_data, offset + 1));
+            end
+            gState.LastActionSync = syncBytes;
         elseif (id == 0x15) then
             newPositionX = struct.unpack('f', e.chunk_data, offset + 0x04 + 1);
             newPositionY = struct.unpack('f', e.chunk_data, offset + 0x0C + 1);
