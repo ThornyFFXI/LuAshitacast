@@ -559,7 +559,7 @@ local EquipSet = function(set, style)
     end
 
     --Handle displaced items
-    for k,v in ipairs(set) do
+    for k,v in pairs(set) do
         if (v.Index == -1) then
             local internalEntry = {};
             internalEntry.Container = 0;
