@@ -1,4 +1,6 @@
 local data = {};
+local encoding = require('encoding');
+local japanese = (AshitaCore:GetConfigurationManager():GetInt32('boot', 'ashita.language', 'ashita', 2) == 1);
 data.Constants = require('constants');
 
 data.CheckInMogHouse = function()
@@ -281,11 +283,16 @@ data.GetCurrentSet = function()
             if (resource ~= nil) then
                 local slot = gData.Constants.EquipSlotNames[i];
                 local augment = gData.GetAugment(equip.Item);
+                local resourceName = encoding:ShiftJIS_To_UTF8(resource.Name[1]);
+                if not japanese then
+                    resourceName = string.lower(resourceName);
+                end
+
                 if (augment.Type == 'Unaugmented') then
-                    setTable[slot] = resource.Name[1];
+                    setTable[slot] = resourceName;
                 else
                     local entry = {};
-                    entry.Name = resource.Name[1];
+                    entry.Name = resourceName;
                     if (augment.Path ~= nil) then
                         entry.AugPath = augment.Path;
                     elseif (augment.Trial ~= nil) then
@@ -385,15 +392,15 @@ data.GetAction = function()
         local currentMp = AshitaCore:GetMemoryManager():GetParty():GetMemberMP(0)
         actionTable.MpAftercast = currentMp - actionTable.MpCost;
         actionTable.MppAftercast = (actionTable.MpAftercast * 100) / AshitaCore:GetMemoryManager():GetPlayer():GetMPMax();
-        actionTable.Name = action.Resource.Name[1];
+        actionTable.Name = encoding:ShiftJIS_To_UTF8(action.Resource.Name[1]);
         actionTable.Recast = action.Resource.RecastDelay * 250;
         actionTable.Skill = gData.ResolveString(gData.Constants.SpellSkills, action.Resource.Skill);
         actionTable.Type = gData.ResolveString(gData.Constants.SpellTypes, action.Resource.Type);
     elseif (action.Type == 'Weaponskill') then
-        actionTable.Name = action.Resource.Name[1];
+        actionTable.Name = encoding:ShiftJIS_To_UTF8(action.Resource.Name[1]);
         actionTable.Id = action.Resource.Id;
     elseif (action.Type == 'Ability') then
-        actionTable.Name = action.Resource.Name[1];
+        actionTable.Name = encoding:ShiftJIS_To_UTF8(action.Resource.Name[1]);
         actionTable.Id = action.Resource.Id - 0x200;
         local abilityType = gData.Constants.AbilityTypes[action.Resource.RecastTimerId];
         if (abilityType ~= nil) then
@@ -407,7 +414,7 @@ data.GetAction = function()
     elseif (action.Type == 'Item') then
         actionTable.CastTime = action.Resource.CastTime * 250;
         actionTable.Id = action.Resource.Id;
-        actionTable.Name = action.Resource.Name[1];
+        actionTable.Name = encoding:ShiftJIS_To_UTF8(action.Resource.Name[1]);
         actionTable.Recast = action.Resource.RecastDelay * 250;
     end
 
@@ -427,9 +434,15 @@ data.GetBuffCount = function(matchBuff)
     if (type(matchBuff) == 'string') then
         local matchText = string.lower(matchBuff);
         for _, buff in pairs(buffs) do
-            local buffString = AshitaCore:GetResourceManager():GetString("buffs.names", buff);
-			if (buffString ~= nil) and (string.lower(buffString:trimend('\x00')) == matchText) then
-                count = count + 1;
+            local buffString = encoding:ShiftJIS_To_UTF8(AshitaCore:GetResourceManager():GetString("buffs.names", buff):trimend('\x00'));
+            if (buffString) then
+                if (not japanese) then
+                    buffString = string.lower(buffString);
+                end
+                
+                if (buffString == matchText) then
+                    count = count + 1;
+                end
             end
         end
     elseif (type(matchBuff) == 'number') then
@@ -458,7 +471,7 @@ data.GetEnvironment = function()
     local environmentTable = {};
     environmentTable.Area = AshitaCore:GetResourceManager():GetString("zones.names", AshitaCore:GetMemoryManager():GetParty():GetMemberZone(0));
     if type(environmentTable.Area) == 'string' then
-        environmentTable.Area = environmentTable.Area:trimend('\x00');
+        environmentTable.Area = encoding:ShiftJIS_To_UTF8(environmentTable.Area:trimend('\x00'));
     end
     local timestamp = gData.GetTimestamp();
     environmentTable.Day = gData.Constants.WeekDay[(timestamp.day % 8) + 1];
@@ -491,7 +504,7 @@ data.GetEquipment = function()
                 local singleTable = {};
                 singleTable.Container = equip.Container;
                 singleTable.Item = equip.Item;
-                singleTable.Name = resource.Name[1];
+                singleTable.Name = encoding:ShiftJIS_To_UTF8(resource.Name[1]);
                 singleTable.Resource = resource;
                 local slot = gData.Constants.EquipSlotNames[i];
                 equipTable[slot] = singleTable;
@@ -556,12 +569,12 @@ data.GetPetAction = function()
         actionTable.Element = gData.ResolveString(gData.Constants.SpellElements, action.Resource.Element);
         actionTable.Id = action.Resource.Index;
         actionTable.MpCost = action.Resource.ManaCost;
-        actionTable.Name = action.Resource.Name[1];
+        actionTable.Name = encoding:ShiftJIS_To_UTF8(action.Resource.Name[1]);
         actionTable.Recast = action.Resource.RecastDelay * 250;
         actionTable.Skill = gData.ResolveString(gData.Constants.SpellSkills, action.Resource.Skill);
         actionTable.Type = gData.ResolveString(gData.Constants.SpellTypes, action.Resource.Type);
     elseif (action.Type == 'Ability') then
-        actionTable.Name = action.Resource.Name[1];
+        actionTable.Name = encoding:ShiftJIS_To_UTF8(action.Resource.Name[1]);
         actionTable.Id = action.Resource.Id - 0x200;
         local abilityType = gData.Constants.AbilityTypes[action.Resource.RecastTimerId];
         if (abilityType ~= nil) then
@@ -573,7 +586,7 @@ data.GetPetAction = function()
         actionTable.Id = action.Id;
         actionTable.Name = action.Name;
         if type(actionTable.Name) == 'string'then
-            actionTable.Name = actionTable.Name:trimend('\x00');
+            actionTable.Name = encoding:ShiftJIS_To_UTF8(actionTable.Name:trimend('\x00'));
         end
     end
 
@@ -594,7 +607,7 @@ data.GetPlayer = function()
     local mainJob = pPlayer:GetMainJob();
     local job = AshitaCore:GetResourceManager():GetString("jobs.names_abbr", mainJob);
     if (type(job) == 'string') then
-        job = job:trimend('\x00');
+        job = encoding:ShiftJIS_To_UTF8(job:trimend('\x00'));
     end
     playerTable.MainJob = job;
     playerTable.MainJobLevel = pPlayer:GetJobLevel(mainJob);
@@ -607,7 +620,7 @@ data.GetPlayer = function()
     local subJob = pPlayer:GetSubJob();
     job = AshitaCore:GetResourceManager():GetString("jobs.names_abbr", subJob);
     if (type(job) == 'string') then
-        job = job:trimend('\x00');
+        job = encoding:ShiftJIS_To_UTF8(job:trimend('\x00'));
     end
     playerTable.SubJob = job;
     playerTable.SubJobLevel = pPlayer:GetJobLevel(subJob);

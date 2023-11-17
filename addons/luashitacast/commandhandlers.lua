@@ -26,6 +26,7 @@ commands.HandleCommand = function(e)
     end
     e.blocked = true;
     if (#args < 2) then
+        gConfigGUI:Show();
         return;
     end
     args[2] = string.lower(args[2]);

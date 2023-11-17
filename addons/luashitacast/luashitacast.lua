@@ -6,9 +6,11 @@ addon.link      = 'https://github.com/ThornyFFXI/LuAshitacast';
 
 require('common');
 chat = require('chat');
+local jit = require('jit');
+jit.off();
 
+gConfigGUI           = require('config');
 gData                = require('data');
-gDefaultSettings     = require('settings');
 gFunc                = require('func');
 gEquip               = require('equip');
 gFileTools           = require('filetools');
@@ -29,6 +31,7 @@ ashita.events.register('load', 'load_cb', function ()
 end);
 
 ashita.events.register('d3d_present', 'mobdb_main_render', function()
+    gConfigGUI:Render();
     gSetDisplay:Render();
 end);
 

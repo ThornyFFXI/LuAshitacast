@@ -6,6 +6,8 @@ local CurrentJob = 0;
 local CurrentLevel = 0;
 local inventoryManager = AshitaCore:GetMemoryManager():GetInventory();
 local resourceManager = AshitaCore:GetResourceManager();
+local encoding = require('encoding');
+local japanese = (AshitaCore:GetConfigurationManager():GetInt32('boot', 'ashita.language', 'ashita', 2) == 1);
 
 local UpdateJobLevel = function()    
     CurrentJob = AshitaCore:GetMemoryManager():GetPlayer():GetMainJob();
@@ -225,7 +227,10 @@ local CheckItem = function(set, container, item)
     if (CheckResource(resource) == false) then
         return;
     end
-    local resourceName = string.lower(resource.Name[1]);
+    local resourceName = encoding:ShiftJIS_To_UTF8(resource.Name[1]);
+    if not japanese then
+        resourceName = string.lower(resourceName);
+    end
 
     --Check if item fits any equip slots
     for slot,equipTable in pairs(set) do
@@ -244,7 +249,10 @@ local CheckItemMatch = function(container, item, equipTable)
     if (CheckResource(resource) == false) then
         return false;
     end
-    local resourceName = string.lower(resource.Name[1]);
+    local resourceName = encoding:ShiftJIS_To_UTF8(resource.Name[1]);
+    if not japanese then
+        resourceName = string.lower(resourceName);
+    end
 
     --Check if item name matches (lua uses pointer internally so very cheap)
     if (equipTable.Name ~= resourceName) then
@@ -657,7 +665,11 @@ local LockStyle = function(set)
                             if containerItem ~= nil and containerItem.Count > 0 and containerItem.Id > 0 then
                                 local resource = resourceManager:GetItemById(containerItem.Id);
                                 if (resource ~= nil) then
-                                    if (string.lower(resource.Name[1]) == equip) and (bit.band(resource.Slots, math.pow(2, i - 1)) ~= 0) then
+                                    local resourceName = encoding:ShiftJIS_To_UTF8(resource.Name[1]);
+                                    if not japanese then
+                                        resourceName = string.lower(resourceName);
+                                    end
+                                    if (resourceName == equip) and (bit.band(resource.Slots, math.pow(2, i - 1)) ~= 0) then
                                         local offset = 8 + (count * 8) + 1;
                                         packet[offset] = index;
                                         packet[offset + 1] = i - 1;

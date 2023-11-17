@@ -69,6 +69,26 @@ state.Init = function()
     end
 end
 
+state.ResetSettings = function(allowAddSet)
+    gSettings = {};
+    for k,v in pairs(gDefaultSettings) do
+        if (type(v) == 'table') then
+            gSettings[k] = {};
+            for subK,subV in pairs(v) do
+                gSettings[k][subK] = subV;
+            end
+        else
+            gSettings[k] = v;
+        end
+    end
+    for k,v in pairs(gActiveSettings) do
+        gSettings[k] = v;
+    end
+    if allowAddSet == true then
+        gSettings.AllowAddSet = true;
+    end
+end
+
 state.LoadProfile = function(profilePath)
     local shortFileName = profilePath:match("[^\\]*.$");
     local success, loadError = loadfile(profilePath);
@@ -80,6 +100,7 @@ state.LoadProfile = function(profilePath)
 	end
 	gProfile = success();
 	if (gProfile ~= nil) then
+        state.ResetSettings();
         print(chat.header('LuAshitacast') .. chat.message('Loaded profile: ') .. chat.color1(2, shortFileName));
         if (gProfile.OnLoad ~= nil) and (type(gProfile.OnLoad) == 'function') then
             gProfile.FilePath = profilePath;
@@ -144,8 +165,17 @@ state.UnloadProfile = function()
     gState.Reset();
 end
 
+local defaultParsed = false;
 state.HandleEquipEvent = function(eventName, equipStyle)
     if (gProfile ~= nil) then
+        if (eventName == 'HandleDefault') then
+            if (gSettings.HorizonMode) and (defaultParsed) then
+                return;
+            end
+        else
+            defaultParsed = false;
+        end
+
         local event = gProfile[eventName];
         if (event ~= nil) and (type(event) == 'function') then
             gEquip.ClearBuffer();
@@ -153,6 +183,7 @@ state.HandleEquipEvent = function(eventName, equipStyle)
             gState.SafeCall(eventName);
             if (eventName == 'HandleDefault') then
                 gEquip.ProcessBuffer(equipStyle);
+                defaultParsed = true;
             elseif (gState.PlayerAction ~= nil) and (gState.PlayerAction.Block ~= true) then
                 if (gState.DelayedEquip.Timer ~= nil) and ((eventName == 'HandleMidcast') or (eventName == 'HandleMidshot')) then
                     gState.DelayedEquip.Tag = eventName .. 'Delayed';
@@ -195,18 +226,6 @@ state.Reset = function()
     --Get rid of all new globals..
     for _,glob in ipairs(newGlobs) do
         _G[glob] = nil;
-    end
-
-    gSettings = {};
-    for k,v in pairs(gDefaultSettings) do
-        if (type(v) == 'table') then
-            gSettings[k] = {};
-            for subK,subV in pairs(v) do
-                gSettings[k][subK] = subV;
-            end
-        else
-            gSettings[k] = v;
-        end
     end
 end
 
