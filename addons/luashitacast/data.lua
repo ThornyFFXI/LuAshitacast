@@ -284,9 +284,6 @@ data.GetCurrentSet = function()
                 local slot = gData.Constants.EquipSlotNames[i];
                 local augment = gData.GetAugment(equip.Item);
                 local resourceName = encoding:ShiftJIS_To_UTF8(resource.Name[1]);
-                if not japanese then
-                    resourceName = string.lower(resourceName);
-                end
 
                 if (augment.Type == 'Unaugmented') then
                     setTable[slot] = resourceName;

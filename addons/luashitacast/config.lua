@@ -65,6 +65,7 @@ local containerNames = {
     'Wardrobe8',
     'Recycle'
 };
+local currentSettings;
 local function DrawContainerMenu(menuState)
     if (menuState.IsOpen[1] == false) then
         state.ContainerMenu = nil;
@@ -111,7 +112,7 @@ local function DrawContainerMenu(menuState)
                 end
             end
             settings.save();
-            gState.ResetSettings(gSettings.AllowAddSet);
+            gState.ResetSettings(currentSettings);
             state.ContainerMenu = nil;
             return;
         end
@@ -124,11 +125,11 @@ local function SliderFloat(setting, text, min, max, helpText)
     if helpText then
         imgui.ShowHelp(helpText);
     end
-    local buffer = { gSettings[setting] };
+    local buffer = { currentSettings[setting] };
     if (imgui.SliderFloat(string.format('##LuAshitacastConfigSlider%s', text), buffer, min, max, '%.1f', ImGuiSliderFlags_AlwaysClamp)) then
         gDefaultSettings[setting] = buffer[1];
         settings.save();
-        gState.ResetSettings(gSettings.AllowAddSet);
+        gState.ResetSettings(currentSettings);
     end
 end
 
@@ -137,16 +138,17 @@ local function SliderInt(setting, text, min, max, helpText)
     if helpText then
         imgui.ShowHelp(helpText);
     end
-    local buffer = { gSettings[setting] };
+    local buffer = { currentSettings[setting] };
     if (imgui.SliderInt(string.format('##LuAshitacastConfigSlider%s', text), buffer, min, max, '%d', ImGuiSliderFlags_AlwaysClamp)) then
         gDefaultSettings[setting] = buffer[1];
         settings.save();
-        gState.ResetSettings(gSettings.AllowAddSet);
+        gState.ResetSettings(currentSettings);
     end
 end
 
 function gui:Render()
-    if (state.IsOpen[1]) then
+    currentSettings = gSettings;
+    if (state.IsOpen[1]) and (currentSettings) then
         local buffer = {};
         if (imgui.Begin(string.format('%s v%s Configuration', addon.name, addon.version), state.IsOpen, ImGuiWindowFlags_AlwaysAutoResize)) then
             if imgui.BeginTabBar('##LuAshitacastConfigTabBar', ImGuiTabBarFlags_NoCloseWithMiddleMouseButton) then
@@ -169,49 +171,72 @@ function gui:Render()
                         imgui.ShowHelp('PacketFlow is a plugin that reduces the delay between outgoing packets when latency permits.  This increases performance, but could put you at risk on retail servers.  Load at your own risk.');
                     end
                     
+                    imgui.TextColored(header, 'Profile');
+                    if (gProfile ~= nil) then
+                        imgui.TextColored({0, 1, 0, 1}, '  ' .. gProfile.FilePath);
+                        if (imgui.Button('Launch Editor')) then
+                            ashita.misc.execute(gProfile.FilePath, '');
+                        end
+                        imgui.SameLine();
+                        if (imgui.Button('Reload')) then
+                            gState.LoadProfileEx(gProfile.FilePath);
+                        end
+                        imgui.SameLine();
+                        if (imgui.Button('Unload')) then
+                            gState.UnloadProfile();
+                            print(chat.header('LuAshitacast') .. chat.message('Profile unloaded.'));
+                        end
+                        imgui.SameLine();
+                    else
+                        imgui.TextColored({1, 0, 0, 1}, '  Not loaded.');
+                    end
+                    if (imgui.Button('Load Default')) then
+                        gState.AutoLoadProfile();
+                    end
+                    
                     imgui.TextColored(header, 'Debug Functions');
-                    buffer[1] = gSettings.Debug;
+                    buffer[1] = currentSettings.Debug;
                     if (imgui.Checkbox('Equipment Debug##LuAshitacastConfigEquipmentDebug', buffer)) then
-                        gSettings.Debug = buffer[1];
+                        currentSettings.Debug = buffer[1];
                     end
                     imgui.ShowHelp('When enabled, equipment swaps and action states will be printed to chat log.');
                     
-                    buffer[1] = gSettings.SafeCall;
+                    buffer[1] = currentSettings.SafeCall;
                     if (imgui.Checkbox('Safe Call##LuAshitacastConfigSafeCall', buffer)) then
-                        gSettings.SafeCall = buffer[1];
+                        currentSettings.SafeCall = buffer[1];
                     end
                     imgui.ShowHelp('When enabled, calls to Handle functions will use pcall.  Disabling this can provide a more explicit error message for debugging, but will allow the addon to fully crash.');
 
                     imgui.TextColored(header, 'Misc. Settings');
-                    buffer[1] = gSettings.AddSetEquipScreenOrder;
+                    buffer[1] = currentSettings.AddSetEquipScreenOrder;
                     if (imgui.Checkbox('AddSet Equip Screen Order##LuAshitacastConfigAddSetEquipScreenOrder', buffer)) then
                         gDefaultSettings.AddSetEquipScreenOrder = buffer[1];
                         settings.save();
-                        gState.ResetSettings(gSettings.AllowAddSet);
+                        gState.ResetSettings(currentSettings);
                     end
                     imgui.ShowHelp('When enabled, sets will be written in the order equip screen shows slots, rather than the internal item index order.');
 
-                    buffer[1] = gSettings.AllowSyncEquip;
+                    buffer[1] = currentSettings.AllowSyncEquip;
                     if (imgui.Checkbox('Allow Sync Equip##LuAshitacastConfigAllowSyncEquip', buffer)) then
                         gDefaultSettings.AllowSyncEquip = buffer[1];
                         settings.save();
-                        gState.ResetSettings(gSettings.AllowAddSet);
+                        gState.ResetSettings(currentSettings);
                     end
                     imgui.ShowHelp('When enabled, LuAshitacast will try to equip items higher than your current sync level if your real job level is high enough to wear them.');
 
-                    buffer[1] = gSettings.AddSetBackups;
+                    buffer[1] = currentSettings.AddSetBackups;
                     if (imgui.Checkbox('AddSet Backups##LuAshitacastConfigAddSetBackups', buffer)) then
                         gDefaultSettings.AddSetBackups = buffer[1];
                         settings.save();
-                        gState.ResetSettings(gSettings.AllowAddSet);
+                        gState.ResetSettings(currentSettings);
                     end
                     imgui.ShowHelp('When enabled, LuAshitacast will make backups of your profiles prior to writing them for AddSet commands.');
 
-                    buffer[1] = gSettings.HorizonMode;
+                    buffer[1] = currentSettings.HorizonMode;
                     if (imgui.Checkbox('Horizon Mode##LuAshitacastHorizonMode', buffer)) then
                         gDefaultSettings.HorizonMode = buffer[1];
                         settings.save();
-                        gState.ResetSettings(gSettings.AllowAddSet);
+                        gState.ResetSettings(currentSettings);
                     end
                     imgui.ShowHelp('When Horizon Mode is enabled, LuAshitacast will only parse HandleDefault once after any given action.');
                     imgui.EndTabItem();
@@ -254,11 +279,11 @@ function gui:Render()
                         state.ContainerMenu = newState;
                     end
                     imgui.ShowHelp('Edit the list of containers that will always be treated as enabled.');
-                    buffer = { gSettings.EnableNomadStorage };
+                    buffer = { currentSettings.EnableNomadStorage };
                     if (imgui.Checkbox('Nomad Storage', buffer)) then
                         gDefaultSettings.EnableNomadStorage = buffer[1];
                         settings.save();
-                        gState.ResetSettings(gSettings.AllowAddSet);
+                        gState.ResetSettings(currentSettings);
                     end
                     imgui.ShowHelp('Flag storage as accessible at nomad moogles.');
                     imgui.TextColored(header, 'Description');

@@ -195,6 +195,15 @@ commands.HandleCommand = function(e)
     end
 
     
+    if (args[2] == 'edit') then
+        if (gProfile ~= nil) then
+            ashita.misc.execute(gProfile.FilePath, '');
+        else
+            print(chat.header('LuAshitacast') .. chat.error("No profile loaded."));
+        end
+        return;
+    end
+    
     if (args[2] == 'reload') then
         if (gProfile ~= nil) then
             gState.LoadProfileEx(gProfile.FilePath);

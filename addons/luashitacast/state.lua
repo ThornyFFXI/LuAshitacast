@@ -69,7 +69,7 @@ state.Init = function()
     end
 end
 
-state.ResetSettings = function(allowAddSet)
+state.ResetSettings = function(currentSettings)
     gSettings = {};
     for k,v in pairs(gDefaultSettings) do
         if (type(v) == 'table') then
@@ -82,10 +82,11 @@ state.ResetSettings = function(allowAddSet)
         end
     end
     for k,v in pairs(gActiveSettings) do
-        gSettings[k] = v;
-    end
-    if allowAddSet == true then
-        gSettings.AllowAddSet = true;
+        if (type(currentSettings) == 'table') and (currentSettings[k] ~= nil) then
+            gSettings[k] = currentSettings[k];
+        else
+            gSettings[k] = v;
+        end
     end
 end
 
@@ -172,8 +173,6 @@ state.HandleEquipEvent = function(eventName, equipStyle)
             if (gSettings.HorizonMode) and (defaultParsed) then
                 return;
             end
-        else
-            defaultParsed = false;
         end
 
         local event = gProfile[eventName];
@@ -227,6 +226,8 @@ state.Reset = function()
     for _,glob in ipairs(newGlobs) do
         _G[glob] = nil;
     end
+
+    state.ResetSettings();
 end
 
 state.SafeCall = function(name,...)
@@ -241,6 +242,7 @@ state.SafeCall = function(name,...)
             else
                 gProfile[name](...);
             end
+            defaultParsed = false;
         elseif (gProfile[name] ~= nil) then
             print(chat.header('LuAshitacast') .. chat.error('Profile member exists but is not a function: ') .. chat.color1(2, name));
         end
