@@ -141,13 +141,13 @@ packethandlers.HandleIncoming0x28 = function(e)
     end
 end
 
-packethandlers.HandleActionPacket = function(packet)
+packethandlers.HandleActionPacket = function(packet, resend)
     local category = struct.unpack('H', packet, 0x0A + 0x01);
     local actionId = struct.unpack('H', packet, 0x0C + 0x01);
     local targetIndex = struct.unpack('H', packet, 0x08 + 0x01);
     if (category == 0x03) then
         gState.DelayedEquip = {};
-        gState.PlayerAction = { Block = false };
+        gState.PlayerAction = { Block = false, Resend = resend };
         gState.PlayerAction.Packet = packet:totable();
         gState.PlayerAction.Target = targetIndex;
         gState.PlayerAction.Type = 'Spell';
@@ -158,7 +158,7 @@ packethandlers.HandleActionPacket = function(packet)
         gState.HandleEquipEvent('HandlePrecast', 'set');
     elseif (category == 0x07) then
         gState.DelayedEquip = {};
-        gState.PlayerAction = { Block = false };
+        gState.PlayerAction = { Block = false, Resend = resend };
         gState.PlayerAction.Packet = packet:totable();
         gState.PlayerAction.Target = targetIndex;
         gState.PlayerAction.Type = 'Weaponskill';
@@ -167,7 +167,7 @@ packethandlers.HandleActionPacket = function(packet)
         gState.HandleEquipEvent('HandleWeaponskill', 'auto');
     elseif (category == 0x09) then
         gState.DelayedEquip = {};
-        gState.PlayerAction = { Block = false };
+        gState.PlayerAction = { Block = false, Resend = resend };
         gState.PlayerAction.Packet = packet:totable();
         gState.PlayerAction.Target = targetIndex;
         gState.PlayerAction.Type = 'Ability';
@@ -176,7 +176,7 @@ packethandlers.HandleActionPacket = function(packet)
         gState.HandleEquipEvent('HandleAbility', 'auto');
     elseif (category == 0x10) then
         gState.DelayedEquip = {};
-        gState.PlayerAction = { Block = false };
+        gState.PlayerAction = { Block = false, Resend = resend };
         gState.PlayerAction.Packet = packet:totable();
         gState.PlayerAction.Target = targetIndex;
         gState.PlayerAction.Type = 'Ranged';
@@ -206,14 +206,14 @@ packethandlers.HandleActionPacket = function(packet)
     end
 end
 
-packethandlers.HandleItemPacket = function(packet)
+packethandlers.HandleItemPacket = function(packet, resend)
     local itemIndex = struct.unpack('B', packet, 0x0E + 0x01);
     local itemContainer = struct.unpack('B', packet, 0x10 + 0x01);
     local targetIndex = struct.unpack('H', packet, 0x0C + 0x01);
     local item = AshitaCore:GetMemoryManager():GetInventory():GetContainerItem(itemContainer, itemIndex);
     
     gState.DelayedEquip = {};
-    gState.PlayerAction = { Block = false };
+    gState.PlayerAction = { Block = false, Resend = resend };
     gState.PlayerAction.Packet = packet:totable();
     gState.PlayerAction.Target = targetIndex;
     gState.PlayerAction.Type = 'Item';
@@ -235,10 +235,9 @@ end
 
 --Check for duplicate packets..   
 local packetBuffer = ffi.new('uint8_t[?]', 512);
-local function CheckDuplicates(chunk, offset, size)
+local function CheckDuplicate(chunk, offset, size)
     local ptr = ffi.cast('uint8_t*', chunk) + offset;
-    local sequencer = (AshitaCore:GetPluginManager():Get('Sequencer') ~= nil);
-    if (not sequencer) and (ffi.C.memcmp(packetBuffer, ptr, size) == 0) then
+    if (ffi.C.memcmp(packetBuffer, ptr, size) == 0) then
         return true;
     end
     ffi.copy(packetBuffer, ptr, size);
@@ -270,15 +269,19 @@ packethandlers.HandleOutgoingChunk = function(e)
         local id    = ashita.bits.unpack_be(e.chunk_data_raw, offset, 0, 9);
         local size  = ashita.bits.unpack_be(e.chunk_data_raw, offset, 9, 7) * 4;
         if (id == 0x1A) then
-            if not CheckDuplicates(e.chunk_data_raw, offset, size) then
-                gPacketHandlers.HandleActionPacket(struct.unpack('c' .. size, e.chunk_data, offset + 1));
+            local isResend = CheckDuplicate(e.chunk_data_raw, offset, size);
+            local sequencer = (AshitaCore:GetPluginManager():Get('Sequencer') ~= nil);
+            if (not isResend) or (sequencer) then
+                gPacketHandlers.HandleActionPacket(struct.unpack('c' .. size, e.chunk_data, offset + 1), isResend);
             end
         elseif (id == 0x15) then
             newPositionX = struct.unpack('f', e.chunk_data, offset + 0x04 + 1);
             newPositionY = struct.unpack('f', e.chunk_data, offset + 0x0C + 1);
         elseif (id == 0x37) then
-            if not CheckDuplicates(e.chunk_data_raw, offset, size) then
-                gPacketHandlers.HandleItemPacket(struct.unpack('c' .. size, e.chunk_data, offset + 1));
+            local isResend = CheckDuplicate(e.chunk_data_raw, offset, size);
+            local sequencer = (AshitaCore:GetPluginManager():Get('Sequencer') ~= nil);
+            if (not isResend) or (sequencer) then
+                gPacketHandlers.HandleItemPacket(struct.unpack('c' .. size, e.chunk_data, offset + 1), isResend);
             end
         end
         offset = offset + size;

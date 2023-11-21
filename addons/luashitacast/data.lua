@@ -381,6 +381,7 @@ data.GetAction = function()
     local actionTable = {};
     actionTable.Resource = action.Resource;
     actionTable.ActionType = action.Type;
+    actionTable.Resend = action.Resend;
     if (action.Type == 'Spell') then
         actionTable.CastTime = action.Resource.CastTime * 250;
         actionTable.Element = gData.ResolveString(gData.Constants.SpellElements, action.Resource.Element);
