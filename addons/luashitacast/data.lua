@@ -432,8 +432,9 @@ data.GetBuffCount = function(matchBuff)
     if (type(matchBuff) == 'string') then
         local matchText = string.lower(matchBuff);
         for _, buff in pairs(buffs) do
-            local buffString = encoding:ShiftJIS_To_UTF8(AshitaCore:GetResourceManager():GetString("buffs.names", buff):trimend('\x00'));
+            local buffString = AshitaCore:GetResourceManager():GetString("buffs.names", buff)
             if (buffString) then
+                buffString = encoding:ShiftJIS_To_UTF8(buffString:trimend('\x00'));
                 if (not japanese) then
                     buffString = string.lower(buffString);
                 end
