@@ -1,3 +1,4 @@
+local encoding = require('encoding');
 local ffi = require("ffi");
 ffi.cdef[[
     int32_t memcmp(const void* buff1, const void* buff2, size_t count);
