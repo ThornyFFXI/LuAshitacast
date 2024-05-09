@@ -23,7 +23,7 @@ end
 data.CheckForNomad = function()
     local entity = AshitaCore:GetMemoryManager():GetEntity();
     for i = 0,1023,1 do
-        if (entity:GetEntity(i) ~= nil) then
+        if (entity:GetServerId(i) > 0) then
             local renderFlags = entity:GetRenderFlags0(i);
             if (bit.band(renderFlags, 0x200) == 0x200) and (entity:GetDistance(i) < 36) then
                 local entityName = entity:GetName(i);
