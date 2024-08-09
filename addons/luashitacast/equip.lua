@@ -367,46 +367,32 @@ local PrepareEquip = function(set)
         end
     end
 
-    local retTable = {};
-    local index = 1;
-    for i = 1,16,1 do
-        --Find highest priority item
-        local key = nil;
-        local value = nil;
-        for k,v in pairs(set) do
-            if (v.Index ~= nil) and (v.Index ~= -1) then
-                if (value == nil) or (v.Priority > value.Priority) then
-                    key = k;
-                    value = v;
+    -- Fill a table with the actual info to be used in the packets.
+    local retTable = T{};
+    for index,data in pairs(set) do
+        if (data.Index ~= nil) and (data.Index ~= -1) then
+            local entry = {Slot=index-1, Index=data.Index, Priority=data.Priority};
+            if (entry.Index == 0) then
+                local currItem = GetCurrentEquip(index);
+                if (currItem.Item ~= nil) and (gState.Disabled[index] ~= true) then
+                    entry.Container = currItem.Container;
+                    retTable:append(entry);
                 end
+            else
+                entry.Container = data.Container;
+                retTable:append(entry);
             end
         end
-
-        if (key == nil) then
-            return retTable;
-        end
-
-        local newTable = {};
-        newTable.Slot = key - 1;
-        newTable.Index = value.Index;
-
-
-        --Handle remove item
-        if (value.Index == 0) then
-            local currItem = GetCurrentEquip(key);
-            if (currItem.Item ~= nil) and (gState.Disabled[key] ~= true) then
-                newTable.Container = currItem.Container;
-                retTable[index] = newTable; 
-                index = index + 1;
-            end            
-        else --Handle normal item
-            newTable.Container = value.Container;
-            retTable[index] = newTable;
-            index = index + 1;
-        end
-
-        set[key] = nil;
     end
+
+    -- Sort, preferring priority but falling back to slot.
+    table.sort(retTable, function(a,b)
+        if (a.Priority ~= b.Priority) then
+            return a.Priority > b.Priority;
+        else
+            return a.Slot < b.Slot;
+        end
+    end);
 
     return retTable;
 end
