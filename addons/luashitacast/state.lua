@@ -119,15 +119,21 @@ state.AutoLoadProfile = function()
     if type(jobString) == 'string'then
         jobString = jobString:trimend('\x00');
     end
-    local profilePath = ('%sconfig\\addons\\luashitacast\\%s_%u\\%s.lua'):fmt(AshitaCore:GetInstallPath(), gState.PlayerName, gState.PlayerId, jobString);
-    if (not ashita.fs.exists(profilePath)) then
-        profilePath = ('%sconfig\\addons\\luashitacast\\%s_%s.lua'):fmt(AshitaCore:GetInstallPath(), gState.PlayerName, jobString);
-        if (not ashita.fs.exists(profilePath)) then
-            print(chat.header('LuAshitacast') .. chat.error('Profile not found matching: ') .. chat.color1(2, gState.PlayerName .. '_' .. jobString));
+    local paths = T{
+        ('%sconfig\\addons\\luashitacast\\%s_%u\\%s.lua'):fmt(AshitaCore:GetInstallPath(), gState.PlayerName, gState.PlayerId, jobString),
+        ('%sconfig\\addons\\luashitacast\\%s_%s.lua'):fmt(AshitaCore:GetInstallPath(), gState.PlayerName, jobString),
+    };
+    if gSettings.DefaultProfile ~= nil then
+        paths:append(('%sconfig\\addons\\luashitacast\\%s'):fmt(AshitaCore:GetInstallPath(), gSettings.DefaultProfile));
+    end
+    for _,path in ipairs(paths) do
+        if (ashita.fs.exists(path)) then
+            gState.LoadProfile(path);
             return;
         end
     end
-    gState.LoadProfile(profilePath);
+    
+    print(chat.header('LuAshitacast') .. chat.error('Profile not found matching: ') .. chat.color1(2, gState.PlayerName .. '_' .. jobString));
 end
 
 state.LoadProfileEx = function(path)
