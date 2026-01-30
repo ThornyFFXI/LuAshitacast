@@ -12,7 +12,7 @@ ffi.cdef[[
 ]];
 ffi.cdef[[
     typedef struct GearListEvent_t {
-        uint8_t ReturnEventPrefix[256];
+        char ReturnEventPrefix[256];
         int32_t EntryCount;
         GearListEntry_t Entries[1000];
     } GearListEvent_t;
