@@ -1,15 +1,28 @@
-local function StringToSet(setString, setsTable)
-    local current = setsTable
-    for key in string.gmatch(setString, "[^%.]+") do
-        if type(current) ~= "table" then
-            return nil
+local function StringToSet(refString, baseTable)
+    refString = string.lower(refString);
+    local refTable = (type(baseTable) == 'table') and baseTable or gProfile.Sets;
+    local periodIndex = string.find(refString, '%.');
+    while (periodIndex ~= nil) and (type(refTable) == 'table') do
+        local matchName = string.sub(refString, 1, periodIndex - 1);
+        local oldTable = refTable;
+        refTable = nil;
+        for tableName,tableEntry in pairs(oldTable) do
+            if (string.lower(tableName) == matchName) then
+                refTable = tableEntry;
+                break;
+            end
         end
-        current = current[key]
-        if current == nil then
-            return nil
+        refString = string.sub(refString, periodIndex + 1);
+        periodIndex = string.find(refString, '%.');
+    end
+
+    if (type(refTable) == 'table') then
+        for name,setEntry in pairs(refTable) do
+            if (string.lower(name) == refString) then
+                return setEntry;
+            end
         end
     end
-    return current
 end
 
 local AddSet = function(setName)
