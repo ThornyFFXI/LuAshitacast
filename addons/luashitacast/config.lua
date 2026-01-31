@@ -75,7 +75,7 @@ local function DrawContainerMenu(menuState)
     imgui.SetNextWindowSizeConstraints({ 335, 220, }, { FLT_MAX, FLT_MAX, });
     if (imgui.Begin(menuState.WindowTitle, menuState.IsOpen, ImGuiWindowFlags_NoResize)) then
         imgui.BeginGroup();
-        imgui.BeginChild('##LuAshitacastContainerLeftPane', { 100, 157 }, false, 128);
+        imgui.BeginChild('##LuAshitacastContainerLeftPane', { 100, 157 }, ImGuiChildFlags_None, 128);
         for i = 1,6 do
             imgui.Checkbox(string.format('%s##LuAshitacastContainerCheck%s', containerNames[i], containerNames[i]), menuState.Current[i - 1]);
         end
@@ -83,7 +83,7 @@ local function DrawContainerMenu(menuState)
         imgui.EndGroup();
         imgui.SameLine();
         imgui.BeginGroup();
-        imgui.BeginChild('##LuAshitacastContainerMiddlePane', { 100, 157 }, false, 128);
+        imgui.BeginChild('##LuAshitacastContainerMiddlePane', { 100, 157 }, ImGuiChildFlags_None, 128);
         for i = 7,12 do
             imgui.Checkbox(string.format('%s##LuAshitacastContainerCheck%s', containerNames[i], containerNames[i]), menuState.Current[i - 1]);
         end
@@ -91,7 +91,7 @@ local function DrawContainerMenu(menuState)
         imgui.EndGroup();
         imgui.SameLine();
         imgui.BeginGroup();
-        imgui.BeginChild('##LuAshitacastContainerRightPane', { 100, 157 }, false, 128);
+        imgui.BeginChild('##LuAshitacastContainerRightPane', { 100, 157 }, ImGuiChildFlags_None, 128);
         for i = 13,18 do
             imgui.Checkbox(string.format('%s##LuAshitacastContainerCheck%s', containerNames[i], containerNames[i]), menuState.Current[i - 1]);
         end
@@ -99,7 +99,6 @@ local function DrawContainerMenu(menuState)
         imgui.EndGroup();
         if (imgui.Button('Cancel', { 106 })) then
             state.ContainerMenu = nil;
-            return;
         end
         imgui.SameLine(imgui.GetWindowWidth() - 111);
         if (imgui.Button('Save', { 106 })) then
@@ -114,10 +113,9 @@ local function DrawContainerMenu(menuState)
             settings.save();
             gState.ResetSettings(currentSettings);
             state.ContainerMenu = nil;
-            return;
         end
-        imgui.End();
     end
+    imgui.End();
 end
 
 local function SliderFloat(setting, text, min, max, helpText)
@@ -310,6 +308,7 @@ function gui:Render()
                 imgui.EndTabBar();
             end
         end
+        imgui.End();
     end
     if (state.IsOpen[1] ~= true) then
         state.ContainerMenu = nil;
