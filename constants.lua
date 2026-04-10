@@ -537,10 +537,8 @@ constants.BasicAugments = {
     [125] = { Multi=true, [1] = { Stat='Pet: M.Acc.', Offset=1}, [2] = { Stat='Pet: M.Dmg.', Offset=1} };
     [126] = { Stat='Pet: Magic Damage', Offset=1},
     [127] = { Stat='Pet: Magic dmg. taken ', Offset=1, Multiplier=-1, Percent=true},
-    [128] = { Stat='Pet:'},
     [133] = { Stat='"Mag. Atk. Bns."', Offset=1},
     [134] = { Stat='"Mag.Def.Bns."', Offset=1},
-    [135] = { Stat='Avatar:'},
     [137] = { Stat='"Regen"', Offset=1},
     [138] = { Stat='"Refresh"', Offset=1},
     [139] = { Stat='"Rapid Shot"', Offset=1},
@@ -662,30 +660,30 @@ constants.BasicAugments = {
     [523] = { Stat='INT', Offset=1, Multiplier=-1},
     [524] = { Stat='MND', Offset=1, Multiplier=-1},
     [525] = { Stat='CHR', Offset=1, Multiplier=-1},
-    [526] = { Multi=true, [1] = { Stat='STR', Offset=1}, [2] = { Stat='DEX', Offset=1, Multiplier=0}, [3] = { Stat='VIT', Offset=1, Multiplier=0} };
-    [527] = { Multi=true, [1] = { Stat='STR', Offset=1}, [2] = { Stat='DEX', Offset=1, Multiplier=0}, [3] = { Stat='AGI', Offset=1, Multiplier=0} };
-    [528] = { Multi=true, [1] = { Stat='STR', Offset=1}, [2] = { Stat='VIT', Offset=1, Multiplier=0}, [3] = { Stat='AGI', Offset=1, Multiplier=0} };
-    [529] = { Multi=true, [1] = { Stat='STR', Offset=1, Multiplier=0}, [2] = { Stat='DEX', Offset=1}, [3] = { Stat='VIT', Offset=1, Multiplier=0} };
-    [530] = { Multi=true, [1] = { Stat='STR', Offset=1, Multiplier=0}, [2] = { Stat='DEX', Offset=1}, [3] = { Stat='AGI', Offset=1, Multiplier=0} };
-    [531] = { Multi=true, [1] = { Stat='DEX', Offset=1}, [2] = { Stat='VIT', Offset=1, Multiplier=0}, [3] = { Stat='AGI', Offset=1, Multiplier=0} };
-    [532] = { Multi=true, [1] = { Stat='STR', Offset=1, Multiplier=0}, [2] = { Stat='DEX', Offset=1, Multiplier=0}, [3] = { Stat='VIT', Offset=1} };
-    [533] = { Multi=true, [1] = { Stat='STR', Offset=1, Multiplier=0}, [2] = { Stat='VIT', Offset=1}, [3] = { Stat='AGI', Offset=1, Multiplier=0} };
-    [534] = { Multi=true, [1] = { Stat='DEX', Offset=1, Multiplier=0}, [2] = { Stat='VIT', Offset=1}, [3] = { Stat='AGI', Offset=1, Multiplier=0} };
-    [535] = { Multi=true, [1] = { Stat='STR', Offset=1, Multiplier=0}, [2] = { Stat='DEX', Offset=1, Multiplier=0}, [3] = { Stat='AGI', Offset=1} };
-    [536] = { Multi=true, [1] = { Stat='STR', Offset=1, Multiplier=0}, [2] = { Stat='VIT', Offset=1, Multiplier=0}, [3] = { Stat='AGI', Offset=1} };
-    [537] = { Multi=true, [1] = { Stat='DEX', Offset=1, Multiplier=0}, [2] = { Stat='VIT', Offset=1, Multiplier=0}, [3] = { Stat='AGI', Offset=1} };
-    [538] = { Multi=true, [1] = { Stat='AGI', Offset=1}, [2] = { Stat='INT', Offset=1, Multiplier=0}, [3] = { Stat='MND', Offset=1, Multiplier=0} };
-    [539] = { Multi=true, [1] = { Stat='AGI', Offset=1}, [2] = { Stat='INT', Offset=1, Multiplier=0}, [3] = { Stat='CHR', Offset=1, Multiplier=0} };
-    [540] = { Multi=true, [1] = { Stat='AGI', Offset=1}, [2] = { Stat='MND', Offset=1, Multiplier=0}, [3] = { Stat='CHR', Offset=1, Multiplier=0} };
-    [541] = { Multi=true, [1] = { Stat='AGI', Offset=1, Multiplier=0}, [2] = { Stat='INT', Offset=1}, [3] = { Stat='MND', Offset=1, Multiplier=0} };
-    [542] = { Multi=true, [1] = { Stat='AGI', Offset=1, Multiplier=0}, [2] = { Stat='INT', Offset=1}, [3] = { Stat='CHR', Offset=1, Multiplier=0} };
-    [543] = { Multi=true, [1] = { Stat='INT', Offset=1}, [2] = { Stat='MND', Offset=1, Multiplier=0}, [3] = { Stat='CHR', Offset=1, Multiplier=0} };
-    [544] = { Multi=true, [1] = { Stat='AGI', Offset=1, Multiplier=0}, [2] = { Stat='INT', Offset=1, Multiplier=0}, [3] = { Stat='MND', Offset=1} };
-    [545] = { Multi=true, [1] = { Stat='AGI', Offset=1, Multiplier=0}, [2] = { Stat='MND', Offset=1}, [3] = { Stat='CHR', Offset=1, Multiplier=0} };
-    [546] = { Multi=true, [1] = { Stat='INT', Offset=1, Multiplier=0}, [2] = { Stat='MND', Offset=1}, [3] = { Stat='CHR', Offset=1, Multiplier=0} };
-    [547] = { Multi=true, [1] = { Stat='AGI', Offset=1, Multiplier=0}, [2] = { Stat='INT', Offset=1, Multiplier=0}, [3] = { Stat='CHR', Offset=1} };
-    [548] = { Multi=true, [1] = { Stat='AGI', Offset=1, Multiplier=0}, [2] = { Stat='MND', Offset=1, Multiplier=0}, [3] = { Stat='CHR', Offset=1} };
-    [549] = { Multi=true, [1] = { Stat='INT', Offset=1, Multiplier=0}, [2] = { Stat='MND', Offset=1, Multiplier=0}, [3] = { Stat='CHR', Offset=1} };
+    [526] = { Multi=true, [1] = { Stat='STR', Offset=1}, [2] = { Stat='DEX', Offset=1, Multiplier=-0.5}, [3] = { Stat='VIT', Offset=1, Multiplier=-0.5} };
+    [527] = { Multi=true, [1] = { Stat='STR', Offset=1}, [2] = { Stat='DEX', Offset=1, Multiplier=-0.5}, [3] = { Stat='AGI', Offset=1, Multiplier=-0.5} };
+    [528] = { Multi=true, [1] = { Stat='STR', Offset=1}, [2] = { Stat='VIT', Offset=1, Multiplier=-0.5}, [3] = { Stat='AGI', Offset=1, Multiplier=-0.5} };
+    [529] = { Multi=true, [1] = { Stat='STR', Offset=1, Multiplier=-0.5}, [2] = { Stat='DEX', Offset=1}, [3] = { Stat='VIT', Offset=1, Multiplier=-0.5} };
+    [530] = { Multi=true, [1] = { Stat='STR', Offset=1, Multiplier=-0.5}, [2] = { Stat='DEX', Offset=1}, [3] = { Stat='AGI', Offset=1, Multiplier=-0.5} };
+    [531] = { Multi=true, [1] = { Stat='DEX', Offset=1}, [2] = { Stat='VIT', Offset=1, Multiplier=-0.5}, [3] = { Stat='AGI', Offset=1, Multiplier=-0.5} };
+    [532] = { Multi=true, [1] = { Stat='STR', Offset=1, Multiplier=-0.5}, [2] = { Stat='DEX', Offset=1, Multiplier=-0.5}, [3] = { Stat='VIT', Offset=1} };
+    [533] = { Multi=true, [1] = { Stat='STR', Offset=1, Multiplier=-0.5}, [2] = { Stat='VIT', Offset=1}, [3] = { Stat='AGI', Offset=1, Multiplier=-0.5} };
+    [534] = { Multi=true, [1] = { Stat='DEX', Offset=1, Multiplier=-0.5}, [2] = { Stat='VIT', Offset=1}, [3] = { Stat='AGI', Offset=1, Multiplier=-0.5} };
+    [535] = { Multi=true, [1] = { Stat='STR', Offset=1, Multiplier=-0.5}, [2] = { Stat='DEX', Offset=1, Multiplier=-0.5}, [3] = { Stat='AGI', Offset=1} };
+    [536] = { Multi=true, [1] = { Stat='STR', Offset=1, Multiplier=-0.5}, [2] = { Stat='VIT', Offset=1, Multiplier=-0.5}, [3] = { Stat='AGI', Offset=1} };
+    [537] = { Multi=true, [1] = { Stat='DEX', Offset=1, Multiplier=-0.5}, [2] = { Stat='VIT', Offset=1, Multiplier=-0.5}, [3] = { Stat='AGI', Offset=1} };
+    [538] = { Multi=true, [1] = { Stat='AGI', Offset=1}, [2] = { Stat='INT', Offset=1, Multiplier=-0.5}, [3] = { Stat='MND', Offset=1, Multiplier=-0.5} };
+    [539] = { Multi=true, [1] = { Stat='AGI', Offset=1}, [2] = { Stat='INT', Offset=1, Multiplier=-0.5}, [3] = { Stat='CHR', Offset=1, Multiplier=-0.5} };
+    [540] = { Multi=true, [1] = { Stat='AGI', Offset=1}, [2] = { Stat='MND', Offset=1, Multiplier=-0.5}, [3] = { Stat='CHR', Offset=1, Multiplier=-0.5} };
+    [541] = { Multi=true, [1] = { Stat='AGI', Offset=1, Multiplier=-0.5}, [2] = { Stat='INT', Offset=1}, [3] = { Stat='MND', Offset=1, Multiplier=-0.5} };
+    [542] = { Multi=true, [1] = { Stat='AGI', Offset=1, Multiplier=-0.5}, [2] = { Stat='INT', Offset=1}, [3] = { Stat='CHR', Offset=1, Multiplier=-0.5} };
+    [543] = { Multi=true, [1] = { Stat='INT', Offset=1}, [2] = { Stat='MND', Offset=1, Multiplier=-0.5}, [3] = { Stat='CHR', Offset=1, Multiplier=-0.5} };
+    [544] = { Multi=true, [1] = { Stat='AGI', Offset=1, Multiplier=-0.5}, [2] = { Stat='INT', Offset=1, Multiplier=-0.5}, [3] = { Stat='MND', Offset=1} };
+    [545] = { Multi=true, [1] = { Stat='AGI', Offset=1, Multiplier=-0.5}, [2] = { Stat='MND', Offset=1}, [3] = { Stat='CHR', Offset=1, Multiplier=-0.5} };
+    [546] = { Multi=true, [1] = { Stat='INT', Offset=1, Multiplier=-0.5}, [2] = { Stat='MND', Offset=1}, [3] = { Stat='CHR', Offset=1, Multiplier=-0.5} };
+    [547] = { Multi=true, [1] = { Stat='AGI', Offset=1, Multiplier=-0.5}, [2] = { Stat='INT', Offset=1, Multiplier=-0.5}, [3] = { Stat='CHR', Offset=1} };
+    [548] = { Multi=true, [1] = { Stat='AGI', Offset=1, Multiplier=-0.5}, [2] = { Stat='MND', Offset=1, Multiplier=-0.5}, [3] = { Stat='CHR', Offset=1} };
+    [549] = { Multi=true, [1] = { Stat='INT', Offset=1, Multiplier=-0.5}, [2] = { Stat='MND', Offset=1, Multiplier=-0.5}, [3] = { Stat='CHR', Offset=1} };
     [550] = { Multi=true, [1] = { Stat='STR', Offset=1}, [2] = { Stat='DEX', Offset=1} };
     [551] = { Multi=true, [1] = { Stat='STR', Offset=1}, [2] = { Stat='VIT', Offset=1} };
     [552] = { Multi=true, [1] = { Stat='STR', Offset=1}, [2] = { Stat='AGI', Offset=1} };
@@ -1122,27 +1120,8 @@ constants.BasicAugments = {
     [1804] = { Stat='Pet: MND', Offset=1, Multiplier=-1},
     [1805] = { Stat='Pet: CHR', Offset=1, Multiplier=-1},
     [1806] = { Multi=true, [1] = { Stat='Pet: STR', Offset=1}, [2] = { Stat='Pet: DEX', Offset=1}, [3] = { Stat='Pet: VIT', Offset=1} };
-    [1807] = { Stat='Pet:', Multiplier=0},
-    [1808] = { Stat='Pet:', Multiplier=0},
-    [1809] = { Stat='Pet:', Multiplier=0},
-    [1810] = { Stat='Pet:', Multiplier=0},
-    [1811] = { Stat='Pet:', Multiplier=0},
-    [1812] = { Stat='Pet:', Multiplier=0},
-    [1813] = { Stat='Pet:', Multiplier=0},
-    [1814] = { Stat='Pet:', Multiplier=0},
-    [1815] = { Stat='Pet:', Multiplier=0},
-    [1816] = { Stat='Pet:', Multiplier=0},
-    [1817] = { Stat='Pet:', Multiplier=0},
-    [1818] = { Stat='Pet:', Multiplier=0},
-    [1819] = { Stat='Pet:', Multiplier=0},
-    [1820] = { Stat='Pet:', Multiplier=0},
-    [1821] = { Stat='Pet:', Multiplier=0},
-    [1822] = { Stat='Pet:', Multiplier=0},
-    [1823] = { Stat='Pet:', Multiplier=0},
-    [2047] = { Stat='???'},
 };
 constants.DelveAugments = {
-    [1] = { Stat='----------------'},
     [2] = { Stat='HP', Offset=1},
     [3] = { Stat='HP', Offset=256},
     [4] = { Stat='MP', Offset=1},
@@ -1228,16 +1207,7 @@ constants.DelveAugments = {
     [195] = { Stat='INT', Offset=1},
     [196] = { Stat='MND', Offset=1},
     [197] = { Stat='CHR', Offset=1},
-    [198] = { Stat='none'},
-    [199] = { Stat='none'},
-    [200] = { Stat='none'},
-    [201] = { Stat='none'},
-    [202] = { Stat='none'},
-    [203] = { Stat='none'},
-    [204] = { Stat='none'},
-    [205] = { Stat='none'},
     [206] = { Multi=true, [1] = { Stat='STR', Offset=1}, [2] = { Stat='DEX', Offset=1}, [3] = { Stat='VIT', Offset=1}, [4] = { Stat='AGI', Offset=1}, [5] = { Stat='INT', Offset=1}, [6] = { Stat='MND', Offset=1}, [7] = { Stat='CHR', Offset=1} };
-    [207] = { Stat='none'},
     [208] = { Stat='Hand-to-Hand skill ', Offset=1},
     [209] = { Stat='Dagger skill ', Offset=1},
     [210] = { Stat='Sword skill ', Offset=1},
@@ -1250,25 +1220,13 @@ constants.DelveAugments = {
     [217] = { Stat='Great Katana skill ', Offset=1},
     [218] = { Stat='Club skill ', Offset=1},
     [219] = { Stat='Staff skill ', Offset=1},
-    [220] = { Stat='269'},
-    [221] = { Stat='270'},
-    [222] = { Stat='271'},
-    [223] = { Stat='272'},
-    [224] = { Stat='273'},
-    [225] = { Stat='274'},
-    [226] = { Stat='275'},
-    [227] = { Stat='276'},
-    [228] = { Stat='277'},
     [229] = { Stat='Melee skill ', Offset=1},
     [230] = { Stat='Ranged skill ', Offset=1},
     [231] = { Stat='Magic skill ', Offset=1},
     [232] = { Stat='Archery skill ', Offset=1},
     [233] = { Stat='Marksmanship skill ', Offset=1},
     [234] = { Stat='Throwing skill ', Offset=1},
-    [235] = { Stat='284'},
-    [236] = { Stat='285'},
     [237] = { Stat='Shield skill ', Offset=1},
-    [238] = { Stat='287'},
     [239] = { Stat='Divine magic skill ', Offset=1},
     [240] = { Stat='Healing magic skill ', Offset=1},
     [241] = { Stat='Enha.mag. skill ', Offset=1},
@@ -1283,8 +1241,6 @@ constants.DelveAugments = {
     [250] = { Stat='Blue Magic skill ', Offset=1},
     [251] = { Stat='Geomancy Skill ', Offset=1},
     [252] = { Stat='Handbell Skill', Offset=1},
-    [253] = { Stat='302'},
-    [254] = { Stat='303'},
 };
 
 return constants;
