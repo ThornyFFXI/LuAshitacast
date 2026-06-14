@@ -233,12 +233,19 @@ local function CreateOrderStruct()
     for _,v in ipairs(allOrders) do
         AddToStructure(structure, v);
     end
-    return ffi.string(structure, ffi.sizeof(structure)):totable();
+    return structure;
 end
 
 local function HandleEvent(eventName)
     local eventStruct = CreateOrderStruct();
-    AshitaCore:GetPluginManager():RaiseEvent(eventName, eventStruct);
+    if ashita.addons_version >= 4.2 then
+        AshitaCore:GetPluginManager():RaiseEvent(eventName,
+            tonumber(ffi.cast('uint32_t', ffi.cast('uint32_t*', eventStruct))),
+            ffi.sizeof('GearListEvent_t'));
+    else
+        local structAsTable = ffi.string(eventStruct, ffi.sizeof(eventStruct)):totable();
+        AshitaCore:GetPluginManager():RaiseEvent(eventName, structAsTable);
+    end
 end
 
 local exports = {
