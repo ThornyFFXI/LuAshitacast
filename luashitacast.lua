@@ -1,6 +1,6 @@
 addon.name      = 'LuAshitacast';
 addon.author    = 'Thorny';
-addon.version   = '2.11';
+addon.version   = '2.12';
 addon.desc      = 'A lua-based equipment swapping system for Ashita';
 addon.link      = 'https://github.com/ThornyFFXI/LuAshitacast';
 
@@ -8,6 +8,9 @@ require('common');
 chat = require('chat');
 local jit = require('jit');
 jit.off();
+if (ashita.addons_version >= 4.3) then
+    addon.instance:enable_feature(addon_feature.use_packet_chunks);
+end
 
 gConfigGUI           = require('config');
 gData                = require('data');
