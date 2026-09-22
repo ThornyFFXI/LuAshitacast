@@ -1,6 +1,6 @@
 addon.name      = 'LuAshitacast';
 addon.author    = 'Thorny';
-addon.version   = '2.13';
+addon.version   = '2.14';
 addon.desc      = 'A lua-based equipment swapping system for Ashita';
 addon.link      = 'https://github.com/ThornyFFXI/LuAshitacast';
 
@@ -31,6 +31,10 @@ ashita.events.register('load', 'luashitacast_load_cb', function ()
         gPreservedGlobalKeys[key] = true;
     end
     gState.Init();
+end);
+
+ashita.events.register('unload', 'luashitacast_unload_cb', function ()
+    gState.UnloadProfile();
 end);
 
 ashita.events.register('d3d_present', 'luashitacast_render', function()
