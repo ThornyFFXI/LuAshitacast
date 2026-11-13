@@ -4,18 +4,6 @@
         <h1 style="color:#FF7903">Summary</h1>
         <p style="color:#FFFFFF">gSettings is a global table containing settings that are used by LuAshitacast during operation.  It is rewritten every time a new profile is loaded, so you should ensure your OnLoad event updates any settings you plan to alter.</p><br>
 
-        <font color="#FFFFFF">Member Name: </font><font color="#208020">AddSetEquipScreenOrder</font><br>
-        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">boolean</font><br>
-        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">true</font><br>
-        <font color="#FFFFFF">Effects: If true, addset will write your sets in the order of equip screen rows.  If false, addset will write them in the order of equipment slot IDs.</font><br>
-        <br><br>
-        
-        <font color="#FFFFFF">Member Name: </font><font color="#208020">AllowSyncEquip</font><br>
-        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">boolean</font><br>
-        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">true</font><br>
-        <font color="#FFFFFF">Effects: If true, LuAshitacast will judge equipment based on your real level and attempt to equip pieces above your current sync level.  If false, LuAshitacast will not try to equip anything above your current sync level.</font><br>
-        <br><br>
-        
         <font color="#FFFFFF">Member Name: </font><font color="#208020">AddSetBackups</font><br>
         <font color="#FFFFFF">Member Type: </font><font color="#FF7903">boolean</font><br>
         <font color="#FFFFFF">Default Value: </font><font color="#FF7903">true</font><br>
@@ -27,6 +15,18 @@
         <font color="#FFFFFF">Default Value: </font><font color="#FF7903">true</font><br>
         <font color="#FFFFFF">Effects: If true, addset will write your sets in the order of equip screen rows.  If false, addset will write them in the order of equipment slot IDs.</font><br>
         <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">AllowAddSet</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">boolean</font><br>
+        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">false</font><br>
+        <font color="#FFFFFF">Effects: If true, LuAshitacast will allow the '/lac addset' and 'gFunc.AddSet' to modify the base profile document by adding or updating sets. Layout restrictions apply.</font><br>
+        <br><br>
+        
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">AllowSyncEquip</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">boolean</font><br>
+        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">true</font><br>
+        <font color="#FFFFFF">Effects: If true, LuAshitacast will judge equipment based on your real level and attempt to equip pieces above your current sync level.  If false, LuAshitacast will not try to equip anything above your current sync level.</font><br>
+        <br><br>
 
         <font color="#FFFFFF">Member Name: </font><font color="#208020">Debug</font><br>
         <font color="#FFFFFF">Member Type: </font><font color="#FF7903">boolean</font><br>
@@ -36,7 +36,7 @@
         
         <font color="#FFFFFF">Member Name: </font><font color="#208020">EquipBags</font><br>
         <font color="#FFFFFF">Member Type: </font><font color="#FF7903">table</font><br>
-        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">{ [1] = 8, [2] = 10, [3] = 11, [4] = 12, [5] = 0 }</font><br>
+        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">{ 8, 10, 11, 12, 13, 14, 15, 16, 0 }</font><br>
         <font color="#FFFFFF">Effects: This determines the containers and order that LuAshitacast will search for equipment.  It must be an ipairs compatible table.</font><br>
         <br><br>
         
@@ -100,6 +100,12 @@
         <font color="#FFFFFF">Effects: Additional time, in seconds, to wait for a ranged attack to complete before assuming the completion packet was lost.</font><br>
         <br><br>
         
+        <font color="#FFFFFF">Member Name: </font><font color="#208020">ItemBase</font><br>
+        <font color="#FFFFFF">Member Type: </font><font color="#FF7903">number</font><br>
+        <font color="#FFFFFF">Default Value: </font><font color="#FF7903">10.0</font><br>
+        <font color="#FFFFFF">Effects: Base time, in seconds, to wait for an item without a resource to complete before assuming the completion packet was lost.</font><br>
+        <br><br>
+
         <font color="#FFFFFF">Member Name: </font><font color="#208020">ItemOffset</font><br>
         <font color="#FFFFFF">Member Type: </font><font color="#FF7903">number</font><br>
         <font color="#FFFFFF">Default Value: </font><font color="#FF7903">1.0</font><br>

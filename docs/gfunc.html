@@ -74,7 +74,7 @@
         <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.Echo(color, text)</font><br>
         <font color="#FFFFFF">Arguments:</font><br>
         <font color="#208020">color</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): a value from 0 to 255 to represent the color</font><br>
-        <font color="#208020">text</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the text you would like to print</font><br>
+        <font color="#208020">text</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): the text you would like to print</font><br>
         <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
         <font color="#FFFFFF">Effects: Prints text of a specified color to chat log using the LuAshitacast header.</font><br>
         <br><br>
@@ -108,7 +108,7 @@
 
         <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.Error(text)</font><br>
         <font color="#FFFFFF">Arguments:</font><br>
-        <font color="#208020">text</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the text you would like to print</font><br>
+        <font color="#208020">text</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): the text you would like to print</font><br>
         <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
         <font color="#FFFFFF">Effects: Prints text of the default error color to chat log using the LuAshitacast header.</font><br>
         <br><br>
@@ -121,6 +121,7 @@
         <font color="#FFFFFF">Effects: Looks for any set ending in _Priority, then treats each slot entry containing a table as a priority list.
             Creates a new set without the _Priority suffix using the first item in each priority list to be below or at your level as the active slot.
             See example usage in tutorial.</font><br>
+        <br><br>
 
         <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.ForceEquip(slot, item)</font><br>
         <font color="#FFFFFF">Arguments:</font><br>
@@ -160,7 +161,7 @@
 
         <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.Message(text)</font><br>
         <font color="#FFFFFF">Arguments:</font><br>
-        <font color="#208020">text</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the text you would like to print</font><br>
+        <font color="#208020">text</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): the text you would like to print</font><br>
         <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
         <font color="#FFFFFF">Effects: Prints text of the default message color to chat log using the LuAshitacast header.</font><br>
         <br><br>
@@ -174,10 +175,10 @@
         <br><br>
 
         <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.LockSet(set, seconds)</font><br>
-        <font color="#FFFFFF">Arguments:</font><br>
-        <font color="#208020">seconds</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the length of seconds(decimals allowed) to lock a set on for</font><br>        
+        <font color="#FFFFFF">Arguments:</font><br>   
         <font color="#208020">set</font><font color="#FFFFFF"> (</font><font color="#FF7908">string</font><font color="#FFFFFF">): the name of a set table, which must be located directly inside the profile.Sets table</font><br>
         <font color="#208020">set</font><font color="#FFFFFF"> (</font><font color="#FF7908">table</font><font color="#FFFFFF">): a set table</font><br>
+        <font color="#208020">seconds</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): the length of seconds(decimals allowed) to lock a set on for</font><br>     
         <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
         <font color="#FFFFFF">Effects: Overrides all state processing and equips a set for the specified period of time.  This does not bypass disable/enable.</font><br>
         <br><br>
@@ -189,7 +190,7 @@
         <font color="#FFFFFF">Effects: Uses the main, sub, range, ammo, head, body, hands, legs, and feet components of the input set to send a lockstyle packet to server.  This happens immediately, unlike the equip functions.  Fields besides name are not considered.</font><br>
         <br><br>
         
-        <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.SetMidDelay(delaye)</font><br>
+        <font color="#FFFFFF">Declaration: </font><font color="#208020">gFunc.SetMidDelay(delay)</font><br>
         <font color="#FFFFFF">Arguments:</font><br>
         <font color="#208020">delay</font><font color="#FFFFFF"> (</font><font color="#FF7908">number</font><font color="#FFFFFF">): how long, in seconds, to delay midcast/midshot</font><br>
         <font color="#FFFFFF">Return Type: </font><font color="#FF7903">nil</font><br>
